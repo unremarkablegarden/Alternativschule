@@ -10,6 +10,5 @@ module.exports = ({ req, connection }) => {
   return {
     db,
     processUpload,
-
   }
 }
