@@ -1,0 +1,7 @@
+#import "./PostFragment.gql"
+
+mutation postAdd ($description: String!, $imageUrl: String!) { {
+  postAdd (description: $description, imageUrl: $imageUrl) {
+    ...Post
+  }
+}

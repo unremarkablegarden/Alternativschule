@@ -1,0 +1,105 @@
+# The following types define the data model of the example service
+# based on which the GraphQL API is generated
+
+type User @model {
+  id: ID! @isUnique
+  username: String @isUnique
+  email: String! @isUnique
+  password: String!
+  firstname: String
+  surname: String
+  # admin, teacher, prefect, student (enum)
+  userType: UserTypes
+  # relations
+  prefectStudents: [User!]! @relation(name: "PrefectStudent")
+  teachesProjects: [Project!]! @relation(name: "TeacherProject")
+  studiesSubjects: [Subject!]! @relation(name: "StudentSubject")
+  studiesProjects: [Project!]! @relation(name: "StudentProject")
+  selfEvaluations: [Evaluation!]! @relation(name: "StudentSelfEvaluation")
+}
+
+enum UserTypes {
+  ADMIN
+  TEACHER
+  PREFECT
+  STUDENT
+}
+
+enum Levels {
+  BK
+  GK
+  AK1
+  AK2
+}
+
+type Area @model {
+  id: ID! @isUnique
+  name: String!
+  subjects: [Subject!]! @relation(name: "SubjectArea")
+}
+
+type Subject @model {
+  id: ID! @isUnique
+  name: String!
+  area: Area! @relation(name: "SubjectArea")
+  description: String!
+  projects: [Project!]! @relation(name: "SubjectProject")
+  students: [User!]! @relation(name: "StudentSubject")
+  competences: [Competence!]! @relation(name: "SubjectCompetences")
+  levels: [Levels!]!
+  # saved in competences, which is linked to subject
+  #evaluations: [Evaluation] @relation(name: "EvaluationSubject")
+  isPublished: Boolean! @defaultValue(value: "true")
+}
+
+type Project @model {
+  id: ID! @isUnique
+  name: String!
+  description: String!
+  subject: Subject! @relation(name: "SubjectProject")
+  materials: [Material!]! @relation(name: "ProjectMaterial")
+  teacher: User! @relation(name: "TeacherProject")
+  students: [User!]! @relation(name: "StudentProject")
+  selfLearn: Boolean! @defaultValue(value: "false")
+  isPublished: Boolean! @defaultValue(value: "true")
+  level: Levels!
+}
+
+type Competence @model {
+  id: ID! @isUnique
+  # i.e. Lesen, Schreiben
+  name: String
+  subject: Subject! @relation(name: "SubjectCompetences")
+  evaluations: [Evaluation!]! @relation(name: "CompetenceEvaluation")
+  # levels determined by subject
+  #levels: [Levels!]!
+}
+
+type Evaluation @model {
+  id: ID! @isUnique
+  # max 10
+  value: Int!
+  student: User! @relation(name: "StudentSelfEvaluation")
+  competence: Competence! @relation(name: "CompetenceEvaluation")
+  #subject: Subject! @relation(name: "EvaluationSubject")
+  level: Levels!
+}
+
+type Material @model {
+  id: ID! @isUnique
+  name: String!
+  description: String
+  project: [Project!]! @relation(name: "ProjectMaterial")
+  contentType: String
+  uploadUrl: String
+  linkUrl: String
+}
+
+# testing...
+type Post @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  description: String!
+  imageUrl: String!
+}

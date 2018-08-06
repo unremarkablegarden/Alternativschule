@@ -1,0 +1,7 @@
+#import "./UserFragment.gql"
+
+# mutation userAdd ($description: String!, $imageUrl: String!) { {
+#   postAdd (description: $description, imageUrl: $imageUrl) {
+#     ...Post
+#   }
+# }
