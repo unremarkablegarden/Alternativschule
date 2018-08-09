@@ -5,42 +5,24 @@
     .solarsystem
       .sun
         img(src="../assets/gfx/planets/sun@3x.png")
-      
-      router-link(to="/planet", @mouseover.native='hoverPlanet(1)', @mouseleave.native='planetHover = null').planet._1
-        img(src="../assets/gfx/planets/01.svg")
-      router-link(to="/planet", @mouseover.native='hoverPlanet(2)', @mouseleave.native='planetHover = null').planet._2
-        img(src="../assets/gfx/planets/02.svg")
-      router-link(to="/planet", @mouseover.native='hoverPlanet(3)', @mouseleave.native='planetHover = null').planet._3
-        img(src="../assets/gfx/planets/03.svg")
-      router-link(to="/planet", @mouseover.native='hoverPlanet(4)', @mouseleave.native='planetHover = null').planet._4
-        img(src="../assets/gfx/planets/04.svg")
+      .planet-orbit(v-for="subject in subjects")  
+        router-link(:to=' "subject/" + subject')
+          planet(:subject="subject")
 </template>
 
 <script>
+import planet from '@/components/areas/planet.vue'
 export default {
   data () {
     return {
-      planets: 4,
+      subjects:[ 
+        'biology', 'history', 'english', 'philosophy'
+      ],
       planetHover: 'test'
     }
   },
-  methods: {
-    hoverPlanet(planet) {
-      let name
-      if (planet === 1) {
-        name = 'planet 1'
-      }
-      if (planet === 2) {
-        name = 'planet 2'
-      }
-      if (planet === 3) {
-        name = 'planet 3'
-      }
-      if (planet === 4) {
-        name = 'planet 4'
-      }
-      this.planetHover = name
-    }
+  components: {
+    planet
   }
 }
 </script>
@@ -60,10 +42,6 @@ $orbit3: 40vh
 $orbit4: 28vh
 
 $sun: 240px
-$planet1: 30px
-$planet2: 24px
-$planet3: 20px
-$planet4: 20px
 
 @keyframes rotating 
   from 
@@ -80,61 +58,47 @@ $planet4: 20px
   width: $sun 
   height: auto 
 
-.planet
+.planet  
+  transition: border 200ms
+  transform: translateX(-15px) rotate(45deg)
+  &:hover
+    opacity: .8   
+
+.planet-orbit
   border: 1px solid #ffffff1c
   position: absolute
-  transition: border 200ms
+  display: flex
+  align-items: center
   &:hover
     border: 1px solid #ffffff30
     cursor: pointer
-  img
-    transform: rotate(130deg)
-    height: auto 
-    position: absolute 
-    box-shadow: 0px 0px 8px #fea2fd
-    transition: box-shadow 300ms ease-out
-    &:hover
-      box-shadow: 0px 0px 24px #fea2fd
-      cursor: pointer
 
-.planet._1
+.planet-orbit:nth-child(2)
   width: $orbit1 
   height: $orbit1 
   border-radius: $orbit1 / 2 
+  transform: rotate(3deg)
   animation: rotating 240s linear infinite 
-  img
-    width: $planet1 
-    top: - $planet1 / 2 
-    border-radius: $planet1 / 2
   
-.planet._2
+.planet-orbit:nth-child(5)
   width: $orbit2 
   height: $orbit2 
   border-radius: $orbit2 / 2 
-  animation: rotating 200s linear infinite 
-  img
-    width: $planet2 
-    top: - $planet2 / 2 
-    border-radius: $planet2 / 2 
+  transform: rotate(30deg)
+  animation: rotating 200s linear infinite
   
-.planet._3
+.planet-orbit:nth-child(3)
   width: $orbit3
   height: $orbit3
   border-radius: $orbit3 / 2 
-  animation: rotating 130s linear infinite 
-  img
-    width: $planet3
-    top: - $planet3 / 2 
-    border-radius: ($planet3 / 2) - 1px
+  transform: rotate(180deg)
+  animation: rotating 130s linear infinite
 
-.planet._4
+.planet-orbit:nth-child(4)
   width: $orbit4
   height: $orbit4
   border-radius: $orbit4 / 2 
-  animation: rotating 60s linear infinite 
-  img
-    width: $planet4
-    top: - $planet4 / 2 
-    border-radius: $planet4 / 2
+  transform: rotate(440deg)
+  animation: rotating 60s linear infinite
 
 </style>

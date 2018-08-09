@@ -3,14 +3,18 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import SolarSystem from './views/SolarSystem.vue'
-import Planet from './views/Planet.vue'
-import AreaMap from './views/AreaMap.vue'
-import SubjectMap from './views/SubjectMap.vue'
-import SubjectSingle from './views/SubjectSingle.vue'
+import SubjectView from './views/SubjectView.vue'
+import Areas from './views/Areas.vue'
+import SingleAreaView from './views/SingleAreaView.vue'
+import SubjectAreaSingle from './views/SubjectAreaSingle.vue' 
+import ProjectView from './views/ProjectView.vue'
+import CompetenceView from './views/CompetenceView.vue'
+import SettingsView from './views/SettingsView.vue'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -18,34 +22,49 @@ export default new Router({
       component: SolarSystem
     },
     {
-      path: '/about',
-      name: 'about',
-      component: About
+      path: '/subject/:subject',
+      name: 'subjectView',
+      component: SubjectView
     },
     {
-      path: '/solarsystem',
-      name: 'solarsystem',
-      component: SolarSystem
+      path: '/areas',
+      name: 'areas',
+      component: Areas
     },
     {
-      path: '/planet',
-      name: 'planet',
-      component: Planet
+      path: '/area/:area',
+      name: 'area',
+      component: SingleAreaView
     },
     {
-      path: '/areamap',
-      name: 'areamap',
-      component: AreaMap
+      path: '/area/:area/:subject',
+      name: 'subjectareasingle',
+      component: SubjectAreaSingle
     },
     {
-      path: '/areamap/subjects',
-      name: 'subjectmap',
-      component: SubjectMap
+      path: '/project/:subject',
+      name: 'projectview-home',
+      component: ProjectView
     },
     {
-      path: '/areamap/subjects/single',
-      name: 'subjectsingle',
-      component: SubjectSingle
+      path: '/project/:subject/:project',
+      name: 'projectview',
+      component: ProjectView
+    },
+    {
+      path: '/project/:subject/:project/material',
+      name: 'projectview-material',
+      component: ProjectView
+    },
+    {
+      path: '/competence/:subject/:competence',
+      name: 'competenceview',
+      component: CompetenceView
+    },
+    {
+      path: '/settings',
+      name: 'settingsview',
+      component: SettingsView
     }
   ]
 })
