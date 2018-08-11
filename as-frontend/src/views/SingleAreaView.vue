@@ -1,7 +1,7 @@
 <template lang="pug">
 #areas
   .areas.guibox.columns.is-multiline  
-    AreaSubject(v-for='subject in subjects', :subject='subject', :key='subject.name')
+    AreaSubject(v-for='subject in subjects', :subject='subject.name')
 </template>
 
 <script>

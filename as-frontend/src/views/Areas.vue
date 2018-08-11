@@ -29,7 +29,7 @@ export default {
   width: calc(100vw - 200px)
   height: calc(100vh - 100px)
   margin-left: 100px
-  background: $darkgrey
+  background: #11111199
   color: #fff
   border: 3px solid $teal
   border-radius: .8rem

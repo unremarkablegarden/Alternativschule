@@ -1,7 +1,7 @@
 <template lang="pug">
   router-link(:to='"/area/" + area').area.column.is-6(:class='area')
     h2.title {{ area }}
-    planet(v-for='(subject, index) in subjects', :subject="subject", :key="subject") 
+    planet(v-for='subject in subjects', :subject="subject.name", :key="subject.name",  :style="{ top: subject.position.y, left: subject.position.x }") 
 </template>
 
 <script>
@@ -10,8 +10,35 @@ export default {
   props: ['area'],
   data () {
     return {
-      subjects:[ 
-        'biology', 'history', 'english', 'philosophy'
+      subjects:[
+        {
+          name: 'biology',
+          position: {
+            x: '25vw',
+            y: '30vh'
+          }
+        },
+        {
+          name: 'english',
+          position: {
+            x: '33vw',
+            y: '23vh'
+          }
+        },
+        {
+          name: 'history',
+          position: {
+            x: '5vw',
+            y: '7vh'
+          }
+        },
+        {
+          name: 'philosophy',
+          position: {
+            x: '13vw',
+            y: '20vh'
+          }
+        }
       ]
     }
   },
@@ -41,28 +68,8 @@ export default {
       left: 1em
       font-size: 1em
       position: absolute
-  @for $i from 1 through 9
-    .area:nth-child(1) div:nth-child(#{$i})
+    .planet
+      width: 30px
+      height: 30px
       position: absolute
-      top: random(35) + vh
-      left: random(35) + vw
-      width: random(20) + 20 + px
-  @for $i from 1 through 9
-    .area:nth-child(2) div:nth-child(#{$i})
-      position: absolute
-      top: random(35) + vh
-      left: random(35) + vw
-      width: random(20) + 20 + px
-  @for $i from 1 through 9
-    .area:nth-child(3) div:nth-child(#{$i})
-      position: absolute
-      top: random(35) + vh
-      left: random(35) + vw
-      width: random(20) + 20 + px
-  @for $i from 1 through 9
-    .area:nth-child(4) div:nth-child(#{$i})
-      position: absolute
-      top: random(35) + vh
-      left: random(35) + vw
-      width: random(20) + 20 + px
 </style>  

@@ -44,6 +44,8 @@ export default {
     align-items: center
     justify-content: center
     position: relative
+    transition: background-color 200ms 
+    
     &:nth-child(1)
       border-right: 1px solid $grey
       border-bottom: 1px solid $grey
