@@ -4,8 +4,8 @@
       h1 {{ planetHover }}
     .solarsystem
       .sun
-        img(src="../assets/gfx/planets/sun@3x.png")
-      .planet-orbit(v-for="subject in subjects")  
+        img(src="../assets/gfx/planets/sun@3x.png")    
+      .planet-orbit(v-for="subject in subjects", :style="{ transform: rotate() }")
         router-link(:to=' "subject/" + subject')
           planet(:subject="subject")
 </template>
@@ -19,6 +19,11 @@ export default {
         'biology', 'history', 'english', 'philosophy'
       ],
       planetHover: 'test'
+    }
+  },
+  methods: {
+    rotate () {
+      return 'rotate(' + Math.floor(Math.random() * 360) + 'deg)'
     }
   },
   components: {
@@ -43,11 +48,14 @@ $orbit4: 28vh
 
 $sun: 240px
 
+$orbit-start: random(360)
+
 @keyframes rotating 
   from 
-    transform: rotate(0deg)
+    transform: rotate($orbit-start deg)
   to 
-    transform: rotate(360deg)
+    transform: rotate($orbit-start + 360deg)
+  
 
 .info
   position: fixed
@@ -77,28 +85,27 @@ $sun: 240px
   width: $orbit1 
   height: $orbit1 
   border-radius: $orbit1 / 2 
-  transform: rotate(3deg)
   animation: rotating 240s linear infinite 
+  z-index: 1
   
 .planet-orbit:nth-child(5)
   width: $orbit2 
   height: $orbit2 
   border-radius: $orbit2 / 2 
-  transform: rotate(30deg)
   animation: rotating 200s linear infinite
+  z-index: 2
   
 .planet-orbit:nth-child(3)
   width: $orbit3
   height: $orbit3
   border-radius: $orbit3 / 2 
-  transform: rotate(180deg)
   animation: rotating 130s linear infinite
+  z-index: 3
 
 .planet-orbit:nth-child(4)
   width: $orbit4
   height: $orbit4
   border-radius: $orbit4 / 2 
-  transform: rotate(440deg)
   animation: rotating 60s linear infinite
-
+  z-index: 4
 </style>

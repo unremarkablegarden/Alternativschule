@@ -71,7 +71,6 @@ $moon: 4vh
   border-radius: $planet / 2
   width: $planet
   height: $planet 
-  background: #fff
   transition: box-shadow 400ms ease
   &[data-levels="0"]
     box-shadow: 0px 0px 24px #fff

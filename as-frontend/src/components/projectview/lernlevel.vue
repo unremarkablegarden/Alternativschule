@@ -17,6 +17,23 @@ export default {
     levelChange(level) {
       this.level = level
       console.log(level)
+      // const bar = 100 - (level * 10)
+      const courseLevel = 'bk'
+      const payload = {
+        subject: this.currentSubject, 
+        competence: this.currentCompetence, 
+        level: courseLevel, 
+        value: level
+      }
+      this.$store.commit('setLernLevel', payload)
+    }
+  },
+  computed: {
+    currentSubject () {
+      return this.$route.params.subject
+    },
+    currentCompetence () {
+      return this.$route.params.competence
     }
   }
 }

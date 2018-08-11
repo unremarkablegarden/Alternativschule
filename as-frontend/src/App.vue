@@ -1,6 +1,7 @@
 <template lang="pug">
   #app
-    router-view#view
+    transition(name="fade", mode="out-in")
+      router-view#view
     usermenu
 </template>
 
@@ -25,10 +26,14 @@ export default {
   @import "@/assets/styles/variables.sass"
   @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Roboto')
   
-  body
+  
+  html,body
     font-family: $R
     font-size: 16px
     line-height: 1.5
+    background-color: $space-blue
+    background-image: url('assets/gfx/stars.svg')
+    background-size: contain
   
   #app
     font-family: 'Avenir', Helvetica, Arial, sans-serif
@@ -37,14 +42,10 @@ export default {
     text-align: center
     color: #2c3e50
     #view
-      background: $space-blue
       height: 100vh
       display: flex
       align-items: center
       justify-content: center
-      background-image: radial-gradient(white, rgba(255,255,255,.8) 1px, transparent 3px), radial-gradient(white, rgba(255,255,255,.5) 1px, transparent 3px), radial-gradient(white, rgba(255,255,255,.3) 1px, transparent 1px), radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.9) 1px, transparent 2px)
-      background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px; 
-      background-position: 0 0, 40px 60px, 130px 270px, 70px 100px
 
   #nav
     padding: 0 .1em .1em
@@ -75,4 +76,13 @@ export default {
     &:hover
       background: darken($pinkred, 5)
       color: #fff
+      
+  .fade-enter-active, .fade-leave-active 
+    transition-duration: 0.1s
+    transition-property: opacity
+    transition-timing-function: ease
+
+  .fade-enter,.fade-leave-active 
+    opacity: 0
+  
 </style>

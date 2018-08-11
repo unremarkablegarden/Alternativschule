@@ -4,7 +4,7 @@
     competencesnav
     .columns
       .column.is-3.chart
-        progresschart 
+        progresschart(:competence='competence') 
         ul.explanation 
           li 1: Ich benötige noch viel Übung!
           li 2: Ich bin noch etwas unsicher.
@@ -12,7 +12,7 @@
           li 4: Super! Ich bin total sicher.
           li 5: Ich bin ein Profi!
       .column.is-7.is-offset-1.text
-        h3 Kompetenz: {{ currentCompetence }}
+        h3 Kompetenz: {{ competence }}
         p Nam dapibus nisl vitae elit fringilla rutrum. Aenean sollicitudin, erat a elementum rutrum, neque sem pretium metus, quis mollis nisl nunc et massa. Vestibulum sed metus in lorem tristique ullamcorper id vitae erat. Nulla mollis sapien sollicitudin lacinia lacinia. Vivamus facilisis dolor et massa placerat, at vestibulum nisl egestas. Nullam rhoncus lacus non odio luctus, eu condimentum mauris ultrices. 
         h3 Mein lernlevel
         lernlevel
@@ -23,16 +23,27 @@ import competencesnav from '@/components/projectview/competencesnav.vue'
 import progresschart from '@/components/projectview/progresschart.vue'
 import lernlevel from '@/components/projectview/lernlevel.vue'
 export default {
+  data () {
+    return {
+      // competence: this.$route.params.competence
+    }
+  },
   components: {
     competencesnav,
     progresschart,
     lernlevel
   },
   computed: {
-    currentCompetence () {
+    competence () {
       return this.$route.params.competence
     },
-  }
+  },
+  // watch: {
+  //   $route (to, from) {
+  //     this.competence = to.params.competence
+  //     console.log(to.params.competence)
+  //   }
+  // }
 }
 </script>
 

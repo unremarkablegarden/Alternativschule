@@ -1,15 +1,15 @@
 <template lang="pug">
 #competencesnav.columns
-    .column.is-10
-      .columns
-        router-link(:to='"/competence/" + currentSubject + "/" + competence.slug').column.is-one-quarter(v-for='competence in competences').tab
-          .columns
-            .column.is-two-fifths.chart
-              progresschart(:competence='competence.slug')
-            .column.is-three-fifths.desc
-              .competence {{ competence.name }}
-              p {{ competence.text }}
-    router-link(:to='"/project/" + currentSubject', :class="{ 'is-not-lit' : currentCompetence }").column.is-2.themen-link Themen
+  .column.is-10
+    .columns
+      router-link(:to='"/competence/" + currentSubject + "/" + competence.slug').column.is-one-quarter(v-for='competence in competences', :key='competence.slug').tab
+        .columns
+          .column.is-two-fifths.chart
+            progresschart(:competence='competence.slug')
+          .column.is-three-fifths.desc
+            .competence {{ competence.name }}
+            p {{ competence.text }}
+  router-link(:to='"/project/" + currentSubject', :class="{ 'is-not-lit' : currentCompetence }").column.is-2.themen-link Themen
 </template>
 
 <script>

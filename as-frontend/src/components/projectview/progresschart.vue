@@ -1,18 +1,29 @@
 <template lang="pug">
 .progresschart
   .gridlines
-  .bar-1.bor
-  .bar-2.bor
-  .bar-3.bor
-  .bar-4.bor
+  .bar(v-for='level in lernLevels', :data-level='level', :style="{ 'grid-row-start': (101-(level*10)) }")
 </template>
 
 <script>
 export default {
   name: 'progresschart',
   props: ['competence'],
+  computed: {
+    subject () {
+      return this.$route.params.subject
+    },
+  },
+  created () {
+    this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
+  },
+  watch: {
+    competence () {
+      this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
+    }
+  },
   data () {
     return {
+      lernLevels: null,
       skills: [
         {
           name: 'bk',
@@ -36,7 +47,8 @@ export default {
         }
       ]
     }
-  }
+  },
+  
 }
 </script>
 
@@ -77,17 +89,21 @@ export default {
       opacity: .8 
       cursor: pointer 
   
-  .bar-1
-    grid-row-start: $bar1
+  .bar:nth-child(2)
+    // grid-row-start: $bar1
+    grid-row-start: 0
     background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%) 
-  .bar-2 
-    grid-row-start: $bar2
+  .bar:nth-child(3)
+    // grid-row-start: $bar2
+    grid-row-start: 0
     background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
-  .bar-3
-    grid-row-start: $bar3
+  .bar:nth-child(4)
+    // grid-row-start: $bar3
+    grid-row-start: 0
     background-image: linear-gradient(-180deg, #4AA8DA 0%, #653393 53%)
-  .bar-4 
-    grid-row-start: $bar4
+  .bar:nth-child(5)
+    // grid-row-start: $bar4
+    grid-row-start: 0
     background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
     
 </style>
