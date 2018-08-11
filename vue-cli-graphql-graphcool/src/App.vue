@@ -1,65 +1,195 @@
 <template lang="pug">
-  #app
-    el-container
-      el-header
-        TopNav
-      el-main
-        router-view
+  .container
+    el-container#wrapper
+      el-header#header
+        h1(v-if='userId')#logo Alternativschule Berlin
+      el-container#main
+        el-aside(width='200px', v-if='userId')
+          MainNav
+        el-main
+          router-view()
 </template>
 
 <script>
-import TopNav from '@/components/TopNav.vue'
+import MainNav from '@/components/MainNav.vue'
 import LOGGED_IN_USER from '@/graphql/LoggedInUser.gql'
+// import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
   components: {
-    TopNav
+    MainNav
   },
   data () {
     return {
-      
+      userId: null
     }
   },
-  mounted () {
+  created () {
     this.checkLoggedIn()
   },
-  methods: {
-    checkLoggedIn () {
-      this.$apollo
-        .query({ query: LOGGED_IN_USER })
-        .then(response => {
-          let loggedIn
-          const token = response.data.loggedInUser.id
-          if (token) {
-            loggedIn = true
-          }
-          else {
-            loggedIn = false
-          }
-          this.$store.commit('setLoggedIn', loggedIn)
-        })
-        .catch((error) => {
-          console.error(error)
-          this.loggedIn = false
-        })
+  watch: {
+    $route (to, from) {
+      this.checkLoggedIn()
     }
+  },
+  methods: {
+    checkLoggedIn() {
+      const userId = localStorage.getItem('userId')
+      if (userId) {
+        this.userId = userId
+      } else {
+        this.$store.dispatch('getUserId')
+          .then((userId) => {
+            if (userId) {
+              this.userId = userId
+              localStorage.setItem('userId', res)
+            } else {
+              this.userId = null
+              localStorage.removeItem('userId')
+            }
+          })
+      }
+    }
+
+    // checkToken () {
+    //   const token = localStorage.getItem('authenticate-user-token')
+    //   if (token) {
+    //     this.loggedIn = true
+    //   } else {
+    //     this.loggedIn = false
+    //   }
+    // },
+
+    // async setUserId () {
+    //   return new Promise((resolve, reject) => {
+    //     this.$store.dispatch('setUserId')
+    //       .then( () => {
+    //         const userId = this.$store.state.userId
+    //         // console.log('dispatchd userId: ' + userId)
+    //         if (userId) {
+    //           this.userId = userId
+    //           this.loggedIn = true
+    //           resolve()
+    //         } else {
+    //           console.log('—— async checkLoggedIn fail ——')
+    //           this.userId = null
+    //           this.loggedIn = false
+    //           reject()
+    //         }
+    //       })
+    //   })
+    // }
+
+    // async asyncCheck () {
+    //   this.checkLoggedIn().then(() => {
+    //     console.log('async: ' + this.userId)
+    //     this.$store.dispatch('setUserIdAction', this.userId)
+    //       .then(() => {
+    //         console.log('dispatch callback')
+    //       })
+    //   })
+    // },
+
+    // async checkLoggedIn () {
+    //   // this.loggedIn = this.$store.state.loggedIn
+    //   // console.log(this.$store.getters.getLoggedIn)
+    //   // this.$store.dispatch('checkLoggedIn')
+    //   //   .then(() => {
+    //   //     const id = this.$store.state.loggedInID
+    //   //     console.log(id)
+    //   //   })
+    //   // console.log('checkLoggedIn('+origin+') = ' + this.loggedIn)
+    //   // WEIRD TIMING ISSUE
+    //
+    //   return new Promise((resolve, reject) => {
+    //   // try {
+    //     this.$apollo
+    //       .query({ query: LOGGED_IN_USER })
+    //       .then(response => {
+    //         // console.log('-- apollo check --')
+    //         // console.log(response)
+    //         // let loggedIn
+    //         const id = response.data.loggedInUser.id
+    //         this.userId = id
+    //         // console.log('user id: ' + id)
+    //         // if (id) {
+    //         //   loggedIn = id
+    //         // } else {
+    //         //   loggedIn = true // fix!
+    //         // }
+    //         // this.loggedIn = id
+    //         // console.log('this.loggedIn: ' + this.loggedIn)
+    //         // this.$store.commit('setLoggedIn', id)
+    //         resolve()
+    //       })
+    //       .catch((error) => {
+    //         reject()
+    //         console.error(error)
+    //         this.loggedIn = false
+    //       })
+    //   })
+    //
+    // }
   }
 }
 </script>
 
 
 <style lang="sass">
-  // @import '~bulma/bulma.sass'
-  @import '~bulma/sass/utilities/_all'
-  @import "~bulma/sass/base/_all"
+  @import "~bulma/sass/utilities/_all"
+  @import "~bulma/sass/base/generic"
+  @import "~bulma/sass/base/helpers"
   @import "~bulma/sass/grid/columns"
+  @import "~bulma/sass/elements/container"
+  @import "~bulma/sass/layout/section"
+
+  // body *
+  //   transition: height 200ms
+
+  #logo
+    text-align: center
+    font-weight: normal
 
   #app
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
-    a
-      color: #66b1ff
-      text-decoration: none
+  a
+    color: #66b1ff
+    text-decoration: none
+
+  .right
+    float: right
+
+  .el-menu
+    border: 0 !important
+
+  // partial bulma minireset
+  body, html
+    margin: 0
+    padding: 0
+    background: #fdfdfd
+  html
+    box-sizing: border-box
+  *
+    &,
+    &::before,
+    &::after
+      box-sizing: inherit
+  img,
+  audio,
+  video
+    height: auto
+    max-width: 100%
+  iframe
+    border: 0
+  table
+    border-collapse: collapse
+    border-spacing: 0
+  td,
+  th
+    padding: 0
+    text-align: left
+
 </style>

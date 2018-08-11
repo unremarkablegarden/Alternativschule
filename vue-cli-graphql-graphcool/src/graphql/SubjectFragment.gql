@@ -1,0 +1,19 @@
+fragment Subject on Subject {
+  id
+}
+
+# id: ID! @isUnique
+# name: String! @isUnique
+# slug: String@isUnique
+# area: Area! @relation(name: "SubjectArea")
+# description: String!
+# projects: [Project!]! @relation(name: "SubjectProject")
+# students: [User!]! @relation(name: "StudentSubject")
+# teachers: [User!]! @relation(name: "TeacherSubject")
+# competences: [Competence!]! @relation(name: "SubjectCompetences")
+# levels: [Levels!]!
+# tutorLevel: TutorLevel @relation(name: "TutorLevelSubject")
+# # subject: Subject! ????
+# # saved in competences, which is linked to subject
+# #evaluations: [Evaluation] @relation(name: "EvaluationSubject")
+# isPublished: Boolean! @defaultValue(value: "true")

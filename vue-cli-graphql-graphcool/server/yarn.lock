@@ -169,6 +169,10 @@ validator@^9.0.0:
   version "9.4.1"
   resolved "https://registry.yarnpkg.com/validator/-/validator-9.4.1.tgz#abf466d398b561cd243050112c6ff1de6cc12663"
 
+vue-ionicons@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/vue-ionicons/-/vue-ionicons-2.2.1.tgz#2837b1af7bce53154e1e951cc677fec1e9dbbc47"
+
 whatwg-fetch@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"

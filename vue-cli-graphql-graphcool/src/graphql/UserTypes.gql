@@ -1,0 +1,8 @@
+query userTypes($enumName: String!) {
+  __type(name: $enumName) {
+    name
+    enumValues {
+ 	    name
+    }
+  }
+}

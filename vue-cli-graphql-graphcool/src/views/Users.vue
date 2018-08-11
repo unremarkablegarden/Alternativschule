@@ -1,16 +1,18 @@
 <template lang="pug">
-  .users.view
+  #users
     UsersList
+    //- br
 </template>
 
 
 <script>
-import UsersList from '@/components/UsersList.vue'
+
 
 export default {
   name: 'users',
-  components: {
-    UsersList
+  data () {
+    return {
+    }
   }
 }
 </script>

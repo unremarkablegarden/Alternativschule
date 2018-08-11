@@ -48,7 +48,7 @@ module.exports = function(event) {
   const email = event.data.email
   const password = event.data.password
 
-  // Create Graphcool API (based on https://github.com/graphcool/graphql-request)  
+  // Create Graphcool API (based on https://github.com/graphcool/graphql-request)
   const graphcool = fromEvent(event)
   const api = graphcool.api('simple/v1')
 

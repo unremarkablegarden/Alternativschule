@@ -1,0 +1,7 @@
+#import "./SubjectFragment.gql"
+
+query allSubjects {
+	allSubjects {
+		...Subject
+	}
+}

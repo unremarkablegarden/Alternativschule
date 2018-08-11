@@ -1,0 +1,20 @@
+query accountInfo($id: ID!) {
+	User(id: $id) {
+		id
+		email
+		prefect
+		prefectStudents {
+			id
+			firstname
+			surname
+		}
+		teachesSubjects {
+			id
+			name
+			isPublished
+			# tutorLevel {
+			# 	levels
+			# }
+		}	
+	}
+}
