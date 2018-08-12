@@ -73,14 +73,14 @@ export default {
     background-repeat: no-repeat
     background-size: cover
   #competencesnav
-    .tab:hover .progresschart [class*="bar"]
+    .tab:hover .progresschart .bar
         background-image: linear-gradient(-180deg, $teal 0%, $teal 58%)     
     .tab:hover .progresschart
       background: url('../../assets/gfx/graphs/chart-lines-teal.svg')
       background-repeat: no-repeat
       background-size: cover
       background-position: 7% 100%
-  [class*="bar"]
+  .bar
     margin: 0 
     padding: 0 
     transition: all 200ms ease 
@@ -90,19 +90,15 @@ export default {
       cursor: pointer 
   
   .bar:nth-child(2)
-    // grid-row-start: $bar1
     grid-row-start: 0
     background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%) 
   .bar:nth-child(3)
-    // grid-row-start: $bar2
     grid-row-start: 0
     background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
   .bar:nth-child(4)
-    // grid-row-start: $bar3
     grid-row-start: 0
     background-image: linear-gradient(-180deg, #4AA8DA 0%, #653393 53%)
   .bar:nth-child(5)
-    // grid-row-start: $bar4
     grid-row-start: 0
     background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
     

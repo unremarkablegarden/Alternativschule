@@ -1,13 +1,14 @@
 <template lang="pug">
   #solarsystem
     .info
-      h1 {{ planetHover }}
+      h1 Planet: {{ planetHover }}
     .solarsystem
       .sun
-        img(src="../assets/gfx/planets/sun@3x.png")    
-      .planet-orbit(v-for="subject in subjects", :style="{ transform: rotate() }")
-        router-link(:to=' "subject/" + subject')
-          planet(:subject="subject")
+        img(src="../assets/gfx/planets/sun@3x.png")  
+      .planet-orbit(v-for="subject in subjects", @mouseover='planetHover = subject.name')
+        .orbit-wrap(:style="{ transform: subject.rotate }")  
+          router-link(:to=' "subject/" + subject.name')
+            planet(:subject="subject.name")
 </template>
 
 <script>
@@ -15,16 +16,56 @@ import planet from '@/components/areas/planet.vue'
 export default {
   data () {
     return {
-      subjects:[ 
-        'biology', 'history', 'english', 'philosophy'
-      ],
-      planetHover: 'test'
+      subjects: [
+        {
+        	name: 'biology'
+        }, 
+        {
+        	name: 'history'
+        }, 
+        {
+        	name: 'english'
+        }, 
+        {
+        	name: 'philosophy'
+        }, 
+        {
+        	name: 'phys'
+        }, 
+        {
+        	name: 'mathe'
+        }, 
+        {
+        	name: 'welterkunde'
+        }, 
+        {
+        	name: 'politics'
+        }, 
+        {
+        	name: 'deutsch'
+        }, 
+        {
+        	name: 'franzoesisch'
+        }, 
+        {
+        	name: 'spanisch'
+        }, 
+        {
+        	name: 'chemie'
+        }
+      ],  
+      planetHover: 'Nothing selected'
     }
   },
   methods: {
     rotate () {
       return 'rotate(' + Math.floor(Math.random() * 360) + 'deg)'
     }
+  },
+  created () {
+    this.subjects.forEach((o) => {
+      o.rotate = this.rotate()
+    })
   },
   components: {
     planet
@@ -41,26 +82,22 @@ export default {
 </style>
 
 <style lang="sass" scoped>
-$orbit1: 70vh 
-$orbit2: 55vh
-$orbit3: 40vh
-$orbit4: 28vh
-
-$sun: 240px
-
+$planet: 2.5vh
+$sun: 10vh
 $orbit-start: random(360)
 
 @keyframes rotating 
   from 
-    transform: rotate($orbit-start deg)
+    transform: rotate3d(0,0,1,0deg)
   to 
-    transform: rotate($orbit-start + 360deg)
-  
-
+    transform: rotate3d(0,0,1,360deg)
+    
 .info
   position: fixed
   top: 30px
   right: 30px
+  h1
+    text-transform: capitalize
 
 .sun img
   width: $sun 
@@ -68,44 +105,43 @@ $orbit-start: random(360)
 
 .planet  
   transition: border 200ms
-  transform: translateX(-15px) rotate(45deg)
+  transform: translateY(-($planet / 2)) rotate(130deg)
+  width: $planet
+  height: $planet
+  border-radius: $planet
+  transition: box-shadow 50ms
   &:hover
-    opacity: .8   
+    box-shadow: 0px 0px 24px #fea2fd
+    cursor: pointer          
 
 .planet-orbit
   border: 1px solid #ffffff1c
   position: absolute
   display: flex
   align-items: center
+  will-change: transform
+  transform: translateY(0)
   &:hover
     border: 1px solid #ffffff30
     cursor: pointer
+  .orbit-wrap
+    display: flex
+    justify-content: center
+    
+$orbit: 99vh
+$rotationtime: 300s
+@for $i from 1 through 14
+  .planet-orbit:nth-child(#{$i})
+    $orbit: $orbit - 6.5vh
+    $rotationtime: $rotationtime - 20s
+    width: $orbit 
+    height: $orbit
+    border-radius: $orbit / 2 
+    animation: rotating $rotationtime linear infinite
+    z-index: $i
+    .orbit-wrap
+      transform: translateY(0)
+      width: $orbit 
+      height: $orbit
 
-.planet-orbit:nth-child(2)
-  width: $orbit1 
-  height: $orbit1 
-  border-radius: $orbit1 / 2 
-  animation: rotating 240s linear infinite 
-  z-index: 1
-  
-.planet-orbit:nth-child(5)
-  width: $orbit2 
-  height: $orbit2 
-  border-radius: $orbit2 / 2 
-  animation: rotating 200s linear infinite
-  z-index: 2
-  
-.planet-orbit:nth-child(3)
-  width: $orbit3
-  height: $orbit3
-  border-radius: $orbit3 / 2 
-  animation: rotating 130s linear infinite
-  z-index: 3
-
-.planet-orbit:nth-child(4)
-  width: $orbit4
-  height: $orbit4
-  border-radius: $orbit4 / 2 
-  animation: rotating 60s linear infinite
-  z-index: 4
 </style>

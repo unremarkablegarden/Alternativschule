@@ -173,7 +173,7 @@ export default {
       ul
         border-color: $teal
         li.is-active a, li a:hover
-          background: $darkgrey
+          background: #0a0f26
           border-color: $teal
         
     h2

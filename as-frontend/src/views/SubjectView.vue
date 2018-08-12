@@ -1,14 +1,16 @@
 <template lang="pug">
   .planetzone
-    planet(:subject='currentSubject')
-    ul.courses
-     li BK
-     li.is-active GK
-     li AK1
-     li.is-deactivated AK2
+    .info
+      div Planet: {{ currentSubject }}
+      div Moon: {{ moonHover }}
+      //- div Course: {{ course }}
+    planet(:subject='currentSubject', :data-levels='subject.currentLevel')
+    ul.levels
+     li(v-for='level in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
     .orbit-wrap
-      .orbit(v-for='project in projects')
+      .orbit(v-for='project in subject.projects', @mouseover='moonHover = project',  style="{ transform: rotate(" + 'rotate' + ") }")
         moon
+        | {{ moonRotation }}
 </template>
 
 <script>
@@ -22,19 +24,34 @@ export default {
   name: 'subjectView',
   data () {
     return {
-      levels: 3,
-      projects:[ 'cells', 'mamals', 'reptiles' ]
+      subject: {
+        name: 'Biology',
+        projects:[ 'cells', 'mamals', 'reptilians', 'nazis'],
+        levels: [ 'bk', 'gk', 'ak1', 'ak2' ],
+        currentLevel: 'gk'
+      },
+      moonHover: 'Nothing selected'
     }
   },
+  // methods: {
+  //   rotate () {
+  //     return 360 / this.subject.projects.length + 'deg'
+  //   }
+  // },
+  // created () {
+  //   this.subject.project.forEach((o) => {
+  //     o.rotate = this.rotate() + this.rotate
+  //   })
+  // },
   computed: {
     currentSubject () {
       return this.$route.params.subject
+    },
+    moonRotation(){
+      return 360 / this.subject.projects.length + 'deg'
     }
   },
   methods: {
-    // getImg(index) {
-    //   return require('@/assets/gfx/planets/moons/moon_0' + (index+1) + '.svg')
-    // },
     levelChange(level) {
       this.levels = level
     }
@@ -57,11 +74,16 @@ $moon: 4vh
   to 
     transform: rotate(360deg)
 
-.levels
+.info
   position: fixed
-  top: 4em
+  top: 1rem
+  right: 1rem
+  text-align: right
+  color: $lightgrey
+  text-transform: capitalize
   
 .orbit-wrap
+  transform: translateY(0)
   animation: rotating 240s linear infinite
   width: $orbit
   height: $orbit
@@ -72,19 +94,20 @@ $moon: 4vh
   width: $planet
   height: $planet 
   transition: box-shadow 400ms ease
-  &[data-levels="0"]
-    box-shadow: 0px 0px 24px #fff
-  &[data-levels="1"]
+  &[data-levels="bk"]
+    box-shadow: 0px 0px 3vh #fff
+  &[data-levels="gk"]
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6
-  &[data-levels="2"]
+  &[data-levels="ak1"]
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6, 0 0 0 4vh #7397C1
-  &[data-levels="3"]  
+  &[data-levels="ak2"]  
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6, 0 0 0 4vh #7397C1, 0 0 0 6vh #5477A1
   img
     width: $planet
     height: $planet  
 
-.courses
+.levels
+  text-transform: uppercase
   position: fixed
   bottom: 2em
   right: 2em
@@ -97,15 +120,13 @@ $moon: 4vh
     border: 1px solid #fff
     border-radius: 3px
     padding: .6em
-    &:hover, &.is-active
+    &.is-active
       border: 1px solid $teal
-      color: $teal
-      cursor: pointer
-    &.is-deactivated
+      color: $teal    
+    &.is-active ~ li
       border: 1px solid $lightgrey
       color: $lightgrey
     
-
 .orbit
   width: $orbit
   height: $orbit
@@ -128,9 +149,9 @@ $moon: 4vh
 .orbit
   &:nth-child(1)
     border: 1px dashed 
-  &:nth-child(2)
-    transform: rotate(120deg)
-  &:nth-child(3)
-    transform: rotate(240deg)
+  // &:nth-child(2)
+  //   transform: rotate(120deg)
+  // &:nth-child(3)
+  //   transform: rotate(240deg)
   
 </style>

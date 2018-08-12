@@ -1,5 +1,6 @@
 <template lang="pug">
   #app
+    router-link(to='/logout').logout Logout
     transition(name="fade", mode="out-in")
       router-view#view
     usermenu
@@ -26,7 +27,6 @@ export default {
   @import "@/assets/styles/variables.sass"
   @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Roboto')
   
-  
   html,body
     font-family: $R
     font-size: 16px
@@ -34,6 +34,11 @@ export default {
     background-color: $space-blue
     background-image: url('assets/gfx/stars.svg')
     background-size: contain
+    
+  .logout
+    position: fixed
+    left: 1rem
+    top: 1rem
   
   #app
     font-family: 'Avenir', Helvetica, Arial, sans-serif

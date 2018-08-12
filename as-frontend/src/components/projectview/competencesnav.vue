@@ -86,5 +86,6 @@ export default {
   .progresschart
     padding: 0
     background-position: 7% 100%
+    .bar
     
 </style>

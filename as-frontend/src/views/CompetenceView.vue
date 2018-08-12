@@ -5,6 +5,11 @@
     .columns
       .column.is-3.chart
         progresschart(:competence='competence') 
+        .levels
+          span BK
+          span GK
+          span AK1
+          span AK2
         ul.explanation 
           li 1: Ich benötige noch viel Übung!
           li 2: Ich bin noch etwas unsicher.
@@ -56,7 +61,19 @@ export default {
     .progresschart
       height: 60%
       width: auto
+      margin-bottom: 1em
+      grid-column-gap: 12.5%
+      padding: 0 10% 0 15%
+      border-bottom: 1px solid #fff
+      .bar
+        border: 1px solid #fff
+    .levels
+      display: flex
+      justify-content: space-around
+      padding-left: 8%
       margin-bottom: 2em
+      font-size: .8em
+      font-weight: bold
   .text
     h3 
       font-family: $A
