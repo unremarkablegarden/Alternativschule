@@ -1,38 +1,46 @@
 <template lang="pug">
   #accountedit
-    el-form(:model='accountForm', ref='accountForm', label-width='120px').accountForm
-      el-form-item(label='Betnutzername')
+    el-form(:model='accountForm', ref='accountForm', label-width='120px', v-loading='$apollo.loading', :rules='rules', :status-icon='formIcon').accountForm
+      el-form-item(label='Betnutzername', prop='username')
         el-input(type='text', v-model='accountForm.username')
-      el-form-item(label='Email')
+      el-form-item(label='Email', prop='email')
         el-input(type='text', v-model='accountForm.email')
-      el-form-item(label='Kennwort')
-        el-input(type='password', v-model='accountForm.password')
       el-form-item
-        el-button(type='primary', @click='save', :loading='loading', icon='el-icon-check')
-          span(v-if='loading') Speichern...
+        el-button(type='primary', @click="submitForm('accountForm')", :loading='$apollo.loading', icon='el-icon-check')
+          span(v-if='$apollo.loading') Speichern...
           span(v-else) Speichern
 </template>
 
 <script>
-// import LOGGED_IN_USER from '@/graphql/LoggedInUser.gql'
 import ACCOUNT_INFO from '../graphql/AccountInfo.gql'
+import ACCOUNT_EDIT from '../graphql/AccountEdit.gql'
 
 export default {
   name: 'accountedit',
   data () {
     return {
+      formIcon: null,
       accountForm: {
         username: '',
         email: '',
-        password: ''
       },
-      loading: false,
+      rules: {
+        email: [
+          { required: true, type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] }
+        ],
+        username: [
+          { required: true, message: 'Username is required', trigger: ['blur', 'change'] }
+        ],
+        // password: [
+        //   { validator: validatePass, trigger: 'blur' }
+        // ],
+        // checkPassword: [
+        //   { validator: validatePass2, trigger: 'change' }
+        // ],
+      },
+      // loading: true,
       error: false
     }
-  },
-
-  mounted () {
-    console.log(this.userId)
   },
 
   computed: {
@@ -41,54 +49,61 @@ export default {
     }
   },
 
-  // apollo: {
-  //   allSubjects: {
-  //     query: ACCOUNT_INFO,
-  //     variables: {
-  //       'id': this.userId
-  //     },
-  //     // loadingKey: 'loading',
-  //     update (data) {
-  //
-  //     },
-  //     result (data) {
-  //       // this.loadingUsers = false
-  //       console.log(data)
-  //     }
-  //   }
-  // },
+  apollo: {
+    accountInfo: {
+      query: ACCOUNT_INFO,
+      variables: {
+        'id': localStorage.getItem('userId')
+      },
+      update (data) {
+        this.accountForm.username = data.User.username
+        this.accountForm.email = data.User.email
+        return data.User
+      }
+    }
+  },
 
   methods: {
-    save () {
-      this.loading = true
-      this.error = false
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log('valid')
+          this.save()
+        } else {
+          this.$message({
+            type: 'info',
+            message: 'Form error'
+          })
+          return false
+        }
+      });
+    },
 
-    	this.$apollo
-    		.query({
-    			mutation: ACCOUNT_INFO,
-    			variables: {
-    				email: this.loginForm.email,
-    				password: this.loginForm.password
-    			}
-    		})
-    		.then(response => {
-          console.log('-- auth success -- ')
-          const token = response.data.authenticateUser.token
-    			// save user token to localstorage
-    			localStorage.setItem('authenticate-user-token', token)
-          // change App.vue token variable
-          // this.$emit('token', token)
-          this.$store.commit('setLoggedIn', true)
-          // this.$parent.token = token
-          this.$router.push({ name: 'users' })
-    		})
+    save () {
+      this.$apollo
+        .mutate({
+          mutation: ACCOUNT_EDIT,
+          variables: {
+            id: this.userId,
+            username: this.accountForm.username,
+            email: this.accountForm.email,
+            // password: this.accountForm.password
+          }
+        })
+        .then(response => {
+          console.log(response)
+          this.$message({
+            type: 'success',
+            message: 'Changes saved'
+          })
+          this.formIcon = 'status-icon'
+        })
         .catch((error) => {
           console.error(error)
-          console.log('Wrong credentials')
-          this.error = true
-        })
-        .then(() => {
-          this.loading = false
+          this.$message({
+            type: 'error',
+            message: error.message
+          })
         })
     }
   }

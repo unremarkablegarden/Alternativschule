@@ -1,7 +1,7 @@
 <template lang="pug">
   #subjectslist
-    el-tabs(type='border-card', v-loading='!this.$apollo.loading')
-      el-tab-pane(v-if='!usersByType')
+    el-tabs(type='border-card', v-loading='!$apollo.loading')
+      el-tab-pane
         span(slot='label')
           i.el-icon-loading Loading
         | Loading
@@ -21,7 +21,7 @@
 
 <script>
 // import USERS_BY_TYPE from '@/graphql/UsersByType.gql'
-// import ALL_USERS from '@/graphql/Users.gql'
+import ALL_SUBJECTS from '@/graphql/Subjects.gql'
 // import USER_TYPES from '../graphql/UserTypes.gql'
 
 

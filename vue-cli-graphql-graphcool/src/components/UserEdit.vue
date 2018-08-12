@@ -21,20 +21,13 @@
         el-form-item(label='Nutzername', prop='username')
           el-input(type='username', v-model='editUserForm.username', placeholder="Type in username")
 
-        el-form-item(label='Vertrauensschüler', prop='prefect')
+        el-form-item(label='Vertrauensschüler', prop='prefect', v-if='editUserForm.userType == "Lehrer"')
           el-switch(v-model='editUserForm.prefect')
 
-
-
-        //- el-form-item(label='Password', prop='password')
-          el-input(type='password', v-model='editUserForm.password', placeholder='Type password')
-        //- el-form-item(label='Confirm', prop='checkPassword')
-          el-input(type='password', v-model='editUserForm.checkPassword', placeholder='Confirm password')
-
         el-form-item
-          el-button(@click='hideDialog') Stornieren
+          el-button(@click='hideDialog', icon='el-icon-close') Stornieren
 
-          el-button(type='primary', @click="submitForm('editUserForm')", :loading='loading', :disabled='submitDisabled')
+          el-button(type='primary', @click="submitForm('editUserForm')", :loading='loading', :disabled='submitDisabled', icon='el-icon-check')
             span(v-if='loading') Speichern...
             span(v-else) Speichern
 </template>
@@ -46,6 +39,11 @@ import USER_EDIT from '../graphql/UserEdit.gql'
 
 export default {
   name: 'useredit',
+  // watch: {
+  //   editUserForm (e) {
+  //     console.log(e)
+  //   }
+  // },
   props: {
     editUserForm: {
       type: Object,
@@ -56,8 +54,6 @@ export default {
           username: '',
           firstname: '',
           surname: '',
-          // password: '',
-          // checkPassword: '',
           userType: '',
           prefect: false
         }
@@ -69,28 +65,7 @@ export default {
     }
   },
   data () {
-    // var validatePass = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('Please input the password'))
-    //   } else {
-    //     if (this.editUserForm.checkPass !== '') {
-    //       this.$refs.editUserForm.validateField('checkPassword')
-    //     }
-    //     callback();
-    //   }
-    // };
-    // var validatePass2 = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('Please input the password again'))
-    //   } else if (value !== this.editUserForm.password) {
-    //     callback(new Error('Two inputs don\'t match!'))
-    //   } else {
-    //     callback();
-    //   }
-    // };
-
     return {
-      // mutableDialogVisible: this.dialogVisible,
       rules: {
         userType: [
           { required: true, message: 'Account type is required', trigger: 'change' }
@@ -107,16 +82,10 @@ export default {
         username: [
           { required: true, message: 'Username is required', trigger: 'change' }
         ],
-        // password: [
-        //   { validator: validatePass, trigger: 'blur' }
-        // ],
-        // checkPassword: [
-        //   { validator: validatePass2, trigger: 'change' }
-        // ],
+
       },
       loading: false,
       error: false,
-      // dialogVisible: false,
       submitDisabled: false
     }
   },

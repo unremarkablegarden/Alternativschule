@@ -27,21 +27,26 @@ import MutationButton from '@/components/MutationButton'
 Vue.component('MutationButton', MutationButton)
 
 import UsersList from '@/components/UsersList.vue'
-import UserAdd from '@/components/UserAdd.vue'
-import UserEdit from '@/components/UserEdit.vue'
 Vue.component('UsersList', UsersList)
+import UserAdd from '@/components/UserAdd.vue'
 Vue.component('UserAdd', UserAdd)
+import UserEdit from '@/components/UserEdit.vue'
 Vue.component('UserEdit', UserEdit)
 
+import AccountEdit from '@/components/AccountEdit.vue'
+Vue.component('AccountEdit', AccountEdit)
+import AccountPasswordReset from '@/components/AccountPasswordReset.vue'
+Vue.component('AccountPasswordReset', AccountPasswordReset)
+import AccountSubjectsList from '@/components/AccountSubjectsList.vue'
+Vue.component('AccountSubjectsList', AccountSubjectsList)
+
 import SubjectsList from '@/components/SubjectsList.vue'
-import SubjectAdd from '@/components/SubjectAdd.vue'
-import SubjectEdit from '@/components/SubjectEdit.vue'
 Vue.component('SubjectsList', SubjectsList)
+import SubjectAdd from '@/components/SubjectAdd.vue'
 Vue.component('SubjectAdd', SubjectAdd)
+import SubjectEdit from '@/components/SubjectEdit.vue'
 Vue.component('SubjectEdit', SubjectEdit)
 
-// import SubjectEdit from '@/components/SubjectEdit.vue'
-// Vue.component('SubjectsList', SubjectsList)
 
 Vue.config.productionTip = false
 

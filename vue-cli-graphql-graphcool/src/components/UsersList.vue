@@ -6,7 +6,19 @@
           i.el-icon-loading Loading
         | Loading
       el-tab-pane(v-for='type in userTypes', :key='type', v-else)
-        span(slot='label') {{ type }}
+        span(slot='label', v-if='type == "Admin"')
+          icon(icon='energy', color='lightgray').icon
+          | Admins
+        span(slot='label', v-if='type == "Lehrer"')
+          icon(icon='eyeglass', color='lightgray').icon
+          | Lehrer
+          //- /-innen
+        span(slot='label', v-if='type == "Schueler"')
+          icon(icon='graduation', color='lightgray').icon
+          | Schüler
+          //- /-innen
+
+
         el-table(:data='usersByType[type]', style='width: 100%', :default-sort="{prop: 'surname', order: 'ascending'}")
           el-table-column(prop='firstname', label='Vorname', sortable)
           el-table-column(prop='surname', label='Nachname', sortable)
@@ -109,4 +121,6 @@ export default {
 </script>
 
 <style lang="sass">
+  .icon
+    transform: scale(0.75) translate(-6px, 7px)
 </style>

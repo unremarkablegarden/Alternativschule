@@ -2,6 +2,7 @@ query accountInfo($id: ID!) {
 	User(id: $id) {
 		id
 		email
+		username
 		prefect
 		prefectStudents {
 			id
@@ -15,6 +16,6 @@ query accountInfo($id: ID!) {
 			# tutorLevel {
 			# 	levels
 			# }
-		}	
+		}
 	}
 }

@@ -16,7 +16,7 @@ type User @model {
 
   teachesSubjects: [Subject!]! @relation(name: "TeacherSubject")
   teachesProjects: [Project!]! @relation(name: "TeacherProject")
-  tutorLevel: TutorLevel @relation(name: "TutorLevelTeacher")
+  tutorLevel: TutorLevels @relation(name: "TutorLevelsTeacher")
 
   studiesSubjects: [Subject!]! @relation(name: "StudentSubject")
   studiesProjects: [Project!]! @relation(name: "StudentProject")
@@ -54,8 +54,8 @@ type Subject @model {
   students: [User!]! @relation(name: "StudentSubject")
   teachers: [User!]! @relation(name: "TeacherSubject")
   competences: [Competence!]! @relation(name: "SubjectCompetences")
-  levels: [Levels!]!
-  tutorLevel: TutorLevel @relation(name: "TutorLevelSubject")
+  levels: [Levels!]! #available in total?
+  tutorLevels: [TutorLevels!]! @relation(name: "TutorLevelsSubject")
   # subject: Subject! ????
   # saved in competences, which is linked to subject
   #evaluations: [Evaluation] @relation(name: "EvaluationSubject")
@@ -87,10 +87,10 @@ type Competence @model {
 }
 
 # teachers
-type TutorLevel @model {
+type TutorLevels @model {
   id: ID! @isUnique
-  teacher: User! @relation(name: "TutorLevelTeacher")
-  subject: Subject! @relation(name: "TutorLevelSubject")
+  teacher: User! @relation(name: "TutorLevelsTeacher")
+  subject: Subject! @relation(name: "TutorLevelsSubject")
   levels: [Levels!]!
 }
 
