@@ -60,7 +60,7 @@ export default {
               localStorage.setItem('userId', res)
               console.log('userId: ' + res)
 
-              this.$router.push({ name: 'store' })
+              this.$router.push({ name: 'home' })
 
               // get the db from graphcool via apollo and save in state.db
               // this.$store.dispatch('getDb').then((res) => {

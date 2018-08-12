@@ -12,6 +12,7 @@ export default {
   },
   data () {
     return {
+      db: null,
       areas: [
         'naturwissenschaft',
         'gesellschaftswissenschaften',
@@ -19,12 +20,25 @@ export default {
         'projecten'
       ]
     }
-  }
+  },
+  mounted () {
+    this.getDb()
+  },
+  methods: {
+    getDb () {
+      this.$store.dispatch('getDb').then((res) => {
+        this.db = res
+        console.log('———db-object———');
+        console.log(res)
+        console.log('————————————————')
+      })
+    }
+  },
 }
 </script>
 
 <style lang="sass">
-@import "@/assets/styles/variables.sass"  
+@import "@/assets/styles/variables.sass"
 .guibox
   width: calc(100vw - 200px)
   height: calc(100vh - 100px)
@@ -41,5 +55,5 @@ export default {
 </style>
 
 <style lang="sass" scoped>
-  
+
 </style>
