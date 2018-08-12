@@ -1,7 +1,7 @@
 <template lang="pug">
   router-link(:to='"/area/" + area').area.column.is-6(:class='area')
     h2.title {{ area }}
-    planet(v-for='subject in subjects', :subject="subject.name", :key="subject.name",  :style="{ top: subject.position.y, left: subject.position.x }") 
+    planet(v-for='subject in subjects', :subject="subject.name",  :style="{ top: subject.position.y, left: subject.position.x }") 
 </template>
 
 <script>

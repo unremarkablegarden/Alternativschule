@@ -6,7 +6,7 @@
 <script>
 export default {
   name: 'planet',
-  props: ['subject', 'rotate'],
+  props: ['subject'],
   computed: {
     src: function () {
       return require('@/assets/gfx/planets/' + this.subject + '.svg')

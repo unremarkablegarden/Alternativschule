@@ -4,12 +4,13 @@
       h1 Planet: {{ planetHover }}
     .solarsystem
       .sun
-        img(src="../assets/gfx/planets/sun@3x.png")  
+        img(src="../assets/gfx/planets/sun@3x.png")    
       .planet-orbit(v-for="subject in subjects", @mouseover='planetHover = subject.name')
         //-.orbit-wrap
         .orbit-wrap(:style="{ transform: subject.rotate }")   
           router-link(:to=' "subject/" + subject.name')
             planet(:subject="subject.name")
+        .orbit-circle(v-for="subject in subjects")
 </template>
 
 <script>
@@ -61,7 +62,6 @@ export default {
 <style lang="sass" scoped>
 $planet: 2.5vh
 $sun: 10vh
-$orbit-start: random(360)
 
 @keyframes rotating 
   from 
@@ -76,9 +76,11 @@ $orbit-start: random(360)
   h1
     text-transform: capitalize
 
-.sun img
-  width: $sun 
-  height: auto 
+.sun
+  z-index: 20
+  img
+    width: $sun 
+    height: auto 
 
 .planet  
   transition: border 200ms
@@ -89,7 +91,7 @@ $orbit-start: random(360)
   transition: box-shadow 50ms
   &:hover
     box-shadow: 0px 0px 24px #fea2fd
-    cursor: pointer          
+    cursor: pointer     
 
 .planet-orbit
   border: 1px solid #ffffff1c
@@ -98,9 +100,7 @@ $orbit-start: random(360)
   align-items: center
   will-change: transform
   transform: translateY(0)
-  &:hover
-    border: 1px solid #ffffff30
-    cursor: pointer
+  width: 10px
   .orbit-wrap
     display: flex
     justify-content: center
@@ -111,7 +111,6 @@ $rotationtime: 300s
   .planet-orbit:nth-child(#{$i})
     $orbit: $orbit - 6.5vh
     $rotationtime: $rotationtime - 20s
-    width: $orbit 
     height: $orbit
     border-radius: $orbit / 2 
     animation: rotating $rotationtime linear infinite
@@ -120,5 +119,10 @@ $rotationtime: 300s
       transform: translateY(0)
       width: $orbit 
       height: $orbit
-
+      a
+        z-index: $i
+        
+  .planet-circle:nth-child(#{$i})
+    $orbit: $orbit - 6.5vh
+         
 </style>

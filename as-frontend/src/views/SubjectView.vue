@@ -4,6 +4,7 @@
       div Planet: {{ currentSubject }}
       div Moon: {{ moonHover }}
     planet(:subject='currentSubject', :data-levels='subject.currentLevel')
+    .orbit-circle  
     ul.levels  
      li(v-for='(level, index) in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount') 
@@ -74,6 +75,7 @@ $moon: 4vh
   width: $planet
   height: $planet 
   transition: box-shadow 400ms ease
+  z-index: 2
   &[data-levels="bk"]
     box-shadow: 0px 0px 3vh #fff
   &[data-levels="gk"]
@@ -106,6 +108,14 @@ $moon: 4vh
     &.is-active ~ li
       border: 1px solid $lightgrey
       color: $lightgrey    
+  
+.orbit-circle
+  height: ($orbit*2) - $moon
+  width: ($orbit*2) - $moon
+  border-radius: (($orbit*2) - $moon)*2
+  border: 1px dashed $lightgrey
+  position: absolute
+  z-index: 0
 
 .orbit-wrap
   position: absolute
@@ -115,9 +125,6 @@ $moon: 4vh
   margin-top: - $orbit / 2
   animation: rotating 200s linear infinite
   transform-origin: 0 15vh
-  background-image: url('../assets/gfx/circle.svg')
-  background-repeat: no-repeat
-  background-size: cover
   .orbit
     height: $orbit
     position: absolute

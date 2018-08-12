@@ -13,12 +13,13 @@ export default {
   data () {
     return {
       db: null,
-      areas: [
-        'naturwissenschaft',
-        'gesellschaftswissenschaften',
-        'sprachen',
-        'projecten'
-      ]
+      // areas: [
+      //   'naturwissenschaft',
+      //   'gesellschaftswissenschaften',
+      //   'sprachen',
+      //   'projecten'
+      // ]
+      areas: []
     }
   },
   mounted () {
@@ -28,9 +29,10 @@ export default {
     getDb () {
       this.$store.dispatch('getDb').then((res) => {
         this.db = res
-        console.log('———db-object———');
+        for (let key in res.areas) {
+          this.areas.push(key)
+        }
         console.log(res)
-        console.log('————————————————')
       })
     }
   },
