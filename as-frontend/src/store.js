@@ -14,9 +14,7 @@ import ALL_SUBJECTS_STUDENT from '@/graphql/SubjectsStudent.gql'
 export default new Vuex.Store({
   state: {
     userId: null,
-    db: {
-      subjects: null
-    },
+    db: null,
 
     lernLevels: {
       history: {
@@ -47,8 +45,8 @@ export default new Vuex.Store({
       state.lernLevels[p.subject][p.competence][p.level] = p.value
     },
 
-    setSubjects (state, subjects) {
-      state.db.subjects = subjects
+    setDb (state, db) {
+      state.db = db
     }
   },
   getters: {
@@ -82,9 +80,21 @@ export default new Vuex.Store({
           .query({ query: ALL_SUBJECTS_STUDENT })
           .then(response => {
             const subjects = JSON.parse(JSON.stringify(response.data.allSubjects))
-            // console.log('--set db--')
-            // console.log(subjects)
-            commit('setSubjects', subjects)
+
+            let areas = {}
+            subjects.forEach((subject) => {
+              if (!areas[subject.area.slug]) {
+                areas[subject.area.slug] = []
+              }
+              areas[subject.area.slug].push(subject)
+            })
+
+            const db = {
+              areas: areas,
+              subjects: subjects
+            }
+
+            commit('setDb', db)
             resolve()
           })
           .catch((error) => {
