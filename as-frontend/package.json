@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "bulma": "^0.7.1",
+    "greensock": "^1.20.2",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
     "vue": "^2.5.16",
+    "vue-animejs": "^1.0.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },

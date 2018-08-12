@@ -1,6 +1,7 @@
 <template lang="pug">
   .planet
-    img(:src='src')
+    | ·
+    //- img(:src='src')
 </template>
 
 <script>

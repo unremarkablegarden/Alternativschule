@@ -50,7 +50,8 @@ export default {
 
 <style lang="sass" scoped>
 @import "@/assets/styles/variables.sass"
-$orbit: 30vh
+$orbit: 50vh 
+
 $planet: 25vh
 $moon: 4vh
 
@@ -69,6 +70,13 @@ $moon: 4vh
   color: $lightgrey
   text-transform: capitalize
   
+.orbit-wrap
+  transform: translateY(0)
+  animation: rotating 240s linear infinite
+  width: $orbit
+  height: $orbit
+  position: absolute
+
 .planet     
   border-radius: $planet / 2
   width: $planet
@@ -105,34 +113,74 @@ $moon: 4vh
       color: $teal    
     &.is-active ~ li
       border: 1px solid $lightgrey
-      color: $lightgrey    
-
-.orbit-wrap
+      color: $lightgrey
+    
+.orbit
+  width: $orbit
+  height: $orbit
+  border-radius: $orbit / 2 
   position: absolute
   display: flex
   align-items: center
-  justify-content: center
-  margin-top: - $orbit / 2
-  animation: rotating 200s linear infinite
-  transform-origin: 0 15vh
-  background-image: url('../assets/gfx/circle.svg')
-  background-repeat: no-repeat
-  background-size: cover
-  .orbit
-    height: $orbit
-    position: absolute
-    transform-origin: bottom
-    .moon
-      width: $moon
-      height: $moon
-      border-radius: $moon/2
-      &:hover
-        box-shadow: 0px 0px 24px #fea2fd
-        cursor: pointer          
+  .moon
+    transform: rotate(50deg) translateX(-20px)
+    transition: box-shadow 200ms ease-out
+    width: $moon 
+    height: $moon 
+    top: - $moon / 2
+    border-radius: $orbit / 2
+    z-index: 909
+    &:hover
+      box-shadow: 0px 0px 24px #fea2fd
+      cursor: pointer          
 
-$rotation: 0
-@for $i from 1 through 6
-  $rotation: $rotation + 60deg
-  .orbit:nth-child(#{$i})
-    transform: rotate($rotation)
+.orbit
+  &:nth-child(1)
+    
+.moonN_2
+  .orbit
+    &:nth-child(2)
+      transform: rotate(180deg)
+.moonN_3
+  .orbit
+    &:nth-child(2)
+      transform: rotate(120deg)
+    &:nth-child(3)
+      transform: rotate(240deg)
+.moonN_3
+  .orbit
+    &:nth-child(2)
+      transform: rotate(120deg)
+    &:nth-child(3)
+      transform: rotate(240deg)
+.moonN_4
+  .orbit
+    &:nth-child(2)
+      transform: rotate(90deg)
+    &:nth-child(3)
+      transform: rotate(180deg)
+    &:nth-child(4)
+      transform: rotate(270deg)
+.moonN_5
+  .orbit
+    &:nth-child(2)
+      transform: rotate(72deg)
+    &:nth-child(3)
+      transform: rotate(144deg)
+    &:nth-child(4)
+      transform: rotate(216deg)
+    &:nth-child(5)
+      transform: rotate(288deg)
+.moonN_6
+  .orbit
+    &:nth-child(2)
+      transform: rotate(60deg)
+    &:nth-child(3)
+      transform: rotate(120deg)
+    &:nth-child(4)
+      transform: rotate(180deg)
+    &:nth-child(5)
+      transform: rotate(240deg)
+    &:nth-child(6 )
+      transform: rotate(300deg)
 </style>

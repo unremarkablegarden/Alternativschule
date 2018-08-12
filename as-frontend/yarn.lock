@@ -1017,6 +1017,10 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+animejs@~2:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/animejs/-/animejs-2.2.0.tgz#35eefdfc535b81949c9cb06f0b3e60c02e6fdc80"
+
 ansi-html@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ansi-html/-/ansi-html-0.0.7.tgz#813584021962a9e9e6fd039f940d12f56ca7859e"
@@ -3140,6 +3144,10 @@ globule@^1.0.0:
 graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
+
+greensock@^1.20.2:
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/greensock/-/greensock-1.20.2.tgz#6a192bf46b2ef27d5bf96fda062f7fdc41b8f488"
 
 gzip-size@^4.1.0:
   version "4.1.0"
@@ -6765,6 +6773,12 @@ vm-browserify@0.0.4:
 void-elements@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
+
+vue-animejs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vue-animejs/-/vue-animejs-1.0.1.tgz#32e4a3ee71c29903bc0d9f3995bdb63e8087192c"
+  dependencies:
+    animejs "~2"
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.0"
