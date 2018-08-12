@@ -68,8 +68,7 @@ export default {
     logout() {
       localStorage.removeItem('authenticate-user-token')
       localStorage.removeItem('userId')
-      this.$store.dispatch('logoutAction')
-        .then(() => this.$router.push({ name: 'login' }) )
+      this.$store.dispatch('logoutAction').then(() => this.$router.push({ name: 'login' }) )
     }
   }
 }

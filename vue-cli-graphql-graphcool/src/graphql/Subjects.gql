@@ -1,7 +1,35 @@
-#import "./SubjectFragment.gql"
-
 query allSubjects {
 	allSubjects {
-		...Subject
+		id
+	  name
+	  slug
+	  description
+	  area {
+	    id
+	    name
+	  }
+	  projects {
+	    id
+	    name
+	  }
+	  teachers {
+	    id
+	    username
+	  }
+	  students {
+	    id
+	    firstname
+	    surname
+	  }
+	  tutorLevels {
+	    id
+	    teacher {
+	      id
+	    }
+	    subject {
+	      id
+	    }
+	    levels
+	  }
 	}
 }

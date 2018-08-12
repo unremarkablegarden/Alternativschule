@@ -4,7 +4,7 @@
 
     el-dialog(title='Benutzer Bearbeiten', :visible.sync='dialogVisible', width='780', :close-on-click-modal='false', :close-on-press-escape='false', :show-close='false')
 
-      el-form(:model='editUserForm', ref='editUserForm', :rules='rules', label-width='140px', v-loading='loading').editUserform
+      el-form(:model='editUserForm', ref='editUserForm', :rules='rules', label-width='140px', v-loading='loading', @keyup.enter.native="submitForm('editUserForm')").editUserform
 
         el-form-item(label='Benutzertyp', prop='userType')
           el-select(v-model='editUserForm.userType', placeholder='Account type')

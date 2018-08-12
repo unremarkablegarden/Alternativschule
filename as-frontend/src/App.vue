@@ -1,6 +1,6 @@
 <template lang="pug">
   #app
-    router-link(to='/logout').logout Logout
+    a(@click='logout').logout Logout
     transition(name="fade", mode="out-in")
       router-view#view
     usermenu
@@ -11,6 +11,13 @@ import usermenu from '@/components/usermenu.vue'
 export default {
   components: {
     usermenu
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('authenticate-user-token')
+      localStorage.removeItem('userId')
+      this.$store.dispatch('logoutAction').then(() => this.$router.push({ name: 'login' }) )
+    }
   }
 }
 </script>
@@ -26,7 +33,7 @@ export default {
   @import "~bulma"
   @import "@/assets/styles/variables.sass"
   @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Roboto')
-  
+
   html,body
     font-family: $R
     font-size: 16px
@@ -34,12 +41,12 @@ export default {
     background-color: $space-blue
     background-image: url('assets/gfx/stars.svg')
     background-size: contain
-    
+
   .logout
     position: fixed
     left: 1rem
     top: 1rem
-  
+
   #app
     font-family: 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing: antialiased
@@ -69,7 +76,7 @@ export default {
       color: #fff
       &.router-link-exact-active
         color: #42b983
-        
+
   .button
     background: $pinkred
     color: #fff
@@ -81,13 +88,13 @@ export default {
     &:hover
       background: darken($pinkred, 5)
       color: #fff
-      
-  .fade-enter-active, .fade-leave-active 
+
+  .fade-enter-active, .fade-leave-active
     transition-duration: 0.1s
     transition-property: opacity
     transition-timing-function: ease
 
-  .fade-enter,.fade-leave-active 
+  .fade-enter,.fade-leave-active
     opacity: 0
-  
+
 </style>

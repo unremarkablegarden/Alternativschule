@@ -4,7 +4,7 @@
 
     el-dialog(title='Benutzer hinzufügen', :visible.sync='dialogVisible', width='800', :close-on-click-modal='false')
 
-      el-form(:model='addUserForm', ref='addUserForm', :rules='rules', label-width='110px', v-loading='loading', status-icon).adduserform
+      el-form(:model='addUserForm', ref='addUserForm', :rules='rules', label-width='110px', v-loading='loading', status-icon, @keyup.enter.native="submitForm('addUserForm')").adduserform
 
         //- el-checkbox-group(label='Account type', prop='userType', v-model='addUserForm.userType', required, size="mini")
           el-radio-button(v-for='(item, index) in userTypes', :key='index', :label="Cfirst(item)", :value='item')

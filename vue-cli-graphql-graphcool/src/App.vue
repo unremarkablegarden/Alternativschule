@@ -36,14 +36,16 @@ export default {
   methods: {
     checkLoggedIn() {
       const userId = localStorage.getItem('userId')
-      if (userId) {
+      if (userId !== 'null') {
         this.userId = userId
+        console.log('---app-localstorage---\n' + userId);
       } else {
         this.$store.dispatch('getUserId')
           .then((userId) => {
             if (userId) {
               this.userId = userId
-              localStorage.setItem('userId', res)
+              console.log('---app-dispatch---\n' + userId)
+              localStorage.setItem('userId', userId)
             } else {
               this.userId = null
               localStorage.removeItem('userId')
@@ -148,8 +150,12 @@ export default {
   //   transition: height 200ms
 
   #logo
-    text-align: center
+    // text-align: center
     font-weight: normal
+    font-size: 1.2em
+    letter-spacing: 0.01em
+    margin-left: 200px
+    margin-top: 1.3em
 
   #app
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
@@ -164,6 +170,11 @@ export default {
 
   .el-menu
     border: 0 !important
+
+  main h1
+    margin: 0 0 0.8em
+    font-weight: normal
+    letter-spacing: 0.01em
 
   // partial bulma minireset
   body, html

@@ -6,10 +6,13 @@ import SolarSystem from './views/SolarSystem.vue'
 import SubjectView from './views/SubjectView.vue'
 import Areas from './views/Areas.vue'
 import SingleAreaView from './views/SingleAreaView.vue'
-import SubjectAreaSingle from './views/SubjectAreaSingle.vue' 
+import SubjectAreaSingle from './views/SubjectAreaSingle.vue'
 import ProjectView from './views/ProjectView.vue'
 import CompetenceView from './views/CompetenceView.vue'
 import SettingsView from './views/SettingsView.vue'
+
+import Login from './views/Login.vue'
+import Store from './views/Store.vue'
 
 Vue.use(Router)
 
@@ -18,6 +21,16 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/store',
+      name: 'store',
+      component: Store
+    },
+    {
+      path: '/solarsystem',
       name: 'home',
       component: SolarSystem
     },

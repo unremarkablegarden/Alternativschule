@@ -4,7 +4,7 @@
       .clearfix(slot='header')
         center
           span Alternativschule Berlin
-      el-form(:model='loginForm', ref='loginForm', label-width='120px').loginform
+      el-form(:model='loginForm', ref='loginForm', label-width='120px', @keyup.enter.native='login').loginform
         el-form-item(label='Email')
           el-input(type='text', v-model='loginForm.email', autofocus='true')
         el-form-item(label='Kennwort')
@@ -53,10 +53,12 @@ export default {
 
           // save user token to localstorage
     			localStorage.setItem('authenticate-user-token', token)
+          // console.log('token: ' + token)
 
           this.$store.dispatch('getUserId')
             .then((res) => {
               localStorage.setItem('userId', res)
+              // console.log('userId: ' + res)
               this.$router.push({ name: 'users' })
             })
 

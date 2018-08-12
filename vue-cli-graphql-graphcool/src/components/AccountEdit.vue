@@ -1,5 +1,7 @@
 <template lang="pug">
   #accountedit
+    div(style='margin-left: 120px')
+      h1 Benutzerkonto
     el-form(:model='accountForm', ref='accountForm', label-width='120px', v-loading='$apollo.loading', :rules='rules', :status-icon='formIcon').accountForm
       el-form-item(label='Betnutzername', prop='username')
         el-input(type='text', v-model='accountForm.username')

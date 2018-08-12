@@ -3,7 +3,7 @@
     el-tabs(type='border-card', v-loading='!usersByType')
       el-tab-pane(v-if='!usersByType')
         span(slot='label')
-          i.el-icon-loading Loading
+          i.el-icon-loading
         | Loading
       el-tab-pane(v-for='type in userTypes', :key='type', v-else)
         span(slot='label', v-if='type == "Admin"')
@@ -68,9 +68,6 @@ export default {
     },
     userTypes: {
       query: USER_TYPES,
-      variables: {
-        'enumName': "UserTypes"
-      },
       update (data) {
         this.loadingUserTypes = false
         return data.__type.enumValues.map(o => o.name)
