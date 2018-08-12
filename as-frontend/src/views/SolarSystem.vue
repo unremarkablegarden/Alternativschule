@@ -14,7 +14,6 @@
 
 <script>
 import planet from '@/components/areas/planet.vue'
-import { TweenMax } from 'greensock'
 export default {
   components: {
     planet
@@ -41,19 +40,13 @@ export default {
   methods: {
     rotate () {
       return 'rotate(' + Math.floor(Math.random() * 360) + 'deg)'
-    },
-    // animate () {
-    //   TweenMax.to('.planet-orbit', 600, { rotation:360} )
-    // }
+    }
   },
   created () {
     this.subjects.forEach((o) => {
       o.rotate = this.rotate()
     })
-  },
-  // mounted(){
-  //   this.animate()
-  // }
+  }
 }
 </script>
 
@@ -88,12 +81,12 @@ $orbit-start: random(360)
   height: auto 
 
 .planet  
-  // transition: border 200ms
+  transition: border 200ms
   transform: translateY(-($planet / 2)) rotate(130deg)
   width: $planet
   height: $planet
   border-radius: $planet
-  // transition: box-shadow 50ms
+  transition: box-shadow 50ms
   &:hover
     box-shadow: 0px 0px 24px #fea2fd
     cursor: pointer          
@@ -105,14 +98,12 @@ $orbit-start: random(360)
   align-items: center
   will-change: transform
   transform: translateY(0)
-  border: 1px solid red
   &:hover
     border: 1px solid #ffffff30
     cursor: pointer
   .orbit-wrap
     display: flex
     justify-content: center
-    border: 1px solid green
     
 $orbit: 99vh
 $rotationtime: 300s
