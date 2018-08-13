@@ -13,7 +13,7 @@
                 el-col(:span='12')
                   .description {{ subject.description }}
                 el-col(:span='12')
-                  ProjectsList(:projects='mySubjects.teachesProjects', :subject='subject.id', :user='userId')
+                  ProjectsList(:projects='mySubjects.teachesProjects', :subjectId='subject.id', :user='userId')
 </template>
 
 <script>

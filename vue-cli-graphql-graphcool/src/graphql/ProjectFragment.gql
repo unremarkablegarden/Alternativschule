@@ -5,6 +5,9 @@ fragment Project on Project {
   description
   selfLearn
   level
+  subject {
+    id
+  }
   materials {
     id
     name

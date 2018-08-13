@@ -33,5 +33,9 @@ query allSubjects {
 	    }
 	    levels
 	  }
+		competences {
+			name
+			slug
+		}
 	}
 }

@@ -12,7 +12,39 @@ export default {
   components: {
     usermenu
   },
+  data () {
+    return {
+      // userId: null
+    }
+  },
+  // created () {
+  //   this.checkLoggedIn()
+  // },
+  // watch: {
+  //   $route (to, from) {
+  //     this.checkLoggedIn()
+  //   }
+  // },
   methods: {
+    // checkLoggedIn() {
+    //   const userId = localStorage.getItem('userId')
+    //   if (userId !== 'null') {
+    //     this.userId = userId
+    //     console.log('---app-localstorage---\n' + userId);
+    //   } else {
+    //     this.$store.dispatch('getUserId')
+    //       .then((userId) => {
+    //         if (userId) {
+    //           this.userId = userId
+    //           console.log('---app-dispatch---\n' + userId)
+    //           localStorage.setItem('userId', userId)
+    //         } else {
+    //           this.userId = null
+    //           localStorage.removeItem('userId')
+    //         }
+    //       })
+    //   }
+    // },
     logout() {
       localStorage.removeItem('authenticate-user-token')
       localStorage.removeItem('userId')

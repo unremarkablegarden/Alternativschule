@@ -2,16 +2,17 @@
   #projectslist
     //- el-card(v-loading='$apollo.loading', shadow='never')
     .projects
-      el-collapse(v-for='(project, index) in projects', :key='project.slug', v-model='activeElCollapse').subject
+      //- xmp {{ projects }}
+      el-collapse(v-for='(project, index) in projects', :key='project.slug', v-model='activeElCollapse', v-if='project.subject.id == subjectId').subject
         el-collapse-item(:title='project.name', :name='project.name')
           .description {{ project.description }}
-    ProjectAdd(:subject='subject', :projects='projects')
+    ProjectAdd(:subject='subjectId', :projects='projects')
 </template>
 
 <script>
 export default {
   name: 'projectslist',
-  props: ['projects', 'subject', 'user'],
+  props: ['projects', 'subjectId', 'user'],
   data () {
     return {
       activeElCollapse: []

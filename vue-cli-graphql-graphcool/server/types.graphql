@@ -53,7 +53,7 @@ type Subject @model {
   projects: [Project!]! @relation(name: "SubjectProject")
   students: [User!]! @relation(name: "StudentSubject")
   teachers: [User!]! @relation(name: "TeacherSubject")
-  competences: [Competence!]! @relation(name: "SubjectCompetences")
+  competences: [Competence!]! @relation(name: "SubjectCompetences") # lesen/schreiben
   levels: [Levels!]! #available in total?
   tutorLevels: [TutorLevels!]! @relation(name: "TutorLevelsSubject")
   # subject: Subject! ????
@@ -80,6 +80,7 @@ type Competence @model {
   id: ID! @isUnique
   # i.e. Lesen, Schreiben
   name: String
+  slug: String
   subject: Subject! @relation(name: "SubjectCompetences")
   evaluations: [Evaluation!]! @relation(name: "CompetenceEvaluation")
   # levels determined by subject
@@ -96,8 +97,7 @@ type TutorLevels @model {
 
 type Evaluation @model {
   id: ID! @isUnique
-  # max 10
-  value: Int!
+  value: Int! # max 10
   student: User! @relation(name: "StudentSelfEvaluation")
   competence: Competence! @relation(name: "CompetenceEvaluation")
   #subject: Subject! @relation(name: "EvaluationSubject")

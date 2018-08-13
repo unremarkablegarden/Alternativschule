@@ -1,0 +1,34 @@
+query userStudentById($id: ID!) {
+	User(id: $id) {
+		id
+		username
+		firstname
+		surname
+		studiesSubjects {
+			id
+			name
+			slug
+		}
+		studiesProjects {
+			id
+			name
+			slug
+		}
+		selfEvaluations {
+			id
+			value
+			level
+			competence {
+				id
+				name
+				slug
+				subject {
+					id
+					name
+					slug
+				}
+			}
+		}
+
+	}
+}

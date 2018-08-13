@@ -8,13 +8,15 @@ const apolloClient = provide.$apolloProvider.defaultClient
 Vue.use(Vuex)
 
 import LOGGED_IN_USER from '@/graphql/LoggedInUser.gql'
-import ALL_SUBJECTS_STUDENT from '@/graphql/SubjectsStudent.gql'
+import ALL_SUBJECTS_FOR_STUDENT from '@/graphql/SubjectsStudent.gql'
+import USER_STUDENT from '@/graphql/UserStudentById.gql'
 
 
 export default new Vuex.Store({
   state: {
     userId: null,
     db: null,
+    myData: null,
 
     lernLevels: {
       history: {
@@ -47,6 +49,9 @@ export default new Vuex.Store({
 
     setDb (state, db) {
       state.db = db
+    },
+    setMyData (state, data) {
+      state.myData = data
     }
   },
   getters: {
@@ -59,6 +64,10 @@ export default new Vuex.Store({
         resolve()
       })
     },
+
+
+
+
     async setUserId ({ commit }) {
       return new Promise((resolve, reject) => {
         apolloClient
@@ -74,34 +83,24 @@ export default new Vuex.Store({
       return state.userId
     },
 
+
+
+
+
     async setApolloDataToStore({ commit }) {
       return new Promise((resolve, reject) => {
         apolloClient
-          .query({ query: ALL_SUBJECTS_STUDENT })
+          .query({ query: ALL_SUBJECTS_FOR_STUDENT })
           .then(response => {
             const subjects = JSON.parse(JSON.stringify(response.data.allSubjects))
 
-            let areas = []
-            // subjects.forEach((subject) => {
-            //   if (!areas[subject.area.slug]) {
-            //     areas[subject.area.slug] = []
-            //   }
-            //   areas[subject.area.slug].push(...subject)
-            // })
-
-            // console.log(areas)
-
-
-            // let areasArr = []
-            // for (let key in areas) {
-            //   areasArr.push(key)
-            // }
-            //
-            // subjects.forEach((subject) => {
-            //   areasArr[subject.area.slug].push(subject)
-            // })
-            //
-            // console.log(areasArr)
+            let areas = {}
+            subjects.forEach((subject) => {
+              if (!areas[subject.area.slug]) {
+                areas[subject.area.slug] = []
+              }
+              areas[subject.area.slug].push(...subject)
+            })
 
             const db = {
               areas: areas,
@@ -120,6 +119,38 @@ export default new Vuex.Store({
     async getDb({ self, state, dispatch }) {
       await dispatch('setApolloDataToStore')
       return state.db
+    },
+
+
+
+
+
+    async setApolloUserToStore({ self, state, dispatch, commit }) {
+      return new Promise((resolve, reject) => {
+        apolloClient
+          .query({
+            query: USER_STUDENT,
+            variables: {
+              id: state.userId
+            },
+          })
+          .then(response => {
+            const myData = JSON.parse(JSON.stringify(response.data.User))
+            commit('setMyData', myData)
+            resolve()
+          })
+          .catch((error) => {
+            console.error(error)
+            reject()
+          })
+      })
+    },
+    async getUserData({ self, state, dispatch }) {
+      await dispatch('setUserId')
+      await dispatch('setApolloUserToStore')
+      console.log('state userId: '+state.userId)
+      console.log('state myData: '+state.myData)
+      return state.myData
     }
   }
 })
