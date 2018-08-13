@@ -10,7 +10,6 @@
     //- ul.levels  
      li(v-for='(level, index) in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount') 
-      router-link.orbit(v-for='project in currentSubjectData.projects', :to='"/project/" + currentSubject + "/" + project.slug',  @mouseover='moonHover = project', @mouseleave='moonHover = null')
         moon
 </template>
 
