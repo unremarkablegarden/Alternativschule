@@ -42,6 +42,7 @@ export default {
       planetHover: null,
       loading: true
 =======
+
       db: null,
       subjects: null  
     }
