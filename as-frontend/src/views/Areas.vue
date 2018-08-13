@@ -126,14 +126,14 @@ export default {
   &:nth-child(4)
     .planet
       &:nth-child(2)
-        top: 2vh
-        left: 3vw
+        top: 6vh
+        left: 6vw
       &:nth-child(3)
         top: 16vh
         left: 29vw
       &:nth-child(4)
-        top: 4vh
-        left: 8vw
+        top: 28vh
+        left: 11vw
       &:nth-child(5)
         top: 16vh
         left: 19vw

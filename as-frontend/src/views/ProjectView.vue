@@ -7,13 +7,13 @@
       .columns
         .side-menu.column.is-3
           ul
+            li.section-title(v-if="myProjects") Meine Themen
+            li(v-for="project in myProjects")
+              router-link(:to="'/project/' + currentSubject + '/' + project.slug")
+                | {{ project.name }}
             li.section-title(v-if="currentSubjectData.projects") Alle Themen
             li(v-for="project in currentSubjectData.projects", v-if='!projectInUserData(project)')
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
-                | {{ project.name }}
-            li.section-title(v-if="myProjects") Meine Themen
-            li(v-for="project in myProjects")
-              router-link(:to="currentSubject + '/' + project.slug")
                 | {{ project.name }}
             //- li.section-title(v-if="selflearnProjects") Selbstlernboxen
             //- li(v-for="project in selflearnProjects")
@@ -151,20 +151,21 @@ export default {
       border-top: 1px solid $lightgrey
       padding-top: 1em
       li
-        margin-bottom: 1.1em
-        padding-bottom: 1.1em
+        margin-bottom: 1.2em
+        padding-bottom: 1.2em
         border-bottom: 1px solid $lightgrey
         line-height: 1
         a
           color: #fff
-          &:hover
+          &:hover, &.router-link-active
             color: $lightgrey
       .section-title
         font-family: $R
         color: $teal
         font-size: .8rem
+        line-height: 1
         position: absolute
-        margin-top: -2em
+        margin-top: -2.1em
         background: $darkgrey
         font-weight: bold
         padding: 0 .5em 0 0
@@ -185,6 +186,8 @@ export default {
       color: #fff
       margin-bottom: .75em
     .tab-content
+      &.info
+        padding-right: 2em
       p
         margin-bottom: 2em
     .material

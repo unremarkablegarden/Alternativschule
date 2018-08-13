@@ -5,7 +5,7 @@
     .guibox.columns
       .column.is-5.is-offset-1
         planet(:subject='currentSubjectData.slug') 
-        .button Hinzufugen
+        .button
       .column.is-4.info.is-offset-1
         h1 Planet: {{ currentSubject }}
         .level
@@ -32,7 +32,7 @@ export default {
       db: null,
       subjects: null,
       currentSubjectData: null,
-      planetHide: true
+      planetHide: false
     }
   },
   mounted () {
@@ -71,7 +71,7 @@ export default {
       margin-bottom: 0
       span
         &::after
-          content: '–'
+          content: ' –'
           margin: 0 .5em 0 .2em
         &:last-child::after
           content: ''
