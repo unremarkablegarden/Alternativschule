@@ -98,6 +98,7 @@ export default {
         },
         updateQueries: {
           mySubjects: (prev, { mutationResult }) => {
+            console.log('--updateQueries--')
             console.log(prev)
             console.log(mutationResult)
             return {
@@ -107,6 +108,7 @@ export default {
         }
       })
       .then((data) => {
+        console.log('--projectAdd then()--')
         console.log(data)
         this.loading = false
         this.dialogVisible = false

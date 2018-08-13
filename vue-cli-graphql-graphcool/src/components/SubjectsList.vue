@@ -44,7 +44,7 @@ export default {
       },
       update (response) {
         // simplify the response
-        console.log(response.User)
+        // console.log(response.User)
         return JSON.parse(JSON.stringify(response.User))
       },
       result (result) {
