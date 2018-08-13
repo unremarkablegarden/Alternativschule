@@ -21,39 +21,22 @@ export default {
   },
   data () {
     return {
-      // subjects: [
-        // { name: 'bio' },
-        // {	name: 'history' },
-        // {	name: 'englisch' },
-        // {	name: 'philosophy' },
-        // { name: 'phys' },
-        // { name: 'mathe' },
-        // {	name: 'welterkundung' },
-        // { name: 'politics' },
-        // { name: 'deutsch' },
-        // { name: 'franzoesisch' },
-        // { name: 'spanisch' },
-        // { name: 'chemie' },
-        // { name: 'deutsch' },
-      // ],
       myData: null,
       subjects: null,
       planetHover: null,
       loading: true,
       db: null,
-      subjects: null  
+      subjects: null
     }
   },
   mounted () {
-    this.getDb()
+    // this.getDb()
+    this.getMyData()
   },
   computed: {
     currentArea () {
       return this.$route.params.area
     }
-  },
-  mounted () {
-    this.getMyData()
   },
   methods: {
     getMyData () {

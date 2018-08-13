@@ -14,11 +14,13 @@ export default {
     },
   },
   created () {
-    this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
+    // this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
+    this.lernLevels = this.$store.state.lernLevels.history[this.competence]
   },
   watch: {
     competence () {
-      this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
+      // this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
+      this.lernLevels = this.$store.state.lernLevels.history[this.competence]
     }
   },
   data () {
@@ -48,7 +50,7 @@ export default {
       ]
     }
   },
-  
+
 }
 </script>
 
@@ -58,14 +60,14 @@ export default {
   $bar2: 30
   $bar3: 20
   $bar4: 60
-  
+
   .progresschart
     padding-left: 20px
     display: grid
-    grid-template-columns: repeat(4, 1fr) 
+    grid-template-columns: repeat(4, 1fr)
     grid-template-rows: repeat(100, 1fr)
     grid-column-gap: 3px
-    height: 100% 
+    height: 100%
     width: 100%
     min-height: 7em
     min-width: 20px
@@ -74,24 +76,24 @@ export default {
     background-size: cover
   #competencesnav
     .tab:hover .progresschart .bar
-        background-image: linear-gradient(-180deg, $teal 0%, $teal 58%)     
+        background-image: linear-gradient(-180deg, $teal 0%, $teal 58%)
     .tab:hover .progresschart
       background: url('../../assets/gfx/graphs/chart-lines-teal.svg')
       background-repeat: no-repeat
       background-size: cover
       background-position: 7% 100%
   .bar
-    margin: 0 
-    padding: 0 
-    transition: all 200ms ease 
-    grid-row-end: 102 
-    &:hover 
-      opacity: .8 
-      cursor: pointer 
-  
+    margin: 0
+    padding: 0
+    transition: all 200ms ease
+    grid-row-end: 102
+    &:hover
+      opacity: .8
+      cursor: pointer
+
   .bar:nth-child(2)
     grid-row-start: 0
-    background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%) 
+    background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%)
   .bar:nth-child(3)
     grid-row-start: 0
     background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
@@ -101,5 +103,5 @@ export default {
   .bar:nth-child(5)
     grid-row-start: 0
     background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
-    
+
 </style>

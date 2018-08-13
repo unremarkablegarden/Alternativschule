@@ -1,50 +1,52 @@
 <template lang="pug">
 .wrapper
   .guibox
-    //- competencesnav
-    .columns
-      .side-menu.column.is-3
-        ul
-          li.section-title(v-if="currentSubjectData.projects") Alle Themen
-          li(v-for="project in currentSubjectData.projects") 
-            router-link(:to="'/project/' + currentSubject + '/' + project.slug")
-              | {{ project.name }} 
-          li.section-title(v-if="myProjects") Meine Themen
-          li(v-for="project in myProjects")   
-            router-link(:to="currentSubject + '/' + project.slug")
-              | {{ project.name }} 
-          //- li.section-title(v-if="selflearnProjects") Selbstlernboxen
-          //- li(v-for="project in selflearnProjects") 
-            router-link(:to="currentSubject + '/' + project.slug")
-              | {{ project.name }} 
-          
-      .main.column.is-8.is-offset-1
-        .tabs.is-boxed
-          ul 
-            li(:class="{ 'is-active' : (tab == 'projectview') }")
-              router-link(:to='"/project/" + currentSubject + "/" + project') Info
-            li(:class="{ 'is-active' : (tab == 'projectview-material') }")
-              router-link(:to='"/project/" + currentSubject + "/" + project + "/material"') Material
-        .tab-content.info(v-if="tab == 'projectview-home'")
-          h2.title Select a project...
-          
-        .tab-content.info(v-if="tab == 'projectview'")
-          //- xmp {{ projectData }}
-          h2.title {{ projectData.name }}
-          .level {{ projectData.level }}
-          p {{ projectData.info }}
-          .button Hinzufugen
-          
-        .tab-content.material(v-if="tab == 'projectview-material'")
-          ul  
-            li(data-type = 'pdf')
-              .text
-                .title Arbeitsbogen
-                p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
-            li(data-type = 'video')
-              .text
-                .title Video
-                p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
+    .loading(v-if='loadingData || loadingUser') Loading...
+    div(v-else)
+      competencesnav
+      .columns
+        .side-menu.column.is-3
+          ul
+            li.section-title(v-if="currentSubjectData.projects") Alle Themen
+            li(v-for="project in currentSubjectData.projects", v-if='!projectInUserData(project)')
+              router-link(:to="'/project/' + currentSubject + '/' + project.slug")
+                | {{ project.name }}
+            li.section-title(v-if="myProjects") Meine Themen
+            li(v-for="project in myProjects")
+              router-link(:to="currentSubject + '/' + project.slug")
+                | {{ project.name }}
+            //- li.section-title(v-if="selflearnProjects") Selbstlernboxen
+            //- li(v-for="project in selflearnProjects")
+              router-link(:to="currentSubject + '/' + project.slug")
+                | {{ project.name }}
+
+        .main.column.is-8.is-offset-1
+          .tabs.is-boxed
+            ul
+              li(:class="{ 'is-active' : (tab == 'projectview') }")
+                router-link(:to='"/project/" + currentSubject + "/" + project') Info
+              li(:class="{ 'is-active' : (tab == 'projectview-material') }")
+                router-link(:to='"/project/" + currentSubject + "/" + project + "/material"') Material
+          .tab-content.info(v-if="tab == 'projectview-home'")
+            h2.title Select a project...
+
+          .tab-content.info(v-if="tab == 'projectview'")
+            //- xmp {{ currentProjectData }}
+            h2.title {{ currentProjectData.name }}
+            .level Level: {{ currentProjectData.level }}
+            p {{ currentProjectData.description }}
+            .button Hinzufugen
+
+          .tab-content.material(v-if="tab == 'projectview-material'")
+            ul
+              li(data-type = 'pdf')
+                .text
+                  .title Arbeitsbogen
+                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
+              li(data-type = 'video')
+                .text
+                  .title Video
+                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
 </template>
 
 <script>
@@ -63,59 +65,15 @@ export default {
       db: null,
       subjects: null,
       currentSubjectData: null,
-      // projects: [
-      //   {
-      //     slug: 'cells',
-      //     name: 'Cells',
-      //     info: 'Lorem ipsum 1',
-      //     level: 'Aufbaukurs 1'
-      //   }, 
-      //   {
-      //     slug: 'mamals',
-      //     name: 'Mamals',
-      //     info: 'Lorem ipsum 1',
-      //     level: 'Aufbaukurs 1'
-      //   }, 
-      //   {
-      //     slug: 'reptilians',
-      //     name: 'Reptilians',
-      //     info: 'Lorem ipsum 1',
-      //     level: 'Aufbaukurs 1'
-      //   },
-      //   {
-      //     slug: 'digestion',
-      //     name: 'Digestion',
-      //     info: 'Lorem ipsum 1',
-      //     level: 'Aufbaukurs 1'
-      //   },
-      //   {
-      //     slug: 'reproduction',
-      //     name: 'Reproduction',
-      //     info: 'Lorem ipsum 1',
-      //     level: 'Aufbaukurs 1'
-      //   }
-      // ],
-      // myProjects: [
-      //   {
-      //     name: 'Trees',
-      //     slug: 'trees'
-      //   }
-      // ],
-      // selflearnProjects: [
-      //   {
-      //     name: 'Plants', 
-      //     slug: 'plants'
-      //   },
-      //   {
-      //     name: 'Ecosystems',
-      //     slug: 'ecosystems'
-      //   }
-      // ]
+      myProjects: null,
+      loadingUser: true,
+      loadingData: true,
+      currentProjectData: null,
     }
   },
   computed: {
     tab () {
-      return this.$route.name  
+      return this.$route.name
     },
     currentSubject () {
       return this.$route.params.subject
@@ -123,35 +81,55 @@ export default {
     project () {
       return this.$route.params.project
     },
-    projectData () {
-      return this.projects.find(o => o.slug === this.project)
-    }
+    // projectData () {
+      // return this.projects.find(o => o.slug === this.project)
+      // return this.currentSubjectData.find(o => o.slug === this.project)
+    // }
   },
   methods: {
+    projectInUserData(project) {
+      let foundIt = false
+      this.myProjects.forEach((p) => {
+        if (p.id == project.id) {
+          // console.log(project.name + ' is already added')
+          foundIt = true
+        }
+      })
+      return foundIt
+    },
     getDb () {
       this.$store.dispatch('getDb')
         .then((response) => {
           this.db = response
-          // console.log(response)
-          this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
-          console.log('currentSobjectData');
-          console.log(this.currentSubjectData)
+
+          this.setCurrentData()
+
+          this.loadingUser = false
         })
     },
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = response
-        this.subjects = response.studiesSubjects
-        this.subjects.forEach(subject => subject.rotate = this.rotate())
-        this.loading = false
-        console.log('myData');
-        console.log(response)
+        this.myProjects = response.studiesProjects
+        this.loadingData = false
+        // console.log('myData')
+        // console.log(response)
       })
-    } 
+    },
+    setCurrentData () {
+      this.currentSubjectData = this.db.subjects.find(subject => subject.slug === this.currentSubject)
+      this.currentProjectData = this.currentSubjectData.projects.find(p => p.slug === this.project)
+    }
   },
   mounted () {
     this.getDb()
     this.getMyData()
+  },
+  watch: {
+    '$route' (to, from) {
+      console.log('route change')
+      this.setCurrentData()
+    }
   }
 }
 </script>
@@ -168,7 +146,7 @@ export default {
     position: relative
     overflow: scroll
     height: calc(100vh - 260px)
-    ul 
+    ul
       border-top: 1px solid $lightgrey
       padding-top: 1em
       li
@@ -186,20 +164,20 @@ export default {
         font-size: .8rem
         position: absolute
         margin-top: -2em
-        background: $darkgrey  
+        background: $darkgrey
         font-weight: bold
         padding: 0 .5em 0 0
         border: none
   .main
     .tabs
       a
-        color: #fff  
+        color: #fff
       ul
         border-color: $teal
         li.is-active a, li a:hover
           background: #0a0f26
           border-color: $teal
-        
+
     h2
       font-size: 1rem
       font-weight: bold
@@ -216,7 +194,7 @@ export default {
           font-size: 1.2rem
           color: #fff
           text-transform: uppercase
-        p 
+        p
           font-size: .8rem
           color: #666
         &::before

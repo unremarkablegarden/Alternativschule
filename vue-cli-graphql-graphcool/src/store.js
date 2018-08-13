@@ -36,16 +36,15 @@ export default new Vuex.Store({
         apolloClient
           .query({ query: LOGGED_IN_USER })
           .then(response => {
-            // console.log('---store apollo---')
-            // console.log(response)
-            // console.log('------------------');
             commit('setUserId', response.data.loggedInUser.id)
             resolve()
           })
       })
     },
     async getUserId ({ self, state, dispatch }) {
-      await dispatch('setUserId')
+      if (!state.userId) {
+        await dispatch('setUserId')
+      }
       return state.userId
     }
   }

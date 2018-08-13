@@ -20,9 +20,10 @@ export default {
       // const bar = 100 - (level * 10)
       const courseLevel = 'bk'
       const payload = {
-        subject: this.currentSubject, 
-        competence: this.currentCompetence, 
-        level: courseLevel, 
+        // subject: this.currentSubject,
+        subject: 'history',
+        competence: this.currentCompetence,
+        level: courseLevel,
         value: level
       }
       this.$store.commit('setLernLevel', payload)
@@ -41,7 +42,7 @@ export default {
 
 <style lang="sass" scoped>
   #lernlevel
-    position: relative  
+    position: relative
   .select-level
     position: absolute
     top: 47px
@@ -51,7 +52,7 @@ export default {
       width: 30px
       border-radius: 15px
       border: 1px solid transparent
-      background: none  
+      background: none
       margin-right: 18.2px
       outline: none
       transition: border 200ms
@@ -60,6 +61,6 @@ export default {
       &:hover, &.is-selected
         border: 1px solid #fff
         cursor: pointer
-        
-      
+
+
 </style>

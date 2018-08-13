@@ -76,8 +76,11 @@ export default {
 
   .logout
     position: fixed
+    color: #DDD
     left: 1rem
     top: 1rem
+    &:hover
+      color: white
 
   #app
     font-family: 'Avenir', Helvetica, Arial, sans-serif

@@ -24,23 +24,23 @@ export default {
     return {
       competences: [
         {
-          name: 'Understanding',
-          slug: 'understanding',
+          name: 'Verstehen',
+          slug: 'verstehen',
           text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
         },
         {
-          name: 'Reading',
-          slug: 'reading',
+          name: 'Lesen',
+          slug: 'lesen',
           text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
         },
         {
-          name: 'Something',
-          slug: 'something',
+          name: 'Schreiben',
+          slug: 'schreiben',
           text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
         },
         {
-          name: 'Nothing Much',
-          slug: 'nothing_much',
+          name: 'Sprechen',
+          slug: 'sprechen',
           text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
         }
       ]
@@ -68,8 +68,8 @@ export default {
       padding-bottom: 0
     .desc
       .competence
-        font-weight: bold  
-    .themen-link      
+        font-weight: bold
+    .themen-link
       font-weight: bold
       display: flex
       align-items: center
@@ -80,12 +80,12 @@ export default {
     .themen-link.is-not-lit
       background: none
       border: 1px solid #fff
-      &:hover 
+      &:hover
         background: $teal
         border: 1px solid $teal
   .progresschart
     padding: 0
     background-position: 7% 100%
     .bar
-    
+
 </style>

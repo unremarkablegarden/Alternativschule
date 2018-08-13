@@ -1,16 +1,17 @@
 <template lang="pug">
-  .loading(v-if='!currentSubjectData') Loading...
+  .loading(v-if='loading') Loading...
   .planetzone(v-else)
     .info
-      div Planet: {{ currentSubjectData.slug }}
+      div Planet: {{ currentSubject }}
       div(v-if='moonHover') Moon: {{ moonHover }}
-    planet(:subject='currentSubjectData.slug')
-    //- planet(:subject='currentSubjectData.slug', :data-levels='subject.currentLevel') FIX CURRENTLEVELS   
-    .orbit-circle  
-    //- ul.levels  
+    planet(:subject='currentSubject')
+    //- planet(:subject='currentSubjectData.slug', :data-levels='subject.currentLevel') FIX CURRENTLEVELS
+    .orbit-circle
+    //- ul.levels
      li(v-for='(level, index) in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
-    .orbit-wrap(:class='moonCount') 
-      router-link.orbit(v-for='project in currentSubjectData.projects', :key='project.slug' :to='"/project/" + currentSubject + "/" + project.slug',  @mouseover='moonHover = project', @mouseleave='moonHover = null')
+    //- .orbit-wrap(:class='moonCount')
+    .orbit-wrap(:class='moonCount')
+      router-link(v-for='project in projects', :key='project.slug', @mouseover.native='moonHover = project.slug', @mouseleave.native='moonHover = null',  :to='"/project/" + currentSubject + "/" + project.slug').orbit
         moon
 </template>
 
@@ -23,16 +24,18 @@ export default {
     moon
   },
   name: 'subjectView',
-  data () {  
+  data () {
     return {
       db: null,
-      subjects: null,
-      currentSubjectData: null,
+      projects: null,
+      // currentSubjectData: null,
       moonHover: null,
+      loading: true
     }
   },
   mounted () {
-    this.getDb()
+    // this.getDb()
+    this.getMyData()
   },
   computed: {
     currentArea () {
@@ -41,15 +44,19 @@ export default {
     currentSubject () {
       return this.$route.params.subject
     },
-    moonCount(){
-      if (this.currentSubjectData.projects.length) {
-        return 'moonN_' + this.currentSubjectData.projects.length
-      } else {
-        return 'moonN_0'
-      }  
-    }
+    moonCount () {
+      return 'moonN_' + this.projects.length
+    },
+
   },
   methods: {
+    getMyData () {
+      this.$store.dispatch('getUserData').then((response) => {
+        this.myData = response
+        this.projects = response.studiesProjects
+        this.loading = false
+      })
+    },
     getDb () {
       this.$store.dispatch('getDb')
         .then((response) => {
@@ -62,7 +69,7 @@ export default {
     levelChange(level) {
       this.levels = level
     }
-  }, 
+  },
 }
 
 </script>
@@ -74,10 +81,10 @@ $planet: 25vh
 $moon: 4vh
 
 
-@keyframes rotating 
-  from 
+@keyframes rotating
+  from
     transform: rotate(0deg)
-  to 
+  to
     transform: rotate(360deg)
 
 .info
@@ -87,11 +94,11 @@ $moon: 4vh
   text-align: right
   color: $lightgrey
   text-transform: capitalize
-  
-.planet     
+
+.planet
   border-radius: $planet / 2
   width: $planet
-  height: $planet 
+  height: $planet
   transition: box-shadow 400ms ease
   z-index: 2
   &[data-levels="bk"]
@@ -100,11 +107,11 @@ $moon: 4vh
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6
   &[data-levels="ak1"]
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6, 0 0 0 4vh #7397C1
-  &[data-levels="ak2"]  
+  &[data-levels="ak2"]
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6, 0 0 0 4vh #7397C1, 0 0 0 6vh #5477A1
   img
     width: $planet
-    height: $planet  
+    height: $planet
 
 .levels
   text-transform: uppercase
@@ -122,11 +129,11 @@ $moon: 4vh
     padding: .6em
     &.is-active
       border: 1px solid $teal
-      color: $teal    
+      color: $teal
     &.is-active ~ li
       border: 1px solid $lightgrey
-      color: $lightgrey    
-  
+      color: $lightgrey
+
 .orbit-circle
   height: ($orbit*2) - $moon
   width: ($orbit*2) - $moon
@@ -153,7 +160,7 @@ $moon: 4vh
       border-radius: $moon/2
       &:hover
         box-shadow: 0px 0px 24px #fea2fd
-        cursor: pointer          
+        cursor: pointer
 
 
 

@@ -36,6 +36,8 @@ query allSubjects {
       id
       name
       slug
+      description
+      level
     }
   }
 }

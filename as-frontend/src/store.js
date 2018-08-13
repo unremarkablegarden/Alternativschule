@@ -20,17 +20,29 @@ export default new Vuex.Store({
 
     lernLevels: {
       history: {
-        understanding: {
-          bk: 10,
-          gk: 9,
+        verstehen: {
+          bk: 3,
+          gk: 5,
           ak1: 8,
           ak2: 7
         },
-        reading: {
+        lesen: {
           bk: 1,
           gk: 2,
-          ak1: 3,
+          ak1: 8,
           ak2: 4
+        },
+        schreiben: {
+          bk: 6,
+          gk: 4,
+          ak1: 3,
+          ak2: 0
+        },
+        sprechen: {
+          bk: 8,
+          gk: 4,
+          ak1: 2,
+          ak2: 1
         }
       }
     }
@@ -150,8 +162,8 @@ export default new Vuex.Store({
       if (!state.myData) {
         await dispatch('setApolloUserToStore')
       }
-      console.log('state userId: '+state.userId)
-      console.log('state myData: '+state.myData)
+      // console.log('state userId: '+state.userId)
+      // console.log('state myData: '+state.myData)
       return state.myData
     }
   }
