@@ -13,16 +13,14 @@
           span BK
           span AK1
           span AK2
-          span(v-for='level in currentSubjectData.tutorlevels') {{ level }}) (fix)
-        .teacher Lehrer: (fix)
+          span(v-for='level in currentSubjectData.tutorlevels') {{ level }})
+        .teacher Lehrer: 
           span(v-for='teacher in currentSubjectData.teachers') 
             | {{ teacher.username }} 
-        .competences 
-          | Kompetenzen: 
-          br
-          | Lorem ipsum dolor
+        //- .competences Kompetenzen: 
         .description 
-          | {{ currentSubjectData.description }}
+          //- | {{ currentSubjectData.description }}
+          | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 </template>
 
 <script>

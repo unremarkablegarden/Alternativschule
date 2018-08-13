@@ -4,12 +4,13 @@
     .info
       div Planet: {{ currentSubject }}
       div(v-if='moonHover') Moon: {{ moonHover }}
-    planet(:subject='currentSubject')
+    planet(:subject='currentSubject', :data-levels='currentLevel')
     //- planet(:subject='currentSubjectData.slug', :data-levels='subject.currentLevel') FIX CURRENTLEVELS
     .orbit-circle
     //- ul.levels
      li(v-for='(level, index) in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
-    //- .orbit-wrap(:class='moonCount')
+    ul.levels
+     li(v-for='(level, index) in levels', :class="{ 'is-active' : (level == currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount')
       router-link(v-for='project in projects', :key='project.slug', @mouseover.native='moonHover = project.slug', @mouseleave.native='moonHover = null',  :to='"/project/" + currentSubject + "/" + project.slug').orbit
         moon
@@ -30,7 +31,9 @@ export default {
       projects: null,
       // currentSubjectData: null,
       moonHover: null,
-      loading: true
+      loading: true,
+      levels: [ 'bk', 'gk', 'ak1', 'ak2' ],
+      currentLevel: 'ak1'
     }
   },
   mounted () {

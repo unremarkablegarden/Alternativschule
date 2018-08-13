@@ -124,7 +124,7 @@ $sun: 10vh
   opacity: .2
 
 $orbit: 99vh
-$orbit-start: 5vh
+$orbit-start: 6vh
 $rotationtime: 20s
 @for $i from 2 through 14
   $orbit-start: $orbit-start + 7vh
