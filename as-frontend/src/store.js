@@ -83,9 +83,7 @@ export default new Vuex.Store({
       return state.userId
     },
 
-
-
-
+    // ------------------ SUBJECTS, AREAS, ETC
 
     async setApolloDataToStore({ commit }) {
       return new Promise((resolve, reject) => {
@@ -117,13 +115,13 @@ export default new Vuex.Store({
       })
     },
     async getDb({ self, state, dispatch }) {
-      await dispatch('setApolloDataToStore')
+      if (!state.db) {
+        await dispatch('setApolloDataToStore')
+      }
       return state.db
     },
 
-
-
-
+    // --------------------- USER INFO
 
     async setApolloUserToStore({ self, state, dispatch, commit }) {
       return new Promise((resolve, reject) => {
@@ -146,8 +144,12 @@ export default new Vuex.Store({
       })
     },
     async getUserData({ self, state, dispatch }) {
-      await dispatch('setUserId')
-      await dispatch('setApolloUserToStore')
+      if (!state.userId) {
+        await dispatch('setUserId')
+      }
+      if (!state.myData) {
+        await dispatch('setApolloUserToStore')
+      }
       console.log('state userId: '+state.userId)
       console.log('state myData: '+state.myData)
       return state.myData
