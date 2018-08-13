@@ -1,37 +1,37 @@
 query allSubjects {
-	allSubjects {
-		id
-	  name
-	  slug
-	  description
-	  area {
-	    id
-	    name
-			slug
-	  }
-	  projects {
-	    id
-	    name
+  allSubjects {
+    id
+    name
+    slug
+    description
+    area {
+      id
+      name
       slug
-	  }
-	  teachers {
-	    id
-	    username
-	  }
-	  students {
-	    id
-	    firstname
-	    surname
-	  }
-	  tutorLevels {
-	    id
-	    teacher {
-	      id
-	    }
-	    subject {
-	      id
-	    }
-	    levels
-	  }
-	}
+    }
+    projects {
+      id
+      name
+      slug
+    }
+    teachers {
+      id
+      username
+    }
+    students {
+      id
+      firstname
+      surname
+    }
+    tutorLevels {
+      id
+      teacher {
+        id
+      }
+      subject {
+        id
+      }
+      levels
+    }
+  }
 }

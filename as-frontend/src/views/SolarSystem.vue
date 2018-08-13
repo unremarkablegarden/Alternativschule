@@ -1,4 +1,5 @@
 <template lang="pug">
+  
   #solarsystem
     .info
       h1(v-if='planetHover') Planet: {{ planetHover }}
@@ -21,25 +22,25 @@ export default {
   },
   data () {
     return {
-      subjects: [
-        { name: 'bio' }, 
-        {	name: 'history' }, 
-        {	name: 'englisch' }, 
-        {	name: 'philosophy' }, 
-        { name: 'phys' }, 
-        { name: 'mathe' }, 
-        {	name: 'welterkundung' }, 
-        { name: 'politics' }, 
-        { name: 'deutsch' }, 
-        { name: 'franzoesisch' }, 
-        { name: 'spanisch' }, 
-        // { name: 'chemie' },
-        // { name: 'deutsch' },
-      ],  
-      planetHover: null
+      db: null,
+      subjects: null  
+    }
+  },
+  mounted () {
+    this.getDb()
+  },
+  computed: {
+    currentArea () {
+      return this.$route.params.area
     }
   },
   methods: {
+    getDb () {
+      this.$store.dispatch('getDb').then((res) => {
+        this.db = res
+        console.log(res)
+      })
+    },
     rotate () {
       return 'rotate(' + Math.floor(Math.random() * 360) + 'deg)'
     }
