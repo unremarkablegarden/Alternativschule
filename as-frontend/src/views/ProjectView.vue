@@ -1,20 +1,20 @@
 <template lang="pug">
 .wrapper
   .guibox
-    competencesnav
+    //- competencesnav
     .columns
       .side-menu.column.is-3
         ul
-          li.section-title(v-if="projects") Alle Themen
-          li(v-for="project in projects") 
+          li.section-title(v-if="currentSubjectData.projects") Alle Themen
+          li(v-for="project in currentSubjectData.projects") 
             router-link(:to="'/project/' + currentSubject + '/' + project.slug")
               | {{ project.name }} 
           li.section-title(v-if="myProjects") Meine Themen
           li(v-for="project in myProjects")   
             router-link(:to="currentSubject + '/' + project.slug")
               | {{ project.name }} 
-          li.section-title(v-if="selflearnProjects") Selbstlernboxen
-          li(v-for="project in selflearnProjects") 
+          //- li.section-title(v-if="selflearnProjects") Selbstlernboxen
+          //- li(v-for="project in selflearnProjects") 
             router-link(:to="currentSubject + '/' + project.slug")
               | {{ project.name }} 
           
@@ -60,54 +60,57 @@ export default {
   },
   data () {
     return {
-      projects: [
-        {
-          slug: 'cells',
-          name: 'Cells',
-          info: 'Lorem ipsum 1',
-          level: 'Aufbaukurs 1'
-        }, 
-        {
-          slug: 'mamals',
-          name: 'Mamals',
-          info: 'Lorem ipsum 1',
-          level: 'Aufbaukurs 1'
-        }, 
-        {
-          slug: 'reptilians',
-          name: 'Reptilians',
-          info: 'Lorem ipsum 1',
-          level: 'Aufbaukurs 1'
-        },
-        {
-          slug: 'digestion',
-          name: 'Digestion',
-          info: 'Lorem ipsum 1',
-          level: 'Aufbaukurs 1'
-        },
-        {
-          slug: 'reproduction',
-          name: 'Reproduction',
-          info: 'Lorem ipsum 1',
-          level: 'Aufbaukurs 1'
-        }
-      ],
-      myProjects: [
-        {
-          name: 'Trees',
-          slug: 'trees'
-        }
-      ],
-      selflearnProjects: [
-        {
-          name: 'Plants', 
-          slug: 'plants'
-        },
-        {
-          name: 'Ecosystems',
-          slug: 'ecosystems'
-        }
-      ]
+      db: null,
+      subjects: null,
+      currentSubjectData: null,
+      // projects: [
+      //   {
+      //     slug: 'cells',
+      //     name: 'Cells',
+      //     info: 'Lorem ipsum 1',
+      //     level: 'Aufbaukurs 1'
+      //   }, 
+      //   {
+      //     slug: 'mamals',
+      //     name: 'Mamals',
+      //     info: 'Lorem ipsum 1',
+      //     level: 'Aufbaukurs 1'
+      //   }, 
+      //   {
+      //     slug: 'reptilians',
+      //     name: 'Reptilians',
+      //     info: 'Lorem ipsum 1',
+      //     level: 'Aufbaukurs 1'
+      //   },
+      //   {
+      //     slug: 'digestion',
+      //     name: 'Digestion',
+      //     info: 'Lorem ipsum 1',
+      //     level: 'Aufbaukurs 1'
+      //   },
+      //   {
+      //     slug: 'reproduction',
+      //     name: 'Reproduction',
+      //     info: 'Lorem ipsum 1',
+      //     level: 'Aufbaukurs 1'
+      //   }
+      // ],
+      // myProjects: [
+      //   {
+      //     name: 'Trees',
+      //     slug: 'trees'
+      //   }
+      // ],
+      // selflearnProjects: [
+      //   {
+      //     name: 'Plants', 
+      //     slug: 'plants'
+      //   },
+      //   {
+      //     name: 'Ecosystems',
+      //     slug: 'ecosystems'
+      //   }
+      // ]
     }
   },
   computed: {
@@ -125,9 +128,30 @@ export default {
     }
   },
   methods: {
+    getDb () {
+      this.$store.dispatch('getDb')
+        .then((response) => {
+          this.db = response
+          // console.log(response)
+          this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
+          console.log('currentSobjectData');
+          console.log(this.currentSubjectData)
+        })
+    },
+    getMyData () {
+      this.$store.dispatch('getUserData').then((response) => {
+        this.myData = response
+        this.subjects = response.studiesSubjects
+        this.subjects.forEach(subject => subject.rotate = this.rotate())
+        this.loading = false
+        console.log('myData');
+        console.log(response)
+      })
+    } 
   },
   mounted () {
-    console.log(this.$route)
+    this.getDb()
+    this.getMyData()
   }
 }
 </script>

@@ -29,12 +29,6 @@ export default {
       subjects: null,
       currentSubjectData: null,
       moonHover: null,
-      // subject: {
-      //   name: 'Biology',
-      //   projects: [ 'cells', 'mamals', 'country', 'god', 'trump' ],
-      //   levels: [ 'bk', 'gk', 'ak1', 'ak2' ],
-      //   currentLevel: 'gk'
-      // },
     }
   },
   mounted () {
@@ -52,8 +46,7 @@ export default {
         return 'moonN_' + this.currentSubjectData.projects.length
       } else {
         return 'moonN_0'
-      }
-      
+      }  
     }
   },
   methods: {
