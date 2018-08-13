@@ -8,38 +8,6 @@ query allSubjects {
       id
       name
       slug
-<<<<<<< HEAD
-	  }
-	  teachers {
-	    id
-	    username
-	  }
-	  students {
-	    id
-	    firstname
-	    surname
-	  }
-	  tutorLevels {
-	    id
-	    teacher {
-	      id
-	    }
-	    subject {
-	      id
-	    }
-	    levels
-	  }
-		competences {
-			name
-			slug
-		}
-	}
-=======
-    }
-    projects {
-      id
-      name
-      slug
     }
     teachers {
       id
@@ -60,6 +28,14 @@ query allSubjects {
       }
       levels
     }
+    competences {
+      name
+      slug
+    }
+    projects {
+      id
+      name
+      slug
+    }
   }
->>>>>>> 470ce019ecce0aa4cb065a426881e380dae78ead
 }

@@ -10,7 +10,7 @@
     //- ul.levels  
      li(v-for='(level, index) in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount') 
-      router-link.orbit(v-for='project in currentSubjectData.projects', :key='project' :to='"/project/" + currentSubject + "/" + project.slug',  @mouseover='moonHover = project', @mouseleave='moonHover = null')
+      router-link.orbit(v-for='project in currentSubjectData.projects', :key='project.slug' :to='"/project/" + currentSubject + "/" + project.slug',  @mouseover='moonHover = project', @mouseleave='moonHover = null')
         moon
 </template>
 
@@ -48,7 +48,12 @@ export default {
       return this.$route.params.subject
     },
     moonCount(){
-      return 'moonN_' + this.currentSubjectData.projects.length
+      if (this.currentSubjectData.projects.length) {
+        return 'moonN_' + this.currentSubjectData.projects.length
+      } else {
+        return 'moonN_0'
+      }
+      
     }
   },
   methods: {
@@ -56,8 +61,9 @@ export default {
       this.$store.dispatch('getDb')
         .then((response) => {
           this.db = response
-          console.log(response)
+          // console.log(response)
           this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
+          console.log(this.currentSubjectData)
         })
     },
     levelChange(level) {

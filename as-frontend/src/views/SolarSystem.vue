@@ -1,5 +1,4 @@
 <template lang="pug">
-  
   #solarsystem
     .info
       h1(v-if='planetHover') Planet: {{ planetHover }}
@@ -9,8 +8,8 @@
       .planet-orbit(v-for="subject in subjects", @mouseover='planetHover = subject.name', @mouseleave='planetHover = null', v-if='!loading')
         //-.orbit-wrap
         .orbit-wrap(:style="{ transform: subject.rotate }")
-          router-link(:to=' "subject/" + subject.name')
-            planet(:subject="subject.name")
+          router-link(:to=' "subject/" + subject.slug')
+            planet(:subject="subject.slug")
     .orbit-circle(v-for="subject in subjects")
 </template>
 
@@ -22,25 +21,25 @@ export default {
   },
   data () {
     return {
-      myData: null,
-      subjects: [
-        { name: 'bio' },
-        {	name: 'history' },
-        {	name: 'englisch' },
-        {	name: 'philosophy' },
-        { name: 'phys' },
-        { name: 'mathe' },
-        {	name: 'welterkundung' },
-        { name: 'politics' },
-        { name: 'deutsch' },
-        { name: 'franzoesisch' },
-        { name: 'spanisch' },
+      // subjects: [
+        // { name: 'bio' },
+        // {	name: 'history' },
+        // {	name: 'englisch' },
+        // {	name: 'philosophy' },
+        // { name: 'phys' },
+        // { name: 'mathe' },
+        // {	name: 'welterkundung' },
+        // { name: 'politics' },
+        // { name: 'deutsch' },
+        // { name: 'franzoesisch' },
+        // { name: 'spanisch' },
         // { name: 'chemie' },
         // { name: 'deutsch' },
-      ],
+      // ],
+      myData: null,
+      subjects: null,
       planetHover: null,
-      loading: true
-
+      loading: true,
       db: null,
       subjects: null  
     }
@@ -60,6 +59,8 @@ export default {
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = response
+        this.subjects = response.studiesSubjects
+        this.subjects.forEach(subject => subject.rotate = this.rotate())
         this.loading = false
         console.log(response)
       })
@@ -69,9 +70,9 @@ export default {
     }
   },
   created () {
-    this.subjects.forEach((o) => {
-      o.rotate = this.rotate()
-    })
+    // this.subjects.forEach((o) => {
+    //   o.rotate = this.rotate()
+    // })
   }
 }
 </script>

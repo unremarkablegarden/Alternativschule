@@ -99,7 +99,7 @@ export default new Vuex.Store({
               if (!areas[subject.area.slug]) {
                 areas[subject.area.slug] = []
               }
-              areas[subject.area.slug].push(...subject)
+              areas[subject.area.slug].push(subject)
             })
 
             const db = {
