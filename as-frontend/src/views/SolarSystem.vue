@@ -1,4 +1,5 @@
 <template lang="pug">
+  
   #solarsystem
     .info
       h1(v-if='planetHover') Planet: {{ planetHover }}
@@ -21,6 +22,7 @@ export default {
   },
   data () {
     return {
+<<<<<<< HEAD
       myData: null,
       subjects: [
         { name: 'bio' },
@@ -39,17 +41,36 @@ export default {
       ],
       planetHover: null,
       loading: true
+=======
+      db: null,
+      subjects: null  
+    }
+  },
+  mounted () {
+    this.getDb()
+  },
+  computed: {
+    currentArea () {
+      return this.$route.params.area
+>>>>>>> 470ce019ecce0aa4cb065a426881e380dae78ead
     }
   },
   mounted () {
     this.getMyData()
   },
   methods: {
+<<<<<<< HEAD
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = response
         this.loading = false
         console.log(response)
+=======
+    getDb () {
+      this.$store.dispatch('getDb').then((res) => {
+        this.db = res
+        console.log(res)
+>>>>>>> 470ce019ecce0aa4cb065a426881e380dae78ead
       })
     },
     rotate () {

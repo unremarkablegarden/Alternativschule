@@ -1,18 +1,14 @@
 query allSubjects {
-	allSubjects {
-		id
-	  name
-	  slug
-	  description
-	  area {
-	    id
-	    name
-			slug
-	  }
-	  projects {
-	    id
-	    name
+  allSubjects {
+    id
+    name
+    slug
+    description
+    area {
+      id
+      name
       slug
+<<<<<<< HEAD
 	  }
 	  teachers {
 	    id
@@ -38,4 +34,32 @@ query allSubjects {
 			slug
 		}
 	}
+=======
+    }
+    projects {
+      id
+      name
+      slug
+    }
+    teachers {
+      id
+      username
+    }
+    students {
+      id
+      firstname
+      surname
+    }
+    tutorLevels {
+      id
+      teacher {
+        id
+      }
+      subject {
+        id
+      }
+      levels
+    }
+  }
+>>>>>>> 470ce019ecce0aa4cb065a426881e380dae78ead
 }
