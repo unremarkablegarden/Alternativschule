@@ -1,9 +1,7 @@
 <template lang="pug">
   #app
-    a(@click='logout').logout Logout
     transition(name="fade", mode="out-in")
       router-view#view
-    usermenu
 </template>
 
 <script>
@@ -14,7 +12,6 @@ export default {
   },
   data () {
     return {
-      // userId: null
     }
   },
   // created () {

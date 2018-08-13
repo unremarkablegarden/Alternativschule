@@ -4,8 +4,11 @@
   div(v-else)
     .guibox.columns
       .column.is-5.is-offset-1
+<<<<<<< HEAD
         planet(:subject='currentSubjectData.slug') 
         .button
+=======
+>>>>>>> b8c3cc6052810f1f260e17c23bb3cc2dc41840f0
       .column.is-4.info.is-offset-1
         h1 Planet: {{ currentSubject }}
         .level
@@ -32,6 +35,7 @@ export default {
       db: null,
       subjects: null,
       currentSubjectData: null,
+<<<<<<< HEAD
       planetHide: false
     }
   },
@@ -51,7 +55,7 @@ export default {
       this.$store.dispatch('getDb')
         .then((response) => {
           this.db = response
-          console.log(response)
+          // console.log(response)
           this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
         })
     },
@@ -60,7 +64,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  @import "@/assets/styles/variables.sass"  
   .guibox
     align-items: center
     .planet
