@@ -1,9 +1,15 @@
 <template lang="pug">
 #areas
   .areas.guibox.columns.is-multiline
+<<<<<<< HEAD
     router-link(v-for='area in areas', :class='area', :to='"/area/" + area', :key='area').area.column.is-6
       h2.title {{ area }}
       planet(v-for='subject in db.areas[area]', :subject="subject.slug", :key="subject.slug")   
+=======
+    //- div(v-for='area in db.areas')
+      h1 {{ area.slug }}
+    //- AreaSingle(v-for='area in areas', :key='area', :area='area')
+>>>>>>> 4e1f1915f644bd6b225b46183e8410648bb4a9ce
 </template>
 
 <script>
@@ -15,7 +21,10 @@ export default {
   data () {
     return {
       db: null,
+<<<<<<< HEAD
       areas: []
+=======
+>>>>>>> 4e1f1915f644bd6b225b46183e8410648bb4a9ce
     }
   },
   mounted () {
@@ -29,6 +38,10 @@ export default {
           this.areas.push(key)
         }
         console.log(res)
+        // for (let key in res.areas) {
+        //   this.areas.push(key)
+        // }
+        // console.log(res)
       })
     }
   },
