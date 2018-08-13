@@ -122,7 +122,11 @@ $sun: 10vh
   position: absolute
   z-index: 0
   opacity: .2
-
+  &:nth-child(3)
+    opacity: .4
+  &:nth-child(4)
+    opacity: .3
+     
 $orbit: 99vh
 $orbit-start: 6vh
 $rotationtime: 20s

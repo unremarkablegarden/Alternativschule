@@ -3,25 +3,26 @@
   .guibox.columns
     .column.is-6.left-zone
       .avatar-grid.columns.is-multiline
-        .column.is-3(v-for='avatar in avatars').avatar
+        .column.is-3(v-for='avatar in avatars', @click='avatarImage = avatar').avatar
           .image
             img(:src='"@/assets/gfx/avatars/avatar_" + avatar + ".png"')
       .colors.columns.is-multiline
         .color.column.is-2(v-for='color in colors')
-          .dot(:class='color')
+          .dot(@click='avatarColor = color', :class='color')
     .column.right-zone
-      .avatar-wrap
-        .avatar.image.orange
-          img(src='@/assets/gfx/avatars/avatar_06.png')
-      .info
-        form
-          p Name:
-          input(type='text', name='name', placeholder='j.robinson' )
-          p Passwort
-          input(type='text', name='password', placeholder='laufente44')
-          .buttons
-            button.button.grassgreen Speichern
-            button.button Verwerfen
+      .flex-wrap
+        .avatar-wrap
+          .avatar.image(:class='avatarColor')
+            img(:src='"@/assets/gfx/avatars/avatar_" + avatarImage + ".png"')
+        .info
+          form
+            p Name:
+            input(type='text', name='name', placeholder='j.robinson' )
+            p Passwort
+            input(type='text', name='password', placeholder='laufente44')
+            .buttons
+              button.button.grassgreen Speichern
+              button.button Verwerfen
 </template>
 
 <script>
@@ -33,6 +34,8 @@ export default {
       avatars: [
         '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' 
       ],
+      avatarImage : '01',
+      avatarColor: 'blue',
       colors: [
         'blue', 'orange', 'yellow', 'lightgreen', 'darkgreen', 'purple', 'pastelteal', 'pastelorange', 'pastelpink', 'pastelgreen', 'pastelred', 'pastelpurple'
       ]
@@ -72,36 +75,40 @@ export default {
             border: 2px solid #fff
             cursor: pointer
   .right-zone
-    padding: 0 4rem
-    input
-      border: none
-      padding: .9em
-      line-height: 1
-      border-radius: 1em
-      width: 100%
-      margin-bottom: 1em
-      font-size: .8rem
-    .avatar-wrap
-      padding: 2rem
-      .avatar 
-        width: 200px
-        height: 200px
-        border-radius: 100px
-        padding: 1em
+    padding: 0 3rem
+    display: flex
+    align-items: center
+    justify-content: center
+    .flex-wrap
+      input
+        border: none
+        padding: .9em
+        line-height: 1
+        border-radius: 1em
+        width: 100%
+        margin-bottom: 1em
+        font-size: .8rem
+      .avatar-wrap
+        padding: 2rem
+        .avatar 
+          width: 300px
+          height: 300px
+          border-radius: 150px
+          padding: 1em
+          display: flex
+          align-items: center
+          justify-content: center
+          margin: 0 auto
+          img
+            width: 80%
+            height: auto
+      .buttons
         display: flex
-        align-items: center
         justify-content: center
-        margin: 0 auto
-        img
-          width: 80%
-          height: auto
-    .buttons
-      display: flex
-      justify-content: center
-      .button
-        font-size: .815rem
-        margin: 1em
-        border-radius: .5em
+        .button
+          font-size: .815rem
+          margin: 1em
+          border-radius: .5em
   .blue
     background: #4A90E2
   .orange
@@ -127,5 +134,5 @@ export default {
   .pastelpurple
     background: #D3A1FF
   .grassgreen
-    background: #B8E986
+    background: #97c963
 </style>
