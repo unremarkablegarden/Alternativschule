@@ -34,10 +34,6 @@ export default {
     getDb () {
       this.$store.dispatch('getDb').then((res) => {
         this.db = res
-        for (let key in res.areas) {
-          this.areas.push(key)
-        }
-        console.log(res)
         // for (let key in res.areas) {
         //   this.areas.push(key)
         // }
