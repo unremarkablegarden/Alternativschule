@@ -1,7 +1,9 @@
 <template lang="pug">
   #app
+    a(@click='logout', v-if='!login').logout Logout
     transition(name="fade", mode="out-in")
       router-view#view
+    usermenu(v-if='!login')
 </template>
 
 <script>
@@ -12,16 +14,29 @@ export default {
   },
   data () {
     return {
+      login: true
     }
   },
-  // created () {
-  //   this.checkLoggedIn()
-  // },
-  // watch: {
-  //   $route (to, from) {
-  //     this.checkLoggedIn()
-  //   }
-  // },
+  computed: {
+    userId () {
+      return localStorage.getItem('userId')
+    }
+  },
+
+  created () {
+    if (this.$route.name == 'login') {
+      this.login = true
+    } else  {
+      this.login = false
+    }
+  },
+
+  watch: {
+    $route (to, from) {
+      // this.checkLoggedIn()
+      this.login = false
+    }
+  },
   methods: {
     // checkLoggedIn() {
     //   const userId = localStorage.getItem('userId')

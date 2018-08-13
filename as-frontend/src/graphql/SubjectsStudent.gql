@@ -12,6 +12,8 @@ query allSubjects {
     teachers {
       id
       username
+      firstname
+      surname
     }
     students {
       id
