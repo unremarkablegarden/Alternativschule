@@ -81,13 +81,27 @@ export default new Vuex.Store({
           .then(response => {
             const subjects = JSON.parse(JSON.stringify(response.data.allSubjects))
 
-            let areas = {}
-            subjects.forEach((subject) => {
-              if (!areas[subject.area.slug]) {
-                areas[subject.area.slug] = []
-              }
-              areas[subject.area.slug].push(subject)
-            })
+            let areas = []
+            // subjects.forEach((subject) => {
+            //   if (!areas[subject.area.slug]) {
+            //     areas[subject.area.slug] = []
+            //   }
+            //   areas[subject.area.slug].push(...subject)
+            // })
+
+            // console.log(areas)
+
+
+            // let areasArr = []
+            // for (let key in areas) {
+            //   areasArr.push(key)
+            // }
+            //
+            // subjects.forEach((subject) => {
+            //   areasArr[subject.area.slug].push(subject)
+            // })
+            //
+            // console.log(areasArr)
 
             const db = {
               areas: areas,

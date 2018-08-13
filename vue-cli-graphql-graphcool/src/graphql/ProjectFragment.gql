@@ -1,0 +1,16 @@
+fragment Project on Project {
+  id
+  name
+  slug
+  description
+  selfLearn
+  level
+  materials {
+    id
+    name
+    description
+    contentType
+    uploadUrl
+    linkUrl
+  }
+}

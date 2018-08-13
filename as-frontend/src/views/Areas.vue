@@ -1,7 +1,9 @@
 <template lang="pug">
 #areas
   .areas.guibox.columns.is-multiline
-    AreaSingle(v-for='area in areas', :key='area', :area='area')
+    //- div(v-for='area in db.areas')
+      h1 {{ area.slug }}
+    //- AreaSingle(v-for='area in areas', :key='area', :area='area')
 </template>
 
 <script>
@@ -13,13 +15,6 @@ export default {
   data () {
     return {
       db: null,
-      // areas: [
-      //   'naturwissenschaft',
-      //   'gesellschaftswissenschaften',
-      //   'sprachen',
-      //   'projecten'
-      // ]
-      areas: []
     }
   },
   mounted () {
@@ -29,10 +24,10 @@ export default {
     getDb () {
       this.$store.dispatch('getDb').then((res) => {
         this.db = res
-        for (let key in res.areas) {
-          this.areas.push(key)
-        }
-        console.log(res)
+        // for (let key in res.areas) {
+        //   this.areas.push(key)
+        // }
+        // console.log(res)
       })
     }
   },

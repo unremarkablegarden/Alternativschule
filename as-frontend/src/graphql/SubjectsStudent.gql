@@ -12,6 +12,7 @@ query allSubjects {
 	  projects {
 	    id
 	    name
+      slug
 	  }
 	  teachers {
 	    id

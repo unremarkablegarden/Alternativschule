@@ -11,7 +11,6 @@
           el-input(type='password', v-model='loginForm.password')
         el-form-item(v-if='error')
           el-alert(title="Incorrect", type="error", :closable="false", show-icon, description="Please try again")
-        //- el-form-item
       center
         el-button(type='primary', @click='login', :loading='loading')
           span(v-if='loading') Einloggen...
@@ -59,6 +58,7 @@ export default {
             .then((res) => {
               localStorage.setItem('userId', res)
               // console.log('userId: ' + res)
+              this.loading = false
               this.$router.push({ name: 'users' })
             })
 
@@ -67,9 +67,6 @@ export default {
           console.error(error)
           console.log('Wrong credentials')
           this.error = true
-        })
-        .then(() => {
-          this.loading = false
         })
     }
   }

@@ -1,8 +1,6 @@
 <template lang="pug">
   #subjects
     SubjectsList
-    br
-    SubjectAdd
 </template>
 
 
