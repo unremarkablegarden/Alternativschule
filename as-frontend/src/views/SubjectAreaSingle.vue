@@ -1,41 +1,62 @@
 <template lang="pug">
 .wrapper
-  .guibox.columns
-    .column.is-5.is-offset-1
-      planet(:subject='currentSubject') 
-      .button Hinzufugen
-    .column.is-4.info.is-offset-1
-      h1 Planet: {{ currentSubject }}
-      .level
-        span(v-for='level in subject.levels') {{ level }} 
-      .teacher Lehrer: {{ subject.teacher }}
-      .competences 
-        | Kompetenzen: 
-        br
-        | Lorem ipsum dolor
-      .description Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  
+  .loading(v-if='!currentSubjectData') Loading...
+  div(v-else)
+    .guibox.columns
+      .column.is-5.is-offset-1
+        planet(:subject='currentSubjectData.slug') 
+        .button Hinzufugen
+      .column.is-4.info.is-offset-1
+        h1 Planet: {{ currentSubject }}
+        .level
+          span GK
+          span BK
+          span AK1
+          span AK2
+          span(v-for='level in currentSubjectData.tutorlevels') {{ level }}) (fix)
+        .teacher Lehrer: (fix)
+          span(v-for='teacher in currentSubjectData.teachers') 
+            | {{ teacher.username }} 
+        .competences 
+          | Kompetenzen: 
+          br
+          | Lorem ipsum dolor
+        .description 
+          | {{ currentSubjectData.description }}
 </template>
 
 <script>
 import planet from '@/components/areas/planet.vue'
 export default {
   components: { planet },
+  data () {
+    return {
+      db: null,
+      subjects: null,
+      currentSubjectData: null,
+      planetHide: true
+    }
+  },
+  mounted () {
+    this.getDb()
+  },
   computed: {
+    currentArea () {
+      return this.$route.params.area
+    },
     currentSubject () {
       return this.$route.params.subject
     }
   },
-  data () {
-    return {
-      subject: {
-        name: 'Biology',
-        slug: 'biology',
-        competences: [ 'lorem', 'ipsum' ],
-        levels: [ 'BK', 'GK', 'AK' ],
-        teacher: 'Klaus',
-        info: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-      }
-    }
+  methods: {
+    getDb () {
+      this.$store.dispatch('getDb')
+        .then((response) => {
+          this.db = response
+          console.log(response)
+          this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
+        })
+    },
   }
 }
 </script>
@@ -58,6 +79,11 @@ export default {
           content: ''
     .teacher
       margin-bottom: 1em
+      span
+        &::after
+          content: ', '
+        &:last-child::after
+          content: ''
     .competences
       font-weight: bold
       margin-bottom: 2em

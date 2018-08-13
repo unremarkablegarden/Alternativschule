@@ -3,7 +3,7 @@
   .top.btn
     router-link(to='/settings', v-if="routeName == 'home'")
       img(src='@/assets/gfx/icons/settings.svg')
-    router-link(to='/', v-else) 
+    router-link(to='/solarsystem', v-else) 
       img(src='@/assets/gfx/icons/close-btn.svg')
   .add.btn(v-if='addLink')
     router-link(:to='addLink')    

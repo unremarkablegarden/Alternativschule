@@ -1,14 +1,16 @@
 <template lang="pug">
-  .planetzone
+  .loading(v-if='!currentSubjectData') Loading...
+  .planetzone(v-else)
     .info
-      div Planet: {{ currentSubject }}
-      div Moon: {{ moonHover }}
-    planet(:subject='currentSubject', :data-levels='subject.currentLevel')
+      div Planet: {{ currentSubjectData.slug }}
+      div(v-if='moonHover') Moon: {{ moonHover }}
+    planet(:subject='currentSubjectData.slug')
+    //- planet(:subject='currentSubjectData.slug', :data-levels='subject.currentLevel') FIX CURRENTLEVELS   
     .orbit-circle  
-    ul.levels  
+    //- ul.levels  
      li(v-for='(level, index) in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount') 
-      .orbit(v-for='project in subject.projects', @mouseover='moonHover = project')
+      router-link.orbit(v-for='project in currentSubjectData.projects', :to='"/project/" + currentSubject + "/" + project.slug',  @mouseover='moonHover = project', @mouseleave='moonHover = null')
         moon
 </template>
 
@@ -21,30 +23,47 @@ export default {
     moon
   },
   name: 'subjectView',
-  data () {
+  data () {  
     return {
-      subject: {
-        name: 'Biology',
-        projects:[ 'cells', 'mamals', 'reptilians', 'country', 'josh_turner', 'god'],
-        levels: [ 'bk', 'gk', 'ak1', 'ak2' ],
-        currentLevel: 'gk'
-      },
-      moonHover: 'Nothing selected'
+      db: null,
+      subjects: null,
+      currentSubjectData: null,
+      moonHover: null,
+      // subject: {
+      //   name: 'Biology',
+      //   projects: [ 'cells', 'mamals', 'country', 'god', 'trump' ],
+      //   levels: [ 'bk', 'gk', 'ak1', 'ak2' ],
+      //   currentLevel: 'gk'
+      // },
     }
   },
-  methods: {
-    levelChange(level) {
-      this.levels = level
-    }
+  mounted () {
+    this.getDb()
   },
   computed: {
+    currentArea () {
+      return this.$route.params.area
+    },
     currentSubject () {
       return this.$route.params.subject
     },
     moonCount(){
-      return 'moonN_' + this.subject.projects.length
+      return 'moonN_' + this.currentSubjectData.projects.length
     }
-  }  
+  },
+  methods: {
+    getDb () {
+      this.$store.dispatch('getDb')
+        .then((response) => {
+          this.db = response
+          console.log(response)
+          this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
+        })
+    },
+    levelChange(level) {
+      this.levels = level
+    }
+  }, 
 }
 
 </script>
@@ -137,9 +156,50 @@ $moon: 4vh
         box-shadow: 0px 0px 24px #fea2fd
         cursor: pointer          
 
+
+
 $rotation: 0
-@for $i from 1 through 6
-  $rotation: $rotation + 60deg
-  .orbit:nth-child(#{$i})
-    transform: rotate($rotation)
+
+@for $ii from 1 through 12
+  .moonN_#{$ii}
+    @for $i from 1 through $ii
+      $rotation: $rotation + (360deg / $ii)
+      .orbit:nth-child(#{$i})
+        transform: rotate($rotation)
+
+// .moonN_2
+//   @for $i from 1 through 2
+//     $rotation: $rotation + 180deg
+//     .orbit:nth-child(#{$i})
+//       transform: rotate($rotation)
+// .moonN_3
+//   @for $i from 1 through 3
+//     $rotation: $rotation + 120deg
+//     .orbit:nth-child(#{$i})
+//       transform: rotate($rotation)
+// .moonN_4
+//   @for $i from 1 through 4
+//     $rotation: $rotation + 90deg
+//     .orbit:nth-child(#{$i})
+//       transform: rotate($rotation)
+// .moonN_5
+//   @for $i from 1 through 5
+//     $rotation: $rotation + 72deg
+//     .orbit:nth-child(#{$i})
+//       transform: rotate($rotation)
+// .moonN_6
+//   @for $i from 1 through 6
+//     $rotation: $rotation + 60deg
+//     .orbit:nth-child(#{$i})
+//       transform: rotate($rotation)
+// .moonN_7
+//   @for $i from 1 through 7
+//     $rotation: $rotation + 120deg
+//     .orbit:nth-child(#{$i})
+//       transform: rotate($rotation)
+// .moonN_8
+//   @for $i from 1 through 8
+//     $rotation: $rotation + 120deg
+//     .orbit:nth-child(#{$i})
+//       transform: rotate($rotation)
 </style>

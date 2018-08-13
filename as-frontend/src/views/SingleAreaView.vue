@@ -1,41 +1,41 @@
 <template lang="pug">
-#areas
-  .areas.guibox.columns.is-multiline  
-    router-link(:to='subject.area + "/" + subject.name').area.column.is-6(v-for='subject in subjects')
+#areas 
+  .loading(v-if='!db')
+    h1 Loading...
+  .areas(v-else).guibox.columns.is-multiline
+    router-link(v-for='subject in db.areas[currentArea]', :to='subject.area.slug + "/" + subject.slug', :key='subject.slug').area.column.is-6
       h2.title {{ subject.name }}
-      planet(:subject="subject.name")
+      planet(:subject="subject.slug")
 </template>
 
 <script>
 import planet from '@/components/areas/planet.vue'
-// import AreaSubject from '@/components/areas/AreaSubject.vue'
 export default {
   components: {
-    // AreaSubject
     planet
   },
   data () {
     return {
-      subjects:[
-        {
-          name: 'biology',
-          area: 'naturwissenschaft'
-        },
-        {
-          name: 'english',
-          area: 'naturwissenschaft'
-        },
-        {
-          name: 'history',
-          area: 'naturwissenschaft'
-        },
-        {
-          name: 'philosophy',
-          area: 'naturwissenschaft'
-        } 
-      ]
+      db: null,
+      subjects: null
     }
-  }
+  },
+  mounted () {
+    this.getDb()
+  },
+  computed: {
+    currentArea () {
+      return this.$route.params.area
+    }
+  },
+  methods: {
+    getDb () {
+      this.$store.dispatch('getDb').then((res) => {
+        this.db = res
+        console.log(res)
+      })
+    }
+  },
 }
 </script>
 
