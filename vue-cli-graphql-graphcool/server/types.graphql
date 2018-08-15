@@ -33,6 +33,7 @@ enum UserTypes {
 enum Levels {
   BK
   GK
+  AK
   AK1
   AK2
 }
@@ -81,6 +82,7 @@ type Competence @model {
   # i.e. Lesen, Schreiben
   name: String
   slug: String
+  level: Levels
   subject: Subject! @relation(name: "SubjectCompetences")
   evaluations: [Evaluation!]! @relation(name: "CompetenceEvaluation")
   # levels determined by subject

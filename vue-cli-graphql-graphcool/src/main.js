@@ -54,6 +54,12 @@ Vue.component('ProjectAdd', ProjectAdd)
 // import ProjectEdit from '@/components/ProjectEdit.vue'
 // Vue.component('ProjectEdit', ProjectEdit)
 
+import SubjectsStudentsList from '@/components/SubjectsStudentsList.vue'
+Vue.component('SubjectsStudentsList', SubjectsStudentsList)
+
+import StudentList from '@/components/StudentList.vue'
+Vue.component('StudentList', StudentList)
+
 
 Vue.config.productionTip = false
 

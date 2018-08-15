@@ -1,8 +1,6 @@
 <template lang="pug">
   #students
-    //- SubjectsList
-    //- br
-    //- SubjectAdd
+    SubjectsStudentsList
 </template>
 
 

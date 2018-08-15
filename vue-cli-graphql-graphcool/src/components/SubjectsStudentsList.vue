@@ -2,16 +2,12 @@
   #subjectslist
     el-card(v-loading='$apollo.loading').subjects
       div(slot="header")
-        span Meine Themen
+        span Meine Schüler
       div(v-if='!loading')
         el-row(v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
           el-collapse(v-model='activeSubjects')
             el-collapse-item(:title='subject.name', :name='subject.name')
-              el-row
-                el-col(:span='12')
-                  .description {{ subject.description }}
-                el-col(:span='12')
-                  ProjectsList(:projects='mySubjects.teachesProjects', :subjectId='subject.id', :user='userId')
+              StudentList(:subjectId='subject.id')
 </template>
 
 <script>

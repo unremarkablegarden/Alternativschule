@@ -1,5 +1,5 @@
 <template lang="pug">
-#areas 
+#areas
   .loading(v-if='!db')
     h1 Loading...
   .areas(v-else).guibox.columns.is-multiline
@@ -40,18 +40,21 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@import "@/assets/styles/variables.sass" 
+@import "@/assets/styles/variables.sass"
 </style>
 
 <style lang="sass" scoped>
-  @import "@/assets/styles/variables.sass" 
+  @import "@/assets/styles/variables.sass"
+
+  h2
+    color: #AAA
   .area
     display: flex
     align-items: center
     justify-content: center
     position: relative
-    transition: background-color 200ms 
-    
+    transition: background-color 200ms
+
     &:nth-child(1)
       border-right: 1px solid $grey
       border-bottom: 1px solid $grey
@@ -59,7 +62,7 @@ export default {
       margin-top: -1px
       margin-left: -1px
       border-left: 1px solid $grey
-      border-top: 1px solid $grey  
+      border-top: 1px solid $grey
     &:hover
       background: #00094880
     .title
