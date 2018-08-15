@@ -13,7 +13,7 @@
 # maybe skip this...
 # this users evals at current i.e. BK
 #currentLevelEvals = marijn.selfEvaluations.find(o => o.level === currentLevel)
-# find 
+# find
 #currentLevelAndCompetenceEvals = currentLevelEvals.competence.find(o.slug => o.slug === currentCompetence)
 #.subject.find() ...
 
@@ -29,17 +29,21 @@ query userStudentById($id: ID!) {
 			name
 			slug
 			levels
-			competences { # lesen, schreiben ... only competences related to current subject
+			evaluations {
 				id
-				slug
-				name
-				evaluations(filter: {
-					studentId: $id
-				}) {
-					# self evaluations saved, only current user
+				level
+				value
+				student { #clean up later?
 					id
-					level
-					value
+					username
+				}
+				competence {
+					id
+					name
+					slug
+					subject {
+						slug #clean up later?
+					}
 				}
 			}
 		}

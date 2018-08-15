@@ -10,6 +10,9 @@ type User @model {
   surname: String
   # admin, teacher, student (enum)
   userType: UserTypes
+  avatar: Int
+  avatarColor: String
+
   prefect: Boolean @defaultValue(value: "false") @migrationValue(value: "false")
   # relations
   prefectStudents: [User!]! @relation(name: "PrefectStudent")
@@ -57,9 +60,7 @@ type Subject @model {
   competences: [Competence!]! @relation(name: "SubjectCompetences") # lesen/schreiben
   levels: [Levels!]! #available in total?
   tutorLevels: [TutorLevels!]! @relation(name: "TutorLevelsSubject")
-  # subject: Subject! ????
-  # saved in competences, which is linked to subject
-  #evaluations: [Evaluation] @relation(name: "EvaluationSubject")
+  evaluations: [Evaluation!]! @relation(name: "EvaluationSubject")
   isPublished: Boolean! @defaultValue(value: "true")
 }
 
@@ -82,7 +83,6 @@ type Competence @model {
   # i.e. Lesen, Schreiben
   name: String
   slug: String
-  level: Levels
   subject: Subject! @relation(name: "SubjectCompetences")
   evaluations: [Evaluation!]! @relation(name: "CompetenceEvaluation")
   # levels determined by subject
@@ -102,7 +102,7 @@ type Evaluation @model {
   value: Int! # max 10
   student: User! @relation(name: "StudentSelfEvaluation")
   competence: Competence! @relation(name: "CompetenceEvaluation")
-  #subject: Subject! @relation(name: "EvaluationSubject")
+  subject: Subject! @relation(name: "EvaluationSubject")
   level: Levels!
 }
 
