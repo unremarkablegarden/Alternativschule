@@ -26,28 +26,31 @@ export default {
   data () {
     return {
       lernLevels: null,
-      skills: [
-        {
-          name: 'bk',
-          level: '1',
-          text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-        },
-        {
-          name: 'gk',
-          level: '30',
-          text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-        },
-        {
-          name: 'ak1',
-          level: '20',
-          text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-        },
-        {
-          name: 'ak2',
-          level: '40',
-          text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-        }
-      ]
+      courses: {
+        
+        competences: [
+          {
+            name: 'lesen',
+            level: '1',
+            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+          },
+          {
+            name: 'schreiben',
+            level: '30',
+            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+          },
+          {
+            name: 'verstehen',
+            level: '20',
+            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+          },
+          {
+            name: 'sprechen',
+            level: '40',
+            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+          }
+        ]
+      }
     }
   },
 
