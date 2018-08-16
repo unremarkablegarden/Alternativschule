@@ -2,15 +2,16 @@
   .loading(v-if='loading') Loading...
   .planetzone(v-else)
     .info
-      div Planet: {{ currentSubject }}
-      div(v-if='moonHover') Moon: {{ moonHover }}
+      div 
+        strong Planet 
+        | {{ currentSubject }}
+      div(v-if='moonHover') 
+        strong Moon: 
+        | {{ moonHover }}
     planet(:subject='currentSubject', :data-levels='currentLevel')
-    //- planet(:subject='currentSubjectData.slug', :data-levels='subject.currentLevel') FIX CURRENTLEVELS
     .orbit-circle
-    //- ul.levels
-     li(v-for='(level, index) in subject.levels', :class="{ 'is-active' : (level == subject.currentLevel) }") {{ level }}
     ul.levels
-     li(v-for='(level, index) in levels', :class="{ 'is-active' : (level == currentLevel) }") {{ level }}
+     li(v-for='level in subjectLevels', :class="{ 'is-active' : (level == currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount')
       router-link(v-for='project in projects', :key='project.slug', @mouseover.native='moonHover = project.slug', @mouseleave.native='moonHover = null',  :to='"/project/" + currentSubject + "/" + project.slug').orbit
         moon
@@ -29,15 +30,14 @@ export default {
     return {
       db: null,
       projects: null,
-      // currentSubjectData: null,
+      currentSubjectData: null,
       moonHover: null,
       loading: true,
-      levels: [ 'bk', 'gk', 'ak1', 'ak2' ],
-      currentLevel: 'ak1'
+      currentLevel: null
     }
   },
   mounted () {
-    // this.getDb()
+    this.getDb()
     this.getMyData()
   },
   computed: {
@@ -50,23 +50,37 @@ export default {
     moonCount () {
       return 'moonN_' + this.projects.length
     },
-
   },
   methods: {
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = response
+        // console.log(response)
         this.projects = response.studiesProjects
+        
+        this.currentLevel = response.studentLevels.find(o => o.subject.slug === this.currentSubject).level
+        
         this.loading = false
       })
     },
+    sortLevels (arrayToSort) {
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
+    },
     getDb () {
-      this.$store.dispatch('getDb')
-        .then((response) => {
+      this.$store.dispatch('getDb').then((response) => {
           this.db = response
           // console.log(response)
           this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
           console.log(this.currentSubjectData)
+          this.subjectLevels = this.sortLevels(this.currentSubjectData.levels)
         })
     },
     levelChange(level) {
@@ -83,7 +97,6 @@ $orbit: 30vh
 $planet: 25vh
 $moon: 4vh
 
-
 @keyframes rotating
   from
     transform: rotate(0deg)
@@ -91,11 +104,15 @@ $moon: 4vh
     transform: rotate(360deg)
 
 .info
+  background: $space-blue
+  strong
+    color: #fff
   position: fixed
-  top: 1rem
-  right: 1rem
+  font-size: 1.3rem
+  top: 1.5rem
+  right: 1.5rem
   text-align: right
-  color: $lightgrey
+  color: #fff
   text-transform: capitalize
 
 .planet
@@ -165,8 +182,6 @@ $moon: 4vh
         box-shadow: 0px 0px 24px #fea2fd
         cursor: pointer
 
-
-
 $rotation: 0
 
 @for $ii from 1 through 12
@@ -175,40 +190,4 @@ $rotation: 0
       $rotation: $rotation + (360deg / $ii)
       .orbit:nth-child(#{$i})
         transform: rotate($rotation)
-
-// .moonN_2
-//   @for $i from 1 through 2
-//     $rotation: $rotation + 180deg
-//     .orbit:nth-child(#{$i})
-//       transform: rotate($rotation)
-// .moonN_3
-//   @for $i from 1 through 3
-//     $rotation: $rotation + 120deg
-//     .orbit:nth-child(#{$i})
-//       transform: rotate($rotation)
-// .moonN_4
-//   @for $i from 1 through 4
-//     $rotation: $rotation + 90deg
-//     .orbit:nth-child(#{$i})
-//       transform: rotate($rotation)
-// .moonN_5
-//   @for $i from 1 through 5
-//     $rotation: $rotation + 72deg
-//     .orbit:nth-child(#{$i})
-//       transform: rotate($rotation)
-// .moonN_6
-//   @for $i from 1 through 6
-//     $rotation: $rotation + 60deg
-//     .orbit:nth-child(#{$i})
-//       transform: rotate($rotation)
-// .moonN_7
-//   @for $i from 1 through 7
-//     $rotation: $rotation + 120deg
-//     .orbit:nth-child(#{$i})
-//       transform: rotate($rotation)
-// .moonN_8
-//   @for $i from 1 through 8
-//     $rotation: $rotation + 120deg
-//     .orbit:nth-child(#{$i})
-//       transform: rotate($rotation)
 </style>

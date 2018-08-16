@@ -1,9 +1,9 @@
 <template lang="pug">
 .wrapper
-  .guibox.columns
+  .guibox.columns(v-if='!loading')
     .column.is-6.left-zone
       .avatar-grid.columns.is-multiline
-        .column.is-3(v-for='avatar in avatars', @click='avatarImage = avatar').avatar
+         .column.is-3(v-for='avatar in avatars').avatar
           .image
             img(:src='"@/assets/gfx/avatars/avatar_" + avatar + ".png"')
       .colors.columns.is-multiline
@@ -11,15 +11,15 @@
           .dot(@click='avatarColor = color', :class='color')
     .column.right-zone
       .flex-wrap
-        .avatar-wrap
-          .avatar.image(:class='avatarColor')
-            img(:src='"@/assets/gfx/avatars/avatar_" + avatarImage + ".png"')
+        .avatar-wrap          
+          .avatar.image(:class='myData.avatarColor')
+            img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"')
         .info
           form
             p Name:
-            input(type='text', name='name', placeholder='j.robinson' )
+            input(type='text', name='name', :placeholder='myData.username' )
             p Passwort
-            input(type='text', name='password', placeholder='laufente44')
+            input(type='text', name='password', placeholder='PASSWORT')
             .buttons
               button.button.grassgreen Speichern
               button.button Verwerfen
@@ -31,14 +31,25 @@ export default {
   },
   data () {
     return {  
+      loading: true,
       avatars: [
-        '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' 
-      ],
-      avatarImage : '01',
-      avatarColor: 'blue',
+        '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' 
+      ],    
       colors: [
         'blue', 'orange', 'yellow', 'lightgreen', 'darkgreen', 'purple', 'pastelteal', 'pastelorange', 'pastelpink', 'pastelgreen', 'pastelred', 'pastelpurple'
       ]
+    }
+  },
+  mounted () {
+    this.getMyData()
+  },
+  methods: {
+    getMyData () {
+      this.$store.dispatch('getUserData').then((response) => {
+        this.myData = response
+        console.log(this.myData)
+        this.loading = false
+      })
     }
   }
 }

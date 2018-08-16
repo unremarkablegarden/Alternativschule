@@ -17,57 +17,50 @@
 #currentLevelAndCompetenceEvals = currentLevelEvals.competence.find(o.slug => o.slug === currentCompetence)
 #.subject.find() ...
 
-
 query userStudentById($id: ID!) {
-	User(id: $id) {
-		id
-		username
-		firstname
-		surname
-		studiesSubjects {
-			id
-			name
-			slug
-			levels
-			evaluations {
-				id
-				level
-				value
-				student { #clean up later?
-					id
-					username
-				}
-				competence {
-					id
-					name
-					slug
-					subject {
-						slug #clean up later?
-					}
-				}
-			}
-		}
-		studiesProjects {
-			id
-			name
-			slug
-		}
-		# selfEvaluations {
-		# 	# e.g. 5 out of 10
-		# 	id
-		# 	value
-		# 	level
-		# 	competence {
-		# 		# e.g. Lesen
-		# 		id
-		# 		name
-		# 		slug
-		# 		subject {
-		# 			id
-		# 			name
-		# 			slug
-		# 		}
-		# 	}
-		# }
-	}
+  User(id: $id) {
+    id
+    username
+    firstname
+    surname
+    avatar
+    avatarColor
+    studiesSubjects {
+      id
+      name
+      slug
+      levels
+      evaluations(
+        filter: {
+          student: {
+            id: $id
+          }
+        }) {
+          id
+          level
+          value
+          competence {
+            id
+            name
+            slug
+            subject {
+              slug #clean up later?
+            }
+          }
+      }
+    }
+    studiesProjects {
+      id
+      name
+      slug
+    }
+    studentLevels {
+      level
+      subject {
+        id
+        slug
+        name
+      }
+    }
+  }
 }

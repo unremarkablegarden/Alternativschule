@@ -4,25 +4,20 @@
   div(v-else)
     .guibox.columns
       .column.is-5.is-offset-1
-        planet(:subject='currentSubjectData.slug')
+        planet(:subject='currentSubjectData.slug', :class="{ 'hidePlanet' : (hidePlanet == true) }")
         .button(@click='editSubject("add", currentSubjectData.id)', v-if='availableSubject') Hinzufugen
         .button(v-else, @click='editSubject("remove", currentSubjectData.id)') Löschen
 
       .column.is-4.info.is-offset-1
         h1 Planet: {{ currentSubject }}
-        .level
-          span GK
-          span BK
-          span AK1
-          span AK2
-          span(v-for='level in currentSubjectData.tutorlevels') {{ level }})
-        .teacher Lehrer: {{ currentSubjectData.teachers[0].firstname }}
-          //- span(v-for='')
-            | {{ teacher.username }}
-        //- .competences Kompetenzen:
+        ul.levels
+          li(v-for='level in subjectLevels') {{ level }}
+        .teacher 
+          strong Lehrer: 
+          span(v-for='teacher in currentSubjectData.teachers')
+            | {{ teacher.firstname }} {{ teacher.lastname }}
         .description
-          //- | {{ currentSubjectData.description }}
-          | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          | {{ currentSubjectData.description }}
 </template>
 
 <script>
@@ -34,11 +29,12 @@ export default {
       db: null,
       subjects: null,
       currentSubjectData: null,
-      hidePlanet: true,
+      hidePlanet: false,
       subjects: null,
       myData: null,
       loading: true,
-      availableSubject: true
+      availableSubject: true,
+      subjectLevels: null
     }
   },
   mounted () {
@@ -58,11 +54,9 @@ export default {
       this.availableSubject = !this.availableSubject
       // console.log(method)
       // console.log(subjectId)
-      console.log(this.myData);
-      console.log(this.db);
-
-
-
+      console.log(this.myData)
+      console.log(this.db)
+      console.log(this.hidePlanet)
 
       if (method == 'add') {
         // console.log(this.db.subjects.find(o => o.id === subjectId));
@@ -71,13 +65,25 @@ export default {
         // this.myData.studiesSubjects.find(o => o.id === subjectId)
       }
     },
+    sortLevels (arrayToSort) {
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
+    },
     getDb () {
       this.$store.dispatch('getDb')
         .then((response) => {
           this.db = response
           // console.log(response)
           this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
-
+          this.subjectLevels = this.sortLevels(this.currentSubjectData.levels)
+          console.log(this.currentSubjectData)
         })
     },
     getMyData () {
@@ -98,24 +104,31 @@ export default {
 
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
-  .hidePlanet
-    display: none
+  .planet
+    transition: all, 600ms
+    &.hidePlanet
+      transform: translateX(-1000px)
   .guibox
     align-items: center
     .planet
       width: 100%
       margin-bottom: 4em
-    .level
+    ul.levels
       display: block
       margin-bottom: 0
-      span
-        &::after
-          content: ' –'
-          margin: 0 .5em 0 .2em
-        &:last-child::after
-          content: ''
+      display: flex 
+      margin-bottom: 1em
+      li
+        border: 1px solid #ffffff80
+        border-radius: 3px
+        padding: .6em .6em
+        margin-right: .5em
+        font-size: .8rem
+        line-height: 1
     .teacher
       margin-bottom: 1em
+      strong
+        color: #fff
       span
         &::after
           content: ', '
@@ -126,8 +139,12 @@ export default {
       margin-bottom: 2em
     .info
       text-align: left
+      max-height: 90%
+      overflow-x: scroll
     h1
       text-transform: capitalize
       color: $teal
       font-weight: bold
+      font-size: 1.3em
+      margin-bottom: .5em
 </style>

@@ -1,7 +1,9 @@
 <template lang="pug">
   #solarsystem
     .info
-      h1(v-if='planetHover') Planet: {{ planetHover }}
+      div(v-if='planetHover') 
+        strong Planet: 
+        | {{ planetHover }}
     .solarsystem
       .sun
         img(src="../assets/gfx/planets/sun@3x.png")
@@ -53,9 +55,6 @@ export default {
     }
   },
   created () {
-    // this.subjects.forEach((o) => {
-    //   o.rotate = this.rotate()
-    // })
   }
 }
 </script>
@@ -69,6 +68,7 @@ export default {
 </style>
 
 <style lang="sass" scoped>
+@import "@/assets/styles/variables.sass"
 $planet: 2.5vh
 $sun: 10vh
 
@@ -79,12 +79,15 @@ $sun: 10vh
     transform: rotate3d(0,0,1,360deg)
 
 .info
+  strong
+    color: #fff
+  background: $space-blue
+  font-size: 1.3rem
   position: fixed
-  top: 30px
-  right: 30px
+  top: 1.5rem
+  right: 1.5rem
   color: #fff
-  h1
-    text-transform: capitalize
+  text-transform: capitalize  
 
 .sun
   z-index: 20
@@ -94,7 +97,7 @@ $sun: 10vh
 
 .planet
   transition: border 200ms
-  transform: translateY(-($planet / 3)) rotate(130deg)
+  transform: translateY(-.9vh) rotate(130deg)
   width: $planet
   height: $planet
   border-radius: $planet
@@ -109,7 +112,6 @@ $sun: 10vh
   align-items: center
   will-change: transform
   transform: translateY(0)
-  width: 10px
   // border: 1px solid #ffffff20
   .orbit-wrap
     display: flex
@@ -131,7 +133,7 @@ $orbit: 99vh
 $orbit-start: 6vh
 $rotationtime: 20s
 @for $i from 2 through 14
-  $orbit-start: $orbit-start + 7vh
+  $orbit-start: $orbit-start + 7.5vh
   $rotationtime: $rotationtime + 20s
   .planet-orbit:nth-child(#{$i})
     animation: rotating $rotationtime linear infinite
@@ -143,9 +145,9 @@ $rotationtime: 20s
       height: $orbit-start
       a
         z-index: 20 - $i
-$orbital: 5vh
+$orbital: 6vh
 @for $i from 3 through 15
-  $orbital: $orbital + 7vh
+  $orbital: $orbital + 7.5vh
   .orbit-circle:nth-child(#{$i})
     height: $orbital
     width: $orbital

@@ -1,69 +1,53 @@
 <template lang="pug">
-.progresschart
+.progresschart(v-if='!loading')
+  .line-box
+    .line(v-for='index in 10')
   .gridlines
-  .bar(v-for='level in lernLevels', :data-level='level', :style="{ 'grid-row-start': (101-(level*10)) }")
+  .bar(v-for='evaluation in evaluations', :data-competence-name='evaluation.competence.slug', :style="{ 'grid-row-start': (101-(evaluation.value*10)) }")
 </template>
 
 <script>
 export default {
   name: 'progresschart',
-  props: ['competence'],
+  props: ['level'],
   computed: {
     subject () {
       return this.$route.params.subject
     },
   },
-  created () {
-    // this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
-    this.lernLevels = this.$store.state.lernLevels.history[this.competence]
-  },
-  watch: {
-    competence () {
-      // this.lernLevels = this.$store.state.lernLevels[this.subject][this.competence]
-      this.lernLevels = this.$store.state.lernLevels.history[this.competence]
-    }
-  },
   data () {
     return {
-      lernLevels: null,
-      courses: {
-        
-        competences: [
-          {
-            name: 'lesen',
-            level: '1',
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-          },
-          {
-            name: 'schreiben',
-            level: '30',
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-          },
-          {
-            name: 'verstehen',
-            level: '20',
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-          },
-          {
-            name: 'sprechen',
-            level: '40',
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-          }
-        ]
-      }
+      beanz: null,
+      evaluations: null, 
+      loading: true
     }
   },
-
+  mounted () {
+    this.getMyData()
+  },
+  watch: {
+    '$route' () {
+      this.setEvaluations()
+    }
+  },
+  methods: {
+    getMyData () {
+      this.$store.dispatch('getUserData').then((response) => {
+        // console.log(response)
+        this.beanz = response.studiesSubjects.find(o => o.slug === this.subject)
+        this.setEvaluations()
+        this.loading = false
+      })   
+    },
+    setEvaluations () {
+      this.evaluations = this.beanz.evaluations.filter(o => o.level === this.level)
+    }
+  }
 }
 </script>
 
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
-  $bar1: 80
-  $bar2: 30
-  $bar3: 20
-  $bar4: 60
-
   .progresschart
     padding-left: 20px
     display: grid
@@ -77,7 +61,7 @@ export default {
     background: url('../../assets/gfx/graphs/chart-lines.svg')
     background-repeat: no-repeat
     background-size: cover
-  #competencesnav
+  #levelnav
     .tab:hover .progresschart .bar
         background-image: linear-gradient(-180deg, $teal 0%, $teal 58%)
     .tab:hover .progresschart
@@ -85,6 +69,9 @@ export default {
       background-repeat: no-repeat
       background-size: cover
       background-position: 7% 100%
+  #leveView
+    .progresschart
+      height: 90px
   .bar
     margin: 0
     padding: 0
@@ -106,5 +93,6 @@ export default {
   .bar:nth-child(5)
     grid-row-start: 0
     background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
-
+  
+  
 </style>

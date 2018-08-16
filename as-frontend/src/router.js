@@ -8,7 +8,7 @@ import Areas from './views/Areas.vue'
 import SingleAreaView from './views/SingleAreaView.vue'
 import SubjectAreaSingle from './views/SubjectAreaSingle.vue'
 import ProjectView from './views/ProjectView.vue'
-import CompetenceView from './views/CompetenceView.vue'
+import LevelView from './views/LevelView.vue'
 import SettingsView from './views/SettingsView.vue'
 
 import Login from './views/Login.vue'
@@ -70,9 +70,9 @@ export default new Router({
       component: ProjectView
     },
     {
-      path: '/competence/:subject/:competence',
-      name: 'competenceview',
-      component: CompetenceView
+      path: '/level/:subject/:level',
+      name: 'levelview',
+      component: LevelView
     },
     {
       path: '/settings',

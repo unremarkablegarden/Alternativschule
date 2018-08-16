@@ -1,5 +1,5 @@
 <template lang="pug">
-.user-menu
+.user-menu(v-if='!loading')
   .top.btn
     router-link(to='/settings', v-if="routeName == 'home'")
       img(src='@/assets/gfx/icons/settings.svg')
@@ -8,12 +8,18 @@
   .add.btn(v-if='addLink')
     router-link(:to='addLink')    
       img(src='@/assets/gfx/icons/add.svg')
-  .avatar
-    img(src='@/assets/gfx/avatars/avatar_01.png')
+  .avatar(:data-color='myData.avatarColor')
+    img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"')
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      myData: null,
+      loading: true
+    }
+  },
   computed: {
     addLink () {
       const r = this.$route.name 
@@ -24,8 +30,17 @@ export default {
       return this.$route.name 
     }
   },
+  methods: {
+    getMyData () {
+      this.$store.dispatch('getUserData').then((response) => {
+        this.myData = response
+        this.loading = false
+      })
+    }
+  },
   mounted () {
-  }
+    this.getMyData()
+  },
 }
 </script>
 
@@ -57,7 +72,6 @@ export default {
     .avatar
       width: 100px
       height: 100px
-      background: #4A90E2
       padding: 20px
       display: flex
       align-items: center
@@ -65,4 +79,40 @@ export default {
       border-radius: 50px
       z-index: 10
       position: relative
+      // blue
+      &[data-color="blue"]
+        background: #4A90E2
+      // orange
+      &[data-color="orange"]
+        background: #F5A623
+      // yellow
+      &[data-color="yellow"]
+        background: #F8E71C
+      // lightgreen
+      &[data-color="lightgreen"]
+        background: #7ED321
+      // darkgreen
+      &[data-color="darkgreen"]
+        background: #417505
+      // purple
+      &[data-color="purple"]
+        background: #BD10E0
+      // pastel teal
+      &[data-color="pastelteal"]
+        background: #77C3B2
+      // pastel orange
+      &[data-color="pastelorange"]
+        background: #FFD185
+      // pastel pink
+      &[data-color="pastelpink"]
+        background: #FFB8B9
+      // pastel green
+      &[data-color="pastelgreen"]
+        background: #CBE5B1
+      // pastel red
+      &[data-color="pastelred"]
+        background: #FF5F73
+      // pastel purple
+      &[data-color="pastelpurple"]
+        background: #D3A1FF
 </style>

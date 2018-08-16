@@ -71,6 +71,8 @@ export default {
       font-size: 1em
       position: absolute
       text-transform: capitalize
+      font-size: 1.3rem
+      background: #11111199
     .planet
       width: 12vw
 </style>

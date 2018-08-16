@@ -1,9 +1,9 @@
 <template lang="pug">
-.wrapper
+.levelNav
   .guibox
     .loading(v-if='loadingData || loadingUser') Loading...
     div(v-else)
-      competencesnav
+      levelnav
       .columns
         .side-menu.column.is-3
           ul
@@ -14,10 +14,6 @@
             li.section-title(v-if="currentSubjectData.projects") Alle Themen
             li(v-for="project in currentSubjectData.projects", v-if='!projectInUserData(project)')
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
-                | {{ project.name }}
-            //- li.section-title(v-if="selflearnProjects") Selbstlernboxen
-            //- li(v-for="project in selflearnProjects")
-              router-link(:to="currentSubject + '/' + project.slug")
                 | {{ project.name }}
 
         .main.column.is-8.is-offset-1
@@ -33,9 +29,10 @@
           .tab-content.info(v-if="tab == 'projectview'")
             //- xmp {{ currentProjectData }}
             h2.title {{ currentProjectData.name }}
-            .level Level: {{ currentProjectData.level }}
-            //- p {{ currentProjectData.description }}
-            p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            .level 
+              strong Level: 
+                | {{ currentProjectData.level }}
+            p.description {{ currentProjectData.description }}
             .button Hinzufugen
 
           .tab-content.material(v-if="tab == 'projectview-material'")
@@ -48,16 +45,40 @@
                 .text
                   .title Video
                   p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
+              li(data-type = 'pdf')
+                .text
+                  .title Arbeitsbogen
+                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
+              li(data-type = 'video')
+                .text
+                  .title Video
+                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
+              li(data-type = 'pdf')
+                .text
+                  .title Arbeitsbogen
+                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
+              li(data-type = 'video')
+                .text
+                  .title Video
+                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
+              li(data-type = 'pdf')
+                .text
+                  .title Arbeitsbogen
+                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
+              li(data-type = 'video')
+                .text
+                  .title Video
+                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
 </template>
 
 <script>
-import competencesnav from '@/components/projectview/competencesnav.vue'
+import levelnav from '@/components/projectview/levelNav.vue'
 import progresschart from '@/components/projectview/progresschart.vue'
 import lernlevel from '@/components/projectview/lernlevel.vue'
 export default {
   name: 'projectview',
   components: {
-    competencesnav,
+    levelnav,
     progresschart,
     lernlevel
   },
@@ -140,13 +161,12 @@ export default {
   .guibox
     text-align: left
     padding: 1.5em
-    overflow-x: scroll
   .side-menu
     font-family: $A
     font-size: 1.125em
     position: relative
-    overflow: scroll
-    height: calc(100vh - 260px)
+    overflow-y: scroll
+    height: calc(70vh - 100px - 3rem)
     ul
       border-top: 1px solid $lightgrey
       padding-top: 1em
@@ -179,21 +199,25 @@ export default {
         li.is-active a, li a:hover
           background: #0a0f26
           border-color: $teal
-
     h2
-      font-size: 1rem
+      font-size: 1.3rem
       font-weight: bold
       color: #fff
       margin-bottom: .75em
     .tab-content
+      overflow-x: scroll
+      max-height: calc(70vh - 100px - 3rem)
       &.info
         padding-right: 2em
-      p
+      p.description
         margin-bottom: 2em
+      strong
+        color: #fff
     .material
       li
         font-family: $A
         display: flex
+        margin-bottom: 2em
         .title
           font-size: 1.2rem
           color: #fff

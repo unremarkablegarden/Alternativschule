@@ -4,6 +4,7 @@ query allSubjects {
     name
     slug
     description
+    levels
     area {
       id
       name
