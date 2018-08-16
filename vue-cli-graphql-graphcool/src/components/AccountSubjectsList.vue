@@ -195,20 +195,15 @@ export default {
 </script>
 
 <style lang="sass">
-  .el-collapse-item__content
+  #subjectslist .el-collapse-item__content
     padding-bottom: 1em
 </style>
-
-
 
 <style lang="sass" scoped>
   .toggle
     height: 2em
     padding-top: 0.7em
-
   .subject
-    .name
-      // font-weight: bold
     .description
       padding: 0 0 1.5em 0
       font-size: 0.9em

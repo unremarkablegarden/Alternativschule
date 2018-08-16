@@ -12,21 +12,18 @@
         span(slot='label', v-if='type == "Lehrer"')
           icon(icon='eyeglass', color='lightgray').icon
           | Lehrer
-          //- /-innen
         span(slot='label', v-if='type == "Schueler"')
           icon(icon='graduation', color='lightgray').icon
           | Schüler
-          //- /-innen
-
 
         el-table(:data='usersByType[type]', style='width: 100%', :default-sort="{prop: 'surname', order: 'ascending'}")
           el-table-column(prop='firstname', label='Vorname', sortable)
           el-table-column(prop='surname', label='Nachname', sortable)
           el-table-column(prop='username', label='Nutzername', sortable)
-          el-table-column(label='Operationen', width="200")
+          el-table-column(label='Operationen', width="300")
             template(slot-scope='scope')
               el-button(size='mini', @click='handleEdit(scope.$index, scope.row)', icon='el-icon-edit') Edit
-              MutationButton(mutation='deleteUser', :id='scope.row.id')
+              DeleteUserButton(:id='scope.row.id')
 
       UserAdd
     //- useredit is in the same component as list because they talk to each other. button->handleEdit() fills the child component editor
@@ -120,4 +117,7 @@ export default {
 <style lang="sass">
   .icon
     transform: scale(0.75) translate(-6px, 7px)
+  // #userslist
+  //   .el-row
+  //     border-top: 1px #ddd solid
 </style>

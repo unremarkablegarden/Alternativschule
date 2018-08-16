@@ -5,13 +5,11 @@
 
 
 <script>
-
-
-export default {
-  name: 'subjects',
-  data () {
-    return {
+  export default {
+    name: 'subjects',
+    data () {
+      return {
+      }
     }
   }
-}
 </script>

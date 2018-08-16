@@ -1,17 +1,16 @@
 <template lang="pug">
   #subjectslist
     el-card(v-loading='$apollo.loading').subjects
-      div(slot="header")
+      div(slot="header").header
         span Meine Themen
-      div(v-if='!loading')
-        el-row(v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
-          el-collapse(v-model='activeSubjects')
-            el-collapse-item(:title='subject.name', :name='subject.name')
-              el-row
-                el-col(:span='12')
-                  .description {{ subject.description }}
-                el-col(:span='12')
-                  ProjectsList(:projects='mySubjects.teachesProjects', :subjectId='subject.id', :user='userId')
+      el-collapse(v-model='activeSubjects', v-if='!loading')
+        el-collapse-item(:title='subject.name', :name='subject.name', v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
+          el-row
+            el-col(:span='11')
+              .description {{ subject.description }}
+
+            el-col(:span='11', :offset='2')
+              ProjectsList(:projects='mySubjects.teachesProjects', :subjectId='subject.id', :user='userId')
 </template>
 
 <script>
@@ -47,6 +46,7 @@ export default {
       },
       result (result) {
         this.loading = false
+        console.log(this.mySubjects)
       }
     }
   }

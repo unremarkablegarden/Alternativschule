@@ -4,6 +4,7 @@ fragment Project on Project {
   slug
   description
   selfLearn
+  isPublished
   level
   subject {
     id

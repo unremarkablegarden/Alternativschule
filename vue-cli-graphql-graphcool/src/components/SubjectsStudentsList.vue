@@ -1,13 +1,19 @@
 <template lang="pug">
   #subjectslist
-    el-card(v-loading='$apollo.loading').subjects
-      div(slot="header")
+    div(v-if='loading')
+      h1 Loading...
+      //- subjects ...
+    el-card(v-else).subjects
+      div(slot="header").header
         span Meine Schüler
-      div(v-if='!loading')
-        el-row(v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
-          el-collapse(v-model='activeSubjects')
-            el-collapse-item(:title='subject.name', :name='subject.name')
-              StudentList(:subjectId='subject.id')
+      el-collapse(v-model='activeSubjects')
+        el-collapse-item(:title='subject.name', :name='subject.name', v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
+          el-row
+            el-col(:span='11')
+              | {{ subject.description }}
+            el-col(:span='11', :offset='2')
+              //- list of students in that subject ...
+              StudentList(:students='subject.students')
 </template>
 
 <script>
@@ -38,8 +44,14 @@ export default {
       },
       update (response) {
         // simplify the response
-        // console.log(response.User)
-        return JSON.parse(JSON.stringify(response.User))
+        let teacher = JSON.parse(JSON.stringify(response.User))
+        // add full names to students
+        teacher.teachesSubjects.forEach((subj) => {
+          subj.students.forEach((stud) => {
+            stud.fullName = stud.firstname + ' ' + stud.surname
+          })
+        })
+        return teacher
       },
       result (result) {
         this.loading = false
@@ -49,7 +61,27 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-  .subjects
-    min-height: 30vh
+<style lang="sass">
+  .el-card__body > .el-collapse:first-child
+    border-top: 0 !important
+  .el-card__body > .el-collapse:last-child
+    border-bottom: 0 !important
+
+  #subjectslist
+    .header
+      font-weight: bold
+      text-transform: uppercase
+      font-size: 0.75em
+      letter-spacing: 0.03em
+    .subject
+      .el-collapse-item__header
+        font-size: 1em
+        font-weight: normal
+    // height: 2em
+    // .subject-wrapper
+    //   margin-bottom: 1em
+    // .el-card__body
+    //   padding: 0 20px
+    // .el-collapse, .el-collapse-item__header
+    //   border: 0 !important
 </style>

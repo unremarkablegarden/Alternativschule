@@ -13,6 +13,26 @@ query subjectsByUser($id: ID!) {
 				id
 				firstname
 				surname
+				username
+				prefectLinks {
+					id
+					username
+					firstname
+					surname
+				}
+				studentStudentNotes {
+					id
+					createdAt
+					text
+					subject {
+						id
+						slug
+					}
+					teacher {
+						id
+						username
+					}
+				}
 			}
 		}
 		teachesProjects {

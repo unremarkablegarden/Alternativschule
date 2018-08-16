@@ -23,8 +23,13 @@ Vue.use(Element, { locale })
 import SimpleLineIcons from 'vue-simple-line'
 Vue.component('icon', SimpleLineIcons)
 
-import MutationButton from '@/components/MutationButton'
-Vue.component('MutationButton', MutationButton)
+import DeleteUserButton from '@/components/DeleteUserButton'
+Vue.component('DeleteUserButton', DeleteUserButton)
+
+import DeleteProjectButton from '@/components/DeleteProjectButton'
+Vue.component('DeleteProjectButton', DeleteProjectButton)
+import ProjectEdit from '@/components/ProjectEdit'
+Vue.component('ProjectEdit', ProjectEdit)
 
 import UsersList from '@/components/UsersList.vue'
 Vue.component('UsersList', UsersList)

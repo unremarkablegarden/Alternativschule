@@ -77,8 +77,4 @@ export default {
 <style lang="sass" scoped>
   .sli-svg
     margin-right: 10px
-  // .fa-icon
-    transform: translate(-7px, -1px)
-  // .right
-    float: right !important
 </style>

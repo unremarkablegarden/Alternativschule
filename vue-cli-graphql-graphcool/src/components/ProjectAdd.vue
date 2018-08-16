@@ -39,7 +39,7 @@ export default {
   props: ['subject'],
   data () {
     return {
-      levelsOptions: ['GK', 'BK', 'AK1', 'AK2'],
+      levelsOptions: ['GK', 'BK', 'AK', 'AK1', 'AK2'],
       form: {
         name: '',
         description: '',
@@ -96,20 +96,23 @@ export default {
           teacher: localStorage.getItem('userId'),
           subject: this.subject
         },
-        updateQueries: {
-          mySubjects: (prev, { mutationResult }) => {
-            console.log('--updateQueries--')
-            console.log(prev)
-            console.log(mutationResult)
-            return {
-              mySubjects: [mutationResult.data.createProject, ...prev.mySubjects],
-            }
-          }
-        }
+        // updateQueries: {
+        //   mySubjects: (prev, { mutationResult }) => {
+        //     console.log('--updateQueries--')
+        //     console.log(prev)
+        //     console.log(mutationResult)
+        //     return {
+        //       mySubjects: [mutationResult.data.createProject, ...prev.mySubjects],
+        //     }
+        //   }
+        // }
       })
       .then((data) => {
         console.log('--projectAdd then()--')
         console.log(data)
+
+        this.$apolloProvider.defaultClient.reFetchObservableQueries()
+
         this.loading = false
         this.dialogVisible = false
       })
@@ -138,10 +141,10 @@ export default {
   .subject
     &:first-child
       .el-collapse
-        border-top: 0 !important
+        // border-top: 0 !important
     &:last-child
       .el-collapse
-        border-bottom: 0 !important
+        // border-bottom: 0 !important
 </style>
 
 <style lang="sass" scoped>
