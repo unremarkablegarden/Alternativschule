@@ -114,20 +114,20 @@ export default {
       opacity: .8
       cursor: pointer
 
-    &[data-bar-n="1"]
-      .inner
-        background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%)
-    &[data-bar-n="2"]
-      .inner
-        background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
-    &[data-bar-n="3"]
-      .inner
-        background-image: linear-gradient(-180deg, #4AA8DA 0%, #653393 53%)
-    &[data-bar-n="4"]
-      .inner
-        background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
+    // &[data-bar-n="1"]
+    //   .inner
+    //     background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%)
+    // &[data-bar-n="2"]
+    //   .inner
+    //     background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
+    // &[data-bar-n="3"]
+    //   .inner
+    //     background-image: linear-gradient(-180deg, #4AA8DA 0%, #653393 53%)
+    // &[data-bar-n="4"]
+    //   .inner
+    //     background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
     &.large
       border: 1px white solid
-      .inner
-        background-image: linear-gradient(180deg, #056537 0%, #44A6D8 25%, #653393, 50%, #ED1E23 75%, #FCB714 100%)
+    .inner
+      background-image: linear-gradient(180deg, #056537 0%, #44A6D8 33%, #653393, 75%, #ED1E23 85%, #FCB714 100%)
 </style>
