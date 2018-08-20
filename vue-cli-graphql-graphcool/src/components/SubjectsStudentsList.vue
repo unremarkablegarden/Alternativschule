@@ -13,7 +13,7 @@
               | {{ subject.description }}
             el-col(:span='11', :offset='2')
               //- list of students in that subject ...
-              StudentList(:students='subject.students')
+              StudentList(:students='subject.students', :subjectId='subject.id')
 </template>
 
 <script>

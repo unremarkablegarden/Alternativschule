@@ -1,12 +1,9 @@
 <template lang="pug">
-.progresschart(v-if='!loading', :class='barClass')
-  .bg-or-hover
-    .line-box
-      .line(v-for='index in 10')
-    .gridlines
-  .bars
-    .bar(v-for='(evaluation, index) in evaluations', :data-bar-n='(index+1)', :class='barClass', :key='index', :data-competence-name='evaluation.competence.slug', :data-value='evaluation.value', :style="{ height: (evaluation.value*10)+'%' }")
-      .inner &nbsp;
+.progresschart(v-if='!loading')
+  .line-box
+    .line(v-for='index in 10')
+  .gridlines
+  .bar(v-for='evaluation in evaluations', :class='barClass',  :data-competence-name='evaluation.competence.slug', :style="{ 'grid-row-start': (101-(evaluation.value*10)) }")
 </template>
 
 <script>
@@ -43,7 +40,6 @@ export default {
   methods: {
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
-        // console.log(response)
         this.subjectData = response.studiesSubjects.find(o => o.slug === this.subject)
         this.setEvaluations()
         this.loading = false
@@ -53,8 +49,6 @@ export default {
       // console.log(this.subjectData)
       // console.log(this.type)
       this.evaluations = this.subjectData.evaluations.filter(o => o.level === this.level)
-      // console.log('---' + this.level + '---')
-      // console.log(this.evaluations)
     }
   }
 }
@@ -62,26 +56,21 @@ export default {
 
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
-
   .progresschart
     padding-left: 20px
-    // height: 100%
+    display: grid
+    grid-template-columns: repeat(4, 1fr)
+    grid-template-rows: repeat(100, 1fr)
+    grid-column-gap: 3px
+    height: 100%
     width: 100%
-    // min-height: 7em
+    min-height: 7em
     min-width: 20px
     background: url('../../assets/gfx/graphs/chart-lines.svg')
     background-repeat: no-repeat
     background-size: cover
-    &.small
-      height: 13vh
-      .bar .inner
-        height: 13vh
-    &.large
-      height: 33vh
-      .bar .inner
-        height: 33vh
   #levelnav
-    .tab:hover .progresschart .bar .inner
+    .tab:hover .progresschart .bar
         background-image: linear-gradient(-180deg, $teal 0%, $teal 58%)
     .tab:hover .progresschart
       background: url('../../assets/gfx/graphs/chart-lines-teal.svg')
@@ -91,43 +80,36 @@ export default {
   #leveView
     .progresschart
       height: 90px
-
-  .bars
-    display: flex
-    align-items: flex-end
-    justify-content: space-between
-    height: 100%
-    padding: 0 7% 0 5%
   .bar
-    width: 12.5%
-    // height: 100%
-    overflow: hidden
     margin: 0
     padding: 0
     transition: all 200ms ease
-    display: flex
-    align-items: flex-end
-    .inner
-      width: 100%
-      // height: 100%
+    grid-row-end: 102
     &:hover
       opacity: .8
       cursor: pointer
 
-    &[data-bar-n="1"]
-      .inner
-        background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%)
-    &[data-bar-n="2"]
-      .inner
-        background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
-    &[data-bar-n="3"]
-      .inner
-        background-image: linear-gradient(-180deg, #4AA8DA 0%, #653393 53%)
-    &[data-bar-n="4"]
-      .inner
-        background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
-    &.large
-      border: 1px white solid
-      .inner
-        background-image: linear-gradient(180deg, #056537 0%, #44A6D8 25%, #653393, 50%, #ED1E23 75%, #FCB714 100%)
+  .bar:nth-child(3)
+    grid-row-start: 0
+    background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%)
+    // border: 1px white solid
+  .bar:nth-child(4)
+    grid-row-start: 0
+    background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
+    // border: 1px white solid
+  .bar:nth-child(5)
+    grid-row-start: 0
+    background-image: linear-gradient(-180deg, #4AA8DA 0%, #653393 53%)
+    // border: 1px white solid
+  .bar:nth-child(6)
+    grid-row-start: 0
+    background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
+    // border: 1px white solid
+
+  .bar.large
+    grid-row-start: 0
+    background-image: linear-gradient(-180deg, #FCB714 0%, #ED1E23 25%, #653393, 50%, #44A6D8 75%, #056537 100%)
+
+
+
 </style>

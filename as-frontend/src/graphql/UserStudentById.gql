@@ -1,22 +1,3 @@
-# user > subject > level > competence > value
-# marijn > bio > BK > Lesen > 5
-
-# chart nav:
-# 	BIO = marijn.currentSubject.name
-# 	for level in marijn.currentSubject.levels
-# 		CHART TITLE = level = BK
-# 			for competence in marijn.currentSubject.competences
-# 				GRAPH = competence = Lesen
-# 					value = competence.evaluations.find(o => o.level === level) OR filter()
-
-
-# maybe skip this...
-# this users evals at current i.e. BK
-#currentLevelEvals = marijn.selfEvaluations.find(o => o.level === currentLevel)
-# find
-#currentLevelAndCompetenceEvals = currentLevelEvals.competence.find(o.slug => o.slug === currentCompetence)
-#.subject.find() ...
-
 query userStudentById($id: ID!) {
   User(id: $id) {
     id
@@ -53,6 +34,10 @@ query userStudentById($id: ID!) {
       id
       name
       slug
+      subject {
+        id
+        slug
+      }
     }
     studentLevels {
       level

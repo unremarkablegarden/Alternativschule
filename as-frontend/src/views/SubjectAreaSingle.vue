@@ -4,16 +4,17 @@
   div(v-else)
     .guibox.columns
       .column.is-5.is-offset-1
-        planet(:subject='currentSubjectData.slug', :class="{ 'hidePlanet' : (hidePlanet == true) }")
+        planet(:subject='currentSubjectData.slug', :class="{ 'hidePlanet' : hidePlanet }")
         .button(@click='editSubject("add", currentSubjectData.id)', v-if='availableSubject') Hinzufugen
-        .button(v-else, @click='editSubject("remove", currentSubjectData.id)') Löschen
+        //- p(v-else) Hinzugefügt
+        //- .button(v-else, @click='editSubject("remove", currentSubjectData.id)') Löschen
 
       .column.is-4.info.is-offset-1
         h1 Planet: {{ currentSubject }}
         ul.levels
           li(v-for='level in subjectLevels') {{ level }}
-        .teacher 
-          strong Lehrer: 
+        .teacher(v-if='currentSubjectData.teachers.length')
+          strong Lehrer:&nbsp;
           span(v-for='teacher in currentSubjectData.teachers')
             | {{ teacher.firstname }} {{ teacher.lastname }}
         .description
@@ -22,6 +23,8 @@
 
 <script>
 import planet from '@/components/areas/planet.vue'
+import gql from 'graphql-tag'
+
 export default {
   components: { planet },
   data () {
@@ -51,31 +54,66 @@ export default {
   },
   methods: {
     editSubject (method, subjectId) {
-      this.availableSubject = !this.availableSubject
-      // console.log(method)
-      // console.log(subjectId)
-      console.log(this.myData)
-      console.log(this.db)
-      console.log(this.hidePlanet)
 
       if (method == 'add') {
-        // console.log(this.db.subjects.find(o => o.id === subjectId));
-      }
+        const subject = this.db.subjects.find(o => o.id === subjectId)
+        console.log('Add ' + subject.name + ' [' + subject.id + ']')
+        const id = localStorage.getItem('userId')
+
+        if (id) {
+          this.$apollo.mutate({
+            mutation: gql`mutation ($id: ID!, $subjectId: ID!) {
+              addToStudentSubject(studentsUserId: $id, studiesSubjectsSubjectId: $subjectId) {
+                studentsUser {
+                  id
+                  username
+                  studiesSubjects {
+                    slug
+                  }
+                }
+              }
+            }`,
+            variables: {
+              id: id,
+              subjectId: subject.id
+            },
+            update: (store, { data }) => {}
+          }).then((data) => {
+            this.$message({
+               type: 'success',
+               message: 'Planet hinzugefügt'
+            })
+            this.availableSubject = false
+            this.hidePlanet = true
+            this.$apolloProvider.defaultClient.reFetchObservableQueries()
+            setTimeout(() => { this.$router.push({ name: 'home' }) }, 1000)
+            console.log(data)
+          }).catch((error) => {
+            console.error(error)
+            this.$message({
+              type: 'error',
+              message: error
+            })
+          })
+        } // if id
+      } // if add
+
       if(method == 'remove') {
         // this.myData.studiesSubjects.find(o => o.id === subjectId)
       }
     },
+
     sortLevels (arrayToSort) {
-      // useage: levels = this.sortLevels(levels)
-      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
-      let newArray = []
-      arrayOrder.forEach((level) => {
-        if (arrayToSort.includes(level)) {
-          newArray.push(level)
-        }
-      })
-      return newArray
-    },
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
+    },
     getDb () {
       this.$store.dispatch('getDb')
         .then((response) => {
@@ -104,9 +142,13 @@ export default {
 
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
+  .added
+    color: white
+
   .planet
-    transition: all, 600ms
+    transition: all 1200ms
     &.hidePlanet
+      transition: all 1200ms
       transform: translateX(-1000px)
   .guibox
     align-items: center
@@ -116,7 +158,7 @@ export default {
     ul.levels
       display: block
       margin-bottom: 0
-      display: flex 
+      display: flex
       margin-bottom: 1em
       li
         border: 1px solid #ffffff80

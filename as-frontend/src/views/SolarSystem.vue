@@ -1,16 +1,15 @@
 <template lang="pug">
   #solarsystem
     .info
-      div(v-if='planetHover') 
-        strong Planet: 
+      div(v-if='planetHover')
+        strong Planet&nbsp;
         | {{ planetHover }}
     .solarsystem
       .sun
         img(src="../assets/gfx/planets/sun@3x.png")
-      .planet-orbit(v-for="subject in subjects", @mouseover='planetHover = subject.name', @mouseleave='planetHover = null', v-if='!loading')
-        //-.orbit-wrap
-        .orbit-wrap(:style="{ transform: subject.rotate }")
-          router-link(:to=' "subject/" + subject.slug')
+      .planet-orbit(v-for="(subject, index) in subjects", v-if='!loading')
+        .orbit-wrap(:style="{ transform: subject.rotate }", data-orbit-n='index')
+          router-link(:to=' "subject/" + subject.slug', @mouseover.native='planetHover = subject.name', @mouseleave.native='planetHover = null', data-planet-n='index').planet-link
             planet(:subject="subject.slug")
     .orbit-circle(v-for="subject in subjects")
 </template>
@@ -82,12 +81,12 @@ $sun: 10vh
   strong
     color: #fff
   background: $space-blue
-  font-size: 1.3rem
+  font-size: 1.5rem
   position: fixed
   top: 1.5rem
   right: 1.5rem
   color: #fff
-  text-transform: capitalize  
+  text-transform: capitalize
 
 .sun
   z-index: 20
@@ -101,9 +100,10 @@ $sun: 10vh
   width: $planet
   height: $planet
   border-radius: $planet
-  // transition: box-shadow 100ms
+  transition: all 200ms
   &:hover
-    box-shadow: 0px 0px 24px #fea2fd
+    transition: all 200ms
+    box-shadow: 0px 0px 34px #fea2fd
     cursor: pointer
 
 .planet-orbit
@@ -114,8 +114,10 @@ $sun: 10vh
   transform: translateY(0)
   // border: 1px solid #ffffff20
   .orbit-wrap
+    // border: 1px red solid
     display: flex
     justify-content: center
+    border-radius: 100%
 
 .orbit-circle
   background: url('../assets/gfx/circle.svg')
@@ -123,18 +125,18 @@ $sun: 10vh
   background-size: contain
   position: absolute
   z-index: 0
-  opacity: .2
+  opacity: .25
   &:nth-child(3)
     opacity: .4
   &:nth-child(4)
     opacity: .3
-     
+
 $orbit: 99vh
 $orbit-start: 6vh
-$rotationtime: 20s
+$rotationtime: 8s
 @for $i from 2 through 14
   $orbit-start: $orbit-start + 7.5vh
-  $rotationtime: $rotationtime + 20s
+  $rotationtime: $rotationtime + 32s
   .planet-orbit:nth-child(#{$i})
     animation: rotating $rotationtime linear infinite
     z-index: 20 - $i

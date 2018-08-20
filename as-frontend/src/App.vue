@@ -37,7 +37,21 @@ export default {
       this.login = false
     }
   },
+  mounted () {
+    window.addEventListener('mousemove', this.parallax)
+  },
   methods: {
+    parallax (event) {
+      let x = event.clientX
+      let y = event.clientY
+      const winW = window.innerWidth
+      const winH = window.innerHeight
+      const p = 20
+      let moveX = ((x / winW) * p) - (p/2)
+      let moveY = ((y / winH) * p) - (p/2)
+      document.body.style.backgroundPosition = moveX+'px '+moveY+'px'
+
+    },
     // checkLoggedIn() {
     //   const userId = localStorage.getItem('userId')
     //   if (userId !== 'null') {
@@ -83,6 +97,10 @@ export default {
     font-size: 16px
     line-height: 1.5
     background-color: $space-blue
+    max-height: 100vh
+    max-width: 100vw
+    overflow: hidden
+  body
     background-image: url('assets/gfx/stars.svg')
     background-size: contain
 

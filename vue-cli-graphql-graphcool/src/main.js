@@ -65,6 +65,10 @@ Vue.component('SubjectsStudentsList', SubjectsStudentsList)
 import StudentList from '@/components/StudentList.vue'
 Vue.component('StudentList', StudentList)
 
+import StudentNote from '@/components/StudentNote.vue'
+Vue.component('StudentNote', StudentNote)
+
+
 
 Vue.config.productionTip = false
 

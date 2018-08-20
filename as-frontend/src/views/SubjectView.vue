@@ -1,15 +1,15 @@
 <template lang="pug">
-  .loading(v-if='loading') Loading...
+  .loading(v-if='!projects') Loading...
   .planetzone(v-else)
     .info
-      div 
-        strong Planet 
-        | {{ currentSubject }}
-      div(v-if='moonHover') 
-        strong Moon: 
+      div
+        strong Planet&nbsp;
+        | {{ currentSubjectData.name }}
+      div(v-if='moonHover')
+        strong Moon&nbsp;
         | {{ moonHover }}
     planet(:subject='currentSubject', :data-levels='currentLevel')
-    .orbit-circle
+    .orbit-circle(v-if='projects.length')
     ul.levels
      li(v-for='level in subjectLevels', :class="{ 'is-active' : (level == currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount')
@@ -48,7 +48,11 @@ export default {
       return this.$route.params.subject
     },
     moonCount () {
-      return 'moonN_' + this.projects.length
+      if (!this.projects) {
+        return 'moonN_0'
+      } else {
+        return 'moonN_' + this.projects.length
+      }
     },
   },
   methods: {
@@ -56,23 +60,34 @@ export default {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = response
         // console.log(response)
-        this.projects = response.studiesProjects
-        
-        this.currentLevel = response.studentLevels.find(o => o.subject.slug === this.currentSubject).level
-        
+
+        this.projects = response.studiesProjects.filter(s => s.subject.slug === this.currentSubject)
+        console.log(this.projects)
+
+        let currentLevel
+
+        currentLevel = response.studentLevels.find(o => o.subject.slug === this.currentSubject)
+        if (currentLevel) {
+          currentLevel = currentLevel.level
+        } else {
+          currentLevel = 'BK'
+        }
+
+        this.currentLevel = currentLevel
+
         this.loading = false
       })
     },
     sortLevels (arrayToSort) {
-      // useage: levels = this.sortLevels(levels)
-      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
-      let newArray = []
-      arrayOrder.forEach((level) => {
-        if (arrayToSort.includes(level)) {
-          newArray.push(level)
-        }
-      })
-      return newArray
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
     },
     getDb () {
       this.$store.dispatch('getDb').then((response) => {

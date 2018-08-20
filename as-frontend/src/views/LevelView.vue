@@ -4,7 +4,7 @@
     levelnav
     .columns
       .column.is-3.chart
-        progresschart(:level='currentLevel') 
+        progresschart(:level='currentLevel', type='large')
         ul.chart-legend
           li A
           li B
@@ -15,17 +15,17 @@
             | {{ competence.name }}
       .column.is-7.is-offset-1.text
         h3 Kurs: {{ currentLevel }}
-        p Nam dapibus nisl vitae elit fringilla rutrum. Aenean sollicitudin, erat a elementum rutrum, neque sem pretium metus, quis mollis nisl nunc et massa. Vestibulum sed metus in lorem tristique ullamcorper id vitae erat. Nulla mollis sapien sollicitudin lacinia lacinia. Vivamus facilisis dolor et massa placerat, at vestibulum nisl egestas. Nullam rhoncus lacus non odio luctus, eu condimentum mauris ultrices. 
+        p Nam dapibus nisl vitae elit fringilla rutrum. Aenean sollicitudin, erat a elementum rutrum, neque sem pretium metus, quis mollis nisl nunc et massa. Vestibulum sed metus in lorem tristique ullamcorper id vitae erat. Nulla mollis sapien sollicitudin lacinia lacinia. Vivamus facilisis dolor et massa placerat, at vestibulum nisl egestas. Nullam rhoncus lacus non odio luctus, eu condimentum mauris ultrices.
         h3 Mein lernlevel
         lernlevel
-        ul.lernlevel-info 
+        ul.lernlevel-info
           li 1: Ich benötige noch viel Übung!
           li 2: Ich bin noch etwas unsicher.
           li 3: Meine leistungen sind in Ordnung.
           li 4: Super! Ich bin total sicher.
           li 5: Ich bin ein Profi!
 </template>
-  
+
 <script>
 import levelnav from '@/components/projectview/levelNav.vue'
 import progresschart from '@/components/projectview/progresschart.vue'
@@ -53,7 +53,7 @@ export default {
       this.routeUpdate()
     }
   },
-  
+
   computed: {
     currentSubject () {
       return this.$route.params.subject
@@ -73,7 +73,7 @@ export default {
           this.db = response
           // console.log(response)
           this.subject = response.subjects.find(subject => subject.slug === this.currentSubject)
-          console.log(this.subject)
+          // console.log(this.subject)
           this.loading = false
         })
     },
@@ -88,7 +88,7 @@ export default {
     padding: 1.5rem
     overflow-x: scroll
     .progresschart
-      height: 60%
+      // height: 60%
       width: auto
       margin-bottom: .5em
       grid-column-gap: 5.5%
@@ -104,7 +104,7 @@ export default {
       font-size: .8em
       font-weight: bold
   .text
-    h3 
+    h3
       font-family: $A
       font-size: 1.125rem
       text-transform: uppercase
@@ -119,7 +119,7 @@ export default {
     padding-left: 12%
     margin-bottom: 1em
     font-weight: bold
-      
+
   .competence-names
     font-size: .9em
     line-height: 2
@@ -134,7 +134,7 @@ export default {
       content: 'C:  '
     li:nth-child(4)::before
       content: 'D:  '
-           
+
   .lernlevel-info
     margin-top: 2em
     color: $lightgrey

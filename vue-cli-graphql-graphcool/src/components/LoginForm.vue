@@ -64,9 +64,11 @@ export default {
 
     		})
         .catch((error) => {
+          // console.log(error.message)
           console.error(error)
           console.log('Wrong credentials')
           this.error = true
+          this.loading = false
         })
     }
   }

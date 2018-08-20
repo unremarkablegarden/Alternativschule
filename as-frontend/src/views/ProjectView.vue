@@ -4,20 +4,22 @@
     .loading(v-if='loadingData || loadingUser') Loading...
     div(v-else)
       levelnav
-      .columns
+      .columns.under-level-nav
         .side-menu.column.is-3
           ul
-            li.section-title(v-if="myProjects") Meine Themen
-            li(v-for="project in myProjects")
-              router-link(:to="'/project/' + currentSubject + '/' + project.slug")
-                | {{ project.name }}
-            li.section-title(v-if="currentSubjectData.projects") Alle Themen
+            div(v-if='myProjects.length').my-projects
+              li.section-title(v-if="myProjects") Meine Projekte
+              li(v-for="project in myProjects")
+                router-link(:to="'/project/' + currentSubject + '/' + project.slug")
+                  | {{ project.name }}
+
+            li.section-title(v-if="currentSubjectData.projects") Alle anderen Projekte
             li(v-for="project in currentSubjectData.projects", v-if='!projectInUserData(project)')
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                 | {{ project.name }}
 
         .main.column.is-8.is-offset-1
-          .tabs.is-boxed
+          .tabs.is-boxed(v-if="tab !== 'projectview-home'")
             ul
               li(:class="{ 'is-active' : (tab == 'projectview') }")
                 router-link(:to='"/project/" + currentSubject + "/" + project') Info
@@ -28,12 +30,17 @@
 
           .tab-content.info(v-if="tab == 'projectview'")
             //- xmp {{ currentProjectData }}
-            h2.title {{ currentProjectData.name }}
-            .level 
-              strong Level: 
+            .columns.is-gapless.no-mb
+              .column.is-9
+                h2.title Project: {{ currentProjectData.name }}
+              .column.is-3
+                el-button(v-if='projectAvailable === true', type='danger', icon='el-icon-plus', @click='addProject(currentProjectData.id)') Hinzufugen
+                el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)') Löschen
+
+            .level
+              strong Level:&nbsp;
                 | {{ currentProjectData.level }}
             p.description {{ currentProjectData.description }}
-            .button Hinzufugen
 
           .tab-content.material(v-if="tab == 'projectview-material'")
             ul
@@ -72,9 +79,11 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 import levelnav from '@/components/projectview/levelNav.vue'
 import progresschart from '@/components/projectview/progresschart.vue'
 import lernlevel from '@/components/projectview/lernlevel.vue'
+
 export default {
   name: 'projectview',
   components: {
@@ -91,6 +100,7 @@ export default {
       loadingUser: true,
       loadingData: true,
       currentProjectData: null,
+      projectAvailable: null
     }
   },
   computed: {
@@ -103,17 +113,93 @@ export default {
     project () {
       return this.$route.params.project
     },
-    // projectData () {
-      // return this.projects.find(o => o.slug === this.project)
-      // return this.currentSubjectData.find(o => o.slug === this.project)
-    // }
   },
   methods: {
+
+    addProject (projectId) {
+      const id = localStorage.getItem('userId')
+      if (id) {
+        this.$apollo.mutate({
+          mutation: gql`mutation ($id: ID!, $projectId: ID!) {
+            addToStudentProject(studentsUserId: $id, studiesProjectsProjectId: $projectId) {
+              studentsUser {
+                id
+                username
+                studiesProjects {
+                  slug
+                }
+              }
+            }
+          }`,
+          variables: {
+            id: id,
+            projectId: projectId
+          },
+          update: (store, { data }) => {
+            // console.log(store)
+            // console.log(data);
+          }
+        }).then((data) => {
+          this.$message({
+             type: 'success',
+             message: 'Planet hinzugefügt'
+          })
+          this.projectAvailable = false
+          // this.$apolloProvider.defaultClient.reFetchObservableQueries()
+        }).catch((error) => {
+          console.error(error)
+          this.$message({
+            type: 'error',
+            message: error
+          })
+        })
+      } // if id
+    },
+
+    removeProject (projectId) {
+      const id = localStorage.getItem('userId')
+      if (id) {
+        this.$apollo.mutate({
+          mutation: gql`mutation ($id: ID!, $projectId: ID!) {
+            removeFromStudentProject(studentsUserId: $id, studiesProjectsProjectId: $projectId) {
+              studentsUser {
+                id
+                username
+                studiesProjects {
+                  slug
+                }
+              }
+            }
+          }`,
+          variables: {
+            id: id,
+            projectId: projectId
+          },
+          update: (store, { data }) => {
+            // console.log(store)
+            // console.log(data);
+          }
+        }).then((data) => {
+          this.$message({
+             type: 'success',
+             message: 'Planet entfernt'
+          })
+          this.projectAvailable = true
+          // this.$apolloProvider.defaultClient.reFetchObservableQueries()
+        }).catch((error) => {
+          console.error(error)
+          this.$message({
+            type: 'error',
+            message: error
+          })
+        })
+      } // if id
+    },
+
     projectInUserData(project) {
       let foundIt = false
       this.myProjects.forEach((p) => {
         if (p.id == project.id) {
-          // console.log(project.name + ' is already added')
           foundIt = true
         }
       })
@@ -122,25 +208,32 @@ export default {
     getDb () {
       this.$store.dispatch('getDb')
         .then((response) => {
-          this.db = response
-
+          this.db = JSON.parse(JSON.stringify(response))
           this.setCurrentData()
-
           this.loadingUser = false
         })
     },
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
-        this.myData = response
-        this.myProjects = response.studiesProjects
-        this.loadingData = false
-        // console.log('myData')
+        this.myData = JSON.parse(JSON.stringify(response))
+        this.myProjects = response.studiesProjects.filter(o => o.subject.slug === this.currentSubject)
         // console.log(response)
+        this.isProjectAvailable()
+        this.loadingData = false
       })
     },
     setCurrentData () {
       this.currentSubjectData = this.db.subjects.find(subject => subject.slug === this.currentSubject)
       this.currentProjectData = this.currentSubjectData.projects.find(p => p.slug === this.project)
+    },
+
+    isProjectAvailable() {
+      // console.log('avail?')
+      if (this.myProjects.find(o => o.id === this.currentProjectData.id)) {
+        this.projectAvailable = false
+      } else {
+        this.projectAvailable = true
+      }
     }
   },
   mounted () {
@@ -151,6 +244,7 @@ export default {
     '$route' (to, from) {
       console.log('route change')
       this.setCurrentData()
+      this.isProjectAvailable()
     }
   }
 }
@@ -158,15 +252,28 @@ export default {
 
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
+
   .guibox
     text-align: left
     padding: 1.5em
+    overflow-x: hidden
+    overflow-y: auto
+    // div
+      border: 1px red solid
+
+  .under-level-nav
+    // background: blue
+    height: calc(77vh - 100px)
+
+  .no-mb
+    margin-bottom: 0 !important
+
   .side-menu
     font-family: $A
     font-size: 1.125em
     position: relative
     overflow-y: scroll
-    height: calc(70vh - 100px - 3rem)
+    // height: calc(70vh - 100px - 3rem)
     ul
       border-top: 1px solid $lightgrey
       padding-top: 1em
@@ -206,7 +313,7 @@ export default {
       margin-bottom: .75em
     .tab-content
       overflow-x: scroll
-      max-height: calc(70vh - 100px - 3rem)
+      max-height: calc(70vh - 100px - 2rem)
       &.info
         padding-right: 2em
       p.description

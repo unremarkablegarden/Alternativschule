@@ -34,7 +34,7 @@
           span Schüler
 
       //- Prefects
-      el-menu-item(index='/vertrauensschueler')
+      el-menu-item(index='/vertrauensschueler', disabled)
         template(slot='title')
           //- icon(name='hands-helping')
           icon(icon='emotsmile')

@@ -5,7 +5,7 @@
         router-link(:to='"/level/" + currentSubject + "/" + level').column.is-one-quarter(v-for='level in studentLevels', :key='level').tab
           .columns
             .column.is-two-fifths.chart
-              progresschart(:level='level')
+              progresschart(:level='level', type='small')
             .column.is-three-fifths.desc
               .level {{ level }}
               p Lorem ipsum dolor sit amet, consectetur.
@@ -60,7 +60,7 @@ export default {
         // console.log(this.subjects)
         this.studentCurrentSubjectData = response.studiesSubjects.find(subject => subject.slug === this.currentSubject)
         this.studentLevels = this.studentCurrentSubjectData.levels
-      })  
+      })
     }
   },
 }
@@ -70,7 +70,11 @@ export default {
   @import "@/assets/styles/variables.sass"
   #levelnav
     font-size: .8em
-    margin-bottom: 4em
+    margin-bottom: 4vh
+    // background: red
+    height: 16vh
+    // position: absolute
+    overflow: hidden
     a
       color: #fff
     .chart
@@ -86,6 +90,8 @@ export default {
       transition: all, 200ms
       background: $teal
       border: 1px solid $teal
+      margin-bottom: 1em
+      padding-left: 2em
     .themen-link.is-not-lit
       background: none
       border: 1px solid #fff

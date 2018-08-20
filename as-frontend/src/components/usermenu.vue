@@ -3,16 +3,18 @@
   .top.btn
     router-link(to='/settings', v-if="routeName == 'home'")
       img(src='@/assets/gfx/icons/settings.svg')
-    router-link(to='/solarsystem', v-else) 
+    router-link(to='/solarsystem', v-else)
       img(src='@/assets/gfx/icons/close-btn.svg')
   .add.btn(v-if='addLink')
-    router-link(:to='addLink')    
+    router-link(:to='addLink')
       img(src='@/assets/gfx/icons/add.svg')
   .avatar(:data-color='myData.avatarColor')
     img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"')
 </template>
 
 <script>
+import gql from 'graphql-tag'
+
 export default {
   data () {
     return {
@@ -22,20 +24,54 @@ export default {
   },
   computed: {
     addLink () {
-      const r = this.$route.name 
+      const r = this.$route.name
       if (r == 'home') return '/areas'
       if (r == 'subjectView') return '/project/' + this.$route.params.subject
     },
     routeName () {
-      return this.$route.name 
+      return this.$route.name
     }
   },
   methods: {
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
-        this.myData = response
+        let data = JSON.parse(JSON.stringify(response))
+        this.myData = data
         this.loading = false
       })
+    }
+  },
+  apollo: {
+    $subscribe: {
+      userUpdated: {
+        query: gql`subscription updateUser($id: ID!) {
+          User(
+            filter: {
+              mutation_in: [UPDATED]
+              node: {
+                id: $id
+              }
+            }
+          ) {
+            mutation
+            node {
+              avatar
+              avatarColor
+            }
+            updatedFields
+          }
+        }`,
+        variables () {
+          return {
+            id: localStorage.getItem('userId')
+          }
+        },
+        result (data) {
+          // console.log('subscription')
+          this.myData.avatar = data.data.User.node.avatar
+          this.myData.avatarColor = data.data.User.node.avatarColor
+        }
+      }
     }
   },
   mounted () {
@@ -61,7 +97,7 @@ export default {
       z-index: 1
       &:hover
         opacity: .7
-      &.top, &.settings 
+      &.top, &.settings
         // top: 0px
         left: 35px
         top: -45px

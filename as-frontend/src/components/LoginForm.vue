@@ -52,7 +52,7 @@ export default {
 
           // save user token to localstorage
     			localStorage.setItem('authenticate-user-token', token)
-          console.log('token: ' + token)
+          // console.log('token: ' + token)
 
           // get the user ID and save in localStorage
           this.$store.dispatch('getUserId')
@@ -73,6 +73,7 @@ export default {
           console.error(error)
           console.log('Wrong credentials')
           this.error = true
+          this.loading = false
         })
         .then(() => {
         })

@@ -4,7 +4,7 @@ query accountInfo($id: ID!) {
 		email
 		username
 		prefect
-		prefectStudents {
+		prefectLinks {
 			id
 			firstname
 			surname

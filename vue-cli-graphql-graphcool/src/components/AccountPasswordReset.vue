@@ -28,7 +28,7 @@ export default {
       if (value === '') {
         callback(new Error('Please input the password'))
       } else {
-        if (this.accountForm.checkPass !== '') {
+        if (this.accountForm.checkPassword !== '') {
           this.$refs.accountForm.validateField('checkPassword')
         }
         callback();
@@ -90,15 +90,17 @@ export default {
 
       const salt = bcryptjs.genSaltSync(10)
       let saltyPassword
+
       if (newPass) {
         return bcryptjs.hash(newPass, salt)
           .then(hash => {
+            saltyPassword = hash
             this.$apollo
               .mutate({
                 mutation: ACCOUNT_PASSWORD_RESET,
                 variables: {
-                  id: this.userId,
-                  password: hash
+                  id: localStorage.getItem('userId'),
+                  password: saltyPassword
                 }
               })
               .then(response => {
