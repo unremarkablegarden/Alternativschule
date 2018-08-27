@@ -145,6 +145,7 @@ export default {
   @import "~bulma/sass/grid/columns"
   @import "~bulma/sass/elements/container"
   @import "~bulma/sass/layout/section"
+  @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Roboto')
 
   // body *
   //   transition: height 200ms
@@ -154,16 +155,19 @@ export default {
     font-weight: normal
     font-size: 1.2em
     letter-spacing: 0.01em
-    margin-left: 200px
+    margin-left: 222px
     margin-top: 1.3em
 
   #app
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
+    font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
   a
     color: #66b1ff
     text-decoration: none
+
+  h1, h2, h3, h4, h5
+    font-family: "Archivo Black","Helvetica Neue",Helvetica,Arial,sans-serif
 
   .right
     float: right

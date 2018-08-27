@@ -113,7 +113,7 @@ export default {
       color: white
 
   #app
-    font-family: 'Avenir', Helvetica, Arial, sans-serif
+    font-family: 'Roboto', Helvetica, Arial, sans-serif
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
     text-align: center
@@ -123,6 +123,9 @@ export default {
       display: flex
       align-items: center
       justify-content: center
+
+  h1, h2, h3, h4, h5, .title, strong
+    font-family: 'Archivo Black', Helvetica, Arial, sans-serif
 
   #nav
     padding: 0 .1em .1em
