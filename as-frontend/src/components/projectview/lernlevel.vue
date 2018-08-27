@@ -14,7 +14,7 @@ import gql from 'graphql-tag'
 
 export default {
   name: 'lernlevel',
-  props: ['competence', 'level'],
+  props: ['competence', 'competenceId', 'level'],
   data () {
     return {
       value: 0,
@@ -33,9 +33,14 @@ export default {
       this.setEvaluations()
     }
   },
+  created () {
+    this.$on('testEvent', val => {
+      console.log('$on testEvent: ' + val)
+    })
+  },
   mounted () {
-    // this.$parent.$emit('customEvent', 'test event')
     this.getMyData()
+    // console.log(this.competenceId)
   },
   methods: {
     getMyData () {
@@ -47,19 +52,77 @@ export default {
     },
     setEvaluations () {
       this.evaluations = this.subjectData.evaluations.filter(o => o.level === this.level)
+      // console.log(this.evaluations)
       this.setEvaluation()
     },
     setEvaluation () {
       this.currentEvaluation = this.evaluations.find(o => o.competence.slug === this.competence)
-      // console.log(this.currentEvaluation)
+      if (!this.currentEvaluation) {
+        console.log('no current eval')
+        this.currentEvaluation = {
+          value: 1,
+          new: true
+        }
+      }
     },
 
     levelChange(value) {
-      // this.currentEvaluation. = value
-      // this.currentEvaluation.id
       this.currentEvaluation.value = value
-      // const id = localStorage.getItem('userId')
+      if (this.currentEvaluation.new) {
+        console.log('create new eval')
+        this.createEvaluation(value)
+      }
+      else {
+        console.log('update existing eval')
+        this.updateEvaluation(value)
+      }
+    },
 
+
+    createEvaluation (value) {
+      this.$apollo.mutate({
+        mutation: gql`mutation ($val: Int!, $studentId: ID!, $competenceId: ID!, $subjectId: ID!, $level: Levels!) {
+          createEvaluation(studentId: $studentId, competenceId: $competenceId, subjectId: $subjectId, level: $level, value: $val) {
+            value
+            student {
+              username
+            }
+            competence {
+              slug
+              id
+            }
+            subject {
+              slug
+            }
+            level
+          }
+        }`,
+        variables: {
+          val: value,
+          studentId: localStorage.getItem('userId'),
+          competenceId: this.competenceId,
+          subjectId: this.subjectData.id,
+          level: this.level
+        },
+        update: (store, { data }) => {
+          // this.$apolloProvider.defaultClient.reFetchObservableQueries()
+          this.$parent.$emit('evalCreated', data.createEvaluation)
+        }
+      }).then((data) => {
+        this.$message({
+           type: 'success',
+           message: 'Lernlevel Gespeichert'
+        })
+        window.location.reload(false)
+      }).catch((error) => {
+        this.$message({
+          type: 'error',
+          message: error
+        })
+      })
+    },
+
+    updateEvaluation (value) {
       this.$apollo.mutate({
         mutation: gql`mutation ($id: ID!, $value: Int!) {
           updateEvaluation(id: $id, value: $value) {

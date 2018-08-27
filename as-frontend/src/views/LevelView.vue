@@ -4,7 +4,7 @@
     levelnav
     .columns
       .column.is-3.chart
-        progresschart(:level='currentLevel', type='large')
+        progresschart(:level='currentLevel', type='large', ref='chart')
         ul.chart-legend
           li(:class='{ current : (currentCompetence.slug === subject.competences[0].slug) }') A
           li(:class='{ current : (currentCompetence.slug === subject.competences[1].slug) }') B
@@ -15,9 +15,9 @@
             | {{ competence.name }}
       .column.is-7.is-offset-1.text
         h3 Kurs: {{ currentLevel }}
-        //- p Nam dapibus nisl vitae elit fringilla rutrum. Aenean sollicitudin, erat a elementum rutrum, neque sem pretium metus, quis mollis nisl nunc et massa. Vestibulum sed metus in lorem tristique ullamcorper id vitae erat. Nulla mollis sapien sollicitudin lacinia lacinia. Vivamus facilisis dolor et massa placerat, at vestibulum nisl egestas. Nullam rhoncus lacus non odio luctus, eu condimentum mauris ultrices.
+        p {{ subject.description }}
         h3 Mein lernlevel: {{ currentCompetence.name }}
-        lernlevel(:competence='currentCompetence.slug', :level='currentLevel')
+        lernlevel(:competence='currentCompetence.slug', :competenceId='currentCompetence.id', :level='currentLevel')
         ul.lernlevel-info
           li 1: Ich benötige noch viel Übung!
           li 2: Ich bin noch etwas unsicher.
@@ -30,6 +30,7 @@
 import levelnav from '@/components/projectview/levelNav.vue'
 import progresschart from '@/components/projectview/progresschart.vue'
 import lernlevel from '@/components/projectview/lernlevel.vue'
+
 export default {
   data () {
     return {
@@ -51,10 +52,14 @@ export default {
       console.log('$on setCompetence')
       this.currentCompetence = competence
     })
+    this.$on('evalCreated', data => {
+      console.log('$on evalCreated')
+      this.$refs.chart.receiveNewEval(data)
+    })
+
   },
   watch: {
     '$route' () {
-      // console.log('route change');
       this.routeUpdate()
     }
   },
@@ -75,9 +80,9 @@ export default {
       this.$store.dispatch('getDb')
         .then((response) => {
           this.db = response
-          // console.log(response)
           this.subject = response.subjects.find(subject => subject.slug === this.currentSubject)
           this.currentCompetence = this.subject.competences[0]
+          console.log(this.currentCompetence)
           this.loading = false
         })
     },
@@ -134,7 +139,7 @@ export default {
   .competence-names
     font-size: .9em
     line-height: 2
-    color: $lightgrey
+    color: #BBB
     li::before
       font-weight: bold
     li:nth-child(1)::before
@@ -148,6 +153,6 @@ export default {
 
   .lernlevel-info
     margin-top: 2em
-    color: $lightgrey
+    color: #BBB
     font-size: .8em
 </style>

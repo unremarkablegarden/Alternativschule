@@ -11,6 +11,11 @@ query userStudentById($id: ID!) {
       name
       slug
       levels
+      competences {
+        id
+        name
+        slug
+      }
       evaluations(
         filter: {
           student: {

@@ -41,6 +41,12 @@ export default {
     }
   },
   methods: {
+    receiveNewEval (data) {
+      console.log('receiveNewEval')
+      // not working????!!!
+      const foundIndex = this.evaluations.findIndex(o => o.competence.id === data.competence.id)
+      this.evaluations[foundIndex] = data
+    },
     selectCompetence (competence, barClass) {
       // only from the main chart, not mini charts
       if (barClass === 'large') {
@@ -49,19 +55,34 @@ export default {
     },
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
-        // console.log(response)
         this.subjectData = response.studiesSubjects.find(o => o.slug === this.subject)
         this.setEvaluations()
         this.loading = false
       })
     },
     setEvaluations () {
-      // console.log(this.subjectData)
-      // console.log(this.type)
-      this.evaluations = this.subjectData.evaluations.filter(o => o.level === this.level)
-      // console.log('---' + this.level + '---')
-      // console.log(this.evaluations)
-    }
+      const existingEvaluations = this.subjectData.evaluations.filter(o => o.level === this.level)
+      let evals = []
+      this.subjectData.competences.forEach(c => {
+        // find matching eval if it exists
+        const e = existingEvaluations.find(e => e.competence.id === c.id)
+        if (e) {
+          evals.push(e)
+        } else {
+          // otherwise create a new eval
+          const newEval = {
+            competence: c,
+            level: this.level,
+            student: {
+              id: localStorage.getItem('userId')
+            },
+            value: 1
+          }
+          evals.push(newEval)
+        }
+      })
+      this.evaluations = evals
+    },
   }
 }
 </script>

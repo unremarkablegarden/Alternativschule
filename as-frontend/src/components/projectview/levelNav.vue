@@ -7,20 +7,22 @@
             .column.is-two-fifths.chart
               progresschart(:level='level', type='small')
             .column.is-three-fifths.desc
-              .level {{ level }}
-              p Lorem ipsum dolor sit amet, consectetur
+              .level.padfix {{ level }}
+              //- p Lorem ipsum dolor sit amet, consectetur
+              LoremIpsum(add="1s")
     router-link(:to='"/project/" + currentSubject', :class="{ 'is-not-lit' : currentLevel }").column.is-2.themen-link Themen
-    //- router-link(:to='"/project/" + currentSubject').column.is-2.themen-link Themen
 </template>
 
 <script>
 import progresschart from '@/components/projectview/progresschart.vue'
+import LoremIpsum from 'vue-lorem-ipsum'
 
 export default {
   name: 'levelnav',
   props: ['project'],
   components: {
-    progresschart
+    progresschart,
+    LoremIpsum
   },
   data () {
     return {
@@ -81,6 +83,8 @@ export default {
 
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
+  .padfix
+    margin-bottom: 0.7em
   #levelnav
     font-size: .8em
     margin-bottom: 4vh

@@ -1,10 +1,9 @@
 <template lang="pug">
-  .loading(v-if='!projects') Loading...
+  .loading(v-if='loading') Loading...
   .planetzone(v-else)
     .info
       div
-        strong Planet&nbsp;
-        | {{ currentSubjectData.name }}
+        strong(v-if='currentSubjectData') Planet&nbsp;{{ currentSubjectData.name }}
       div(v-if='moonHover')
         strong Moon&nbsp;
         | {{ moonHover }}
@@ -33,7 +32,8 @@ export default {
       currentSubjectData: null,
       moonHover: null,
       loading: true,
-      currentLevel: null
+      currentLevel: null,
+      subjectLevels: null
     }
   },
   mounted () {
