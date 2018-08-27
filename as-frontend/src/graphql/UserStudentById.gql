@@ -28,6 +28,10 @@ query userStudentById($id: ID!) {
               slug #clean up later?
             }
           }
+          student {
+            id
+            username
+          }
       }
     }
     studiesProjects {

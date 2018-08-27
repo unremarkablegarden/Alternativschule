@@ -37,6 +37,18 @@ query subjectsByUser($id: ID!) {
 						username
 					}
 				}
+				studentLevels {
+					id
+					level
+					student {
+						id
+						username
+					}
+					subject {
+						id
+						slug
+					}
+				}
 			}
 		}
 		teachesProjects {

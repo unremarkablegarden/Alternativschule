@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted () {
-    window.addEventListener('mousemove', this.parallax)
+    // window.addEventListener('mousemove', this.parallax)
   },
   methods: {
     parallax (event) {

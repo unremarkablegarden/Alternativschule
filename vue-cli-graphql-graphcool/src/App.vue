@@ -4,7 +4,7 @@
       el-header#header
         h1(v-if='userId')#logo Alternativschule Berlin
       el-container#main
-        el-aside(width='200px', v-if='userId')
+        el-aside(width='220px', v-if='userId')
           MainNav
         el-main
           router-view()

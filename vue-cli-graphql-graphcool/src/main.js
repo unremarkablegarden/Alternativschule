@@ -64,9 +64,13 @@ Vue.component('SubjectsStudentsList', SubjectsStudentsList)
 
 import StudentList from '@/components/StudentList.vue'
 Vue.component('StudentList', StudentList)
-
 import StudentNote from '@/components/StudentNote.vue'
 Vue.component('StudentNote', StudentNote)
+import StudentProjectsList from '@/components/StudentProjectsList.vue'
+Vue.component('StudentProjectsList', StudentProjectsList)
+
+import StudentSelfEvaluations from '@/components/StudentSelfEvaluations.vue'
+Vue.component('StudentSelfEvaluations', StudentSelfEvaluations)
 
 
 

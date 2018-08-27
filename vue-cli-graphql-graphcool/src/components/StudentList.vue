@@ -2,17 +2,26 @@
   #userslist(v-if='students')
     el-collapse(v-model='active', v-for='student in students', :key='student.username').students
       el-collapse-item(:title='student.fullName', :name='student.username')
-        //- xmp {{ student }}
-        .meta
-          | Vertrauenslehrer:&nbsp;
-          | {{ student.prefectLinks[0].firstname }}
-          //- | {{ student.prefectLinks[0].surname }}
-        //- .note(v-if='studentNoteByTeacherInSubject(student)')
-        StudentNote(:note='studentNoteByTeacherInSubject(student)', v-if='studentNoteByTeacherInSubject(student)')
-        StudentNote(:note='newNote(student)', v-else)
+        el-row
+          el-col(:span='8')
+            StudentProjectsList(:subjectId='subjectId', :studentId='student.id')
+          el-col(:span='16')
+            .meta(v-if='student.prefectLinks.length')
+              | Vertrauenslehrer:&nbsp;
+              | {{ student.prefectLinks[0].firstname }}
+            el-row.studentlevels
+              el-col(:span='6')
+                .label
+                  strong Lernlevel
+              el-col(:span='18')
+                el-button(v-for='level in levels', :key='level', size='mini', :type='buttonType(level, studentLevel(student.studentLevels))', @click='changeLevel(student, level)', plain) {{ level }}
+            StudentNote(:note='studentNoteByTeacherInSubject(student)', v-if='studentNoteByTeacherInSubject(student)')
+            StudentNote(:note='newNote(student)', v-else)
+            StudentSelfEvaluations(:subjectId='subjectId', :studentId='student.id')
 </template>
 
 <script>
+import gql from 'graphql-tag'
 
 export default {
   name: 'studentlist',
@@ -20,10 +29,94 @@ export default {
   data () {
     return {
       active: [],
+      levels: ['BK', 'GK', 'AK', 'AK1', 'AK2'],
+      loading: false
     }
   },
   methods: {
-    studentNoteByTeacherInSubject(student) {
+    buttonType (i, is) {
+      if (i === is) return 'primary'
+    },
+    changeLevel (student, level) {
+      this.loading = true
+      const levelObj = student.studentLevels.find(o => o.subject.id === this.subjectId)
+      if (levelObj) {
+        console.log('update');
+        levelObj.level = level
+        this.updateStudentLevel(levelObj)
+      } else {
+        console.log('create');
+        const newLevelObj = {
+          level: level,
+          student: {
+            id: student.id
+          },
+          subject: {
+            id: this.subjectId
+          },
+          new: true
+        }
+        student.studentLevels.push(newLevelObj)
+        this.createStudentLevel(newLevelObj)
+      }
+    },
+
+    updateStudentLevel (levelObj) {
+      console.log(levelObj)
+      this.$apollo.mutate({
+        mutation: gql`mutation ($id: ID!, $level: Levels!) {
+          updateStudentLevels(id: $id, level: $level) {
+            id
+            level
+          }
+        }`,
+        variables: {
+          id: levelObj.id,
+          level: levelObj.level
+        },
+      }).then((data) => {
+        console.log(data)
+        this.msg('success', 'Level saved')
+      }).catch((error) => {
+        console.error(error)
+        this.msg('error', error)
+      }).then(() => {
+        this.loading = false
+      })
+    },
+
+    createStudentLevel (levelObj) {
+      // console.log(levelObj)
+      const studs = this.students
+      this.$apollo.mutate({
+        mutation: gql`mutation ($level: Levels!, $subjectId: ID!, $studentId: ID!) {
+          createStudentLevels(level: $level, studentId: $studentId, subjectId: $subjectId) {
+            id
+            level
+          }
+        }`,
+        variables: {
+          level: levelObj.level,
+          subjectId: levelObj.subject.id,
+          studentId: levelObj.student.id,
+        },
+        update (data, response) {
+          const stud = studs.find(o => o.id === levelObj.student.id)
+          const newLevel = stud.studentLevels.find(o => o.new === true)
+          newLevel.new = false
+          newLevel.id = response.data.createStudentLevels.id
+        }
+      }).then((data) => {
+        this.msg('success', 'Level saved')
+      }).catch((error) => {
+        console.error(error)
+        this.msg('error', error)
+      }).then(() => {
+        this.loading = false
+      })
+    },
+
+    studentNoteByTeacherInSubject (student) {
       const notes = student.studentStudentNotes
       const teacher = localStorage.getItem('userId')
       const note = notes.find((s) => {
@@ -32,13 +125,27 @@ export default {
         }
       })
       return note
-
-      return true
+      // return true
     },
-    studentNote(studentNotes) {
+    studentLevel (studentLevels) {
+      const levelObj = studentLevels.find(o => o.subject.id === this.subjectId)
+      let level
+      if (levelObj) level = levelObj.level
+      else level = 'BK'
+      return level
+    },
+
+    msg (type, message) {
+      this.$message({
+         type: type,
+         message: message
+      })
+    },
+
+    studentNote (studentNotes) {
       return studentNotes.find(o => o.teacher.id === localStorage.getItem('userId'))
     },
-    newNote(student) {
+    newNote (student) {
       return {
         subject: {
           id: this.subjectId
@@ -58,4 +165,22 @@ export default {
     margin: 0 0 1em 0
   .note
     margin: 1em 0
+  .studentlevels
+    margin-bottom: 1em
+  .label
+    margin-top: 2px
+  .el-icon-loading
+    margin-left: 1em
+</style>
+
+<style lang='sass'>
+  #userslist .el-collapse:first-child
+    border-top: 0 !important
+  #userslist .el-collapse-item__header:last-child
+    border-bottom: 0 !important
+
+  .subject.is-active .el-collapse-item__content .el-card__body
+    padding-bottom: 0.3em !important
+  #userslist .el-collapse-item__wrap
+    border-bottom: 0 !important
 </style>

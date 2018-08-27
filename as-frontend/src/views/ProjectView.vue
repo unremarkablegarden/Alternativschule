@@ -34,8 +34,8 @@
               .column.is-9
                 h2.title Project: {{ currentProjectData.name }}
               .column.is-3
-                el-button(v-if='projectAvailable === true', type='danger', icon='el-icon-plus', @click='addProject(currentProjectData.id)') Hinzufugen
-                el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)') Löschen
+                el-button(v-if='projectAvailable === true', type='danger', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
+                el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)', :loading='submitting') Löschen
 
             .level
               strong Level:&nbsp;
@@ -100,7 +100,8 @@ export default {
       loadingUser: true,
       loadingData: true,
       currentProjectData: null,
-      projectAvailable: null
+      projectAvailable: null,
+      submitting: false
     }
   },
   computed: {
@@ -118,6 +119,7 @@ export default {
 
     addProject (projectId) {
       const id = localStorage.getItem('userId')
+      this.submitting = true
       if (id) {
         this.$apollo.mutate({
           mutation: gql`mutation ($id: ID!, $projectId: ID!) {
@@ -129,6 +131,11 @@ export default {
                   slug
                 }
               }
+              studiesProjectsProject {
+                id
+                name
+                slug
+              }
             }
           }`,
           variables: {
@@ -136,8 +143,9 @@ export default {
             projectId: projectId
           },
           update: (store, { data }) => {
-            // console.log(store)
-            // console.log(data);
+            const addedProject = data.addToStudentProject.studiesProjectsProject
+            this.myProjects.push(addedProject)
+            // this.myData.studiesProjects.push(addedProject)
           }
         }).then((data) => {
           this.$message({
@@ -146,18 +154,25 @@ export default {
           })
           this.projectAvailable = false
           // this.$apolloProvider.defaultClient.reFetchObservableQueries()
+          this.submitting = false
+
+          // update the state in store
+          this.updateStateMyData()
+
         }).catch((error) => {
           console.error(error)
           this.$message({
             type: 'error',
             message: error
           })
+          this.submitting = false
         })
       } // if id
     },
 
     removeProject (projectId) {
       const id = localStorage.getItem('userId')
+      this.submitting = true
       if (id) {
         this.$apollo.mutate({
           mutation: gql`mutation ($id: ID!, $projectId: ID!) {
@@ -169,6 +184,11 @@ export default {
                   slug
                 }
               }
+              studiesProjectsProject {
+                id
+                name
+                slug
+              }
             }
           }`,
           variables: {
@@ -176,8 +196,9 @@ export default {
             projectId: projectId
           },
           update: (store, { data }) => {
-            // console.log(store)
-            // console.log(data);
+            // remove from (also adds to)
+            this.myProjects = this.myProjects.filter(o => o.id !== data.removeFromStudentProject.studiesProjectsProject.id)
+            // this.myData.studiesProjects = this.myData.studiesProjects.filter(o => o.id !== data.removeFromStudentProject.studiesProjectsProject.id)
           }
         }).then((data) => {
           this.$message({
@@ -186,14 +207,38 @@ export default {
           })
           this.projectAvailable = true
           // this.$apolloProvider.defaultClient.reFetchObservableQueries()
+          this.submitting = false
+
+          // update the state in store
+          this.updateStateMyData()
+
         }).catch((error) => {
           console.error(error)
           this.$message({
             type: 'error',
             message: error
           })
+          this.submitting = false
         })
       } // if id
+    },
+
+    updateStateMyData () {
+      console.log('projectview: update the store somehow?')
+      // dirty hack
+      location.reload()
+      // console.log('myprojects');
+      // console.log(this.myProjects);
+      // console.log('mydata');
+      // console.log(this.myData.studiesProjects)
+
+      // this.$store.dispatch('updateMyDataStudiesProjects', this.myData.studiesProjects)
+
+      //   .then((response) => {
+      //     console.log('--projectview dispatch response--')
+      //     console.log(response)
+      //   })
+      // console.log(this.$store.state)
     },
 
     projectInUserData(project) {
@@ -229,10 +274,12 @@ export default {
 
     isProjectAvailable() {
       // console.log('avail?')
-      if (this.myProjects.find(o => o.id === this.currentProjectData.id)) {
-        this.projectAvailable = false
-      } else {
-        this.projectAvailable = true
+      if (this.currentProjectData) {
+        if (this.myProjects.find(o => o.id === this.currentProjectData.id)) {
+          this.projectAvailable = false
+        } else {
+          this.projectAvailable = true
+        }
       }
     }
   },

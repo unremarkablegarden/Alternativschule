@@ -16,9 +16,9 @@
             | Nicht veröffentlicht
           br
           el-row
-            el-col(:span='12')
+            el-col(:span='14')
               ProjectEdit(:projectData='{ id: project.id, name: project.name, description: project.description, level: project.level, selfLearn: project.selfLearn, isPublished: project.isPublished }')
-            el-col(:span='12')
+            el-col(:span='10')
               DeleteProjectButton(:id='project.id')
 
     ProjectAdd(:subject='subjectId', :projects='projects')

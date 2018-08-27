@@ -86,7 +86,12 @@ export default {
             this.availableSubject = false
             this.hidePlanet = true
             this.$apolloProvider.defaultClient.reFetchObservableQueries()
-            setTimeout(() => { this.$router.push({ name: 'home' }) }, 1000)
+            setTimeout(() => {
+              // hack
+              window.location.href = window.location.origin + '/solarsystem'
+              // needs store updated
+              // this.$router.push({ name: 'home' })
+            }, 1000)
             console.log(data)
           }).catch((error) => {
             console.error(error)

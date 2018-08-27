@@ -8,12 +8,8 @@
         span Meine Schüler
       el-collapse(v-model='activeSubjects')
         el-collapse-item(:title='subject.name', :name='subject.name', v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
-          el-row
-            el-col(:span='11')
-              | {{ subject.description }}
-            el-col(:span='11', :offset='2')
-              //- list of students in that subject ...
-              StudentList(:students='subject.students', :subjectId='subject.id')
+          el-card
+            StudentList(:students='subject.students', :subjectId='subject.id')
 </template>
 
 <script>

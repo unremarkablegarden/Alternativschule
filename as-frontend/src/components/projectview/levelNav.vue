@@ -2,19 +2,20 @@
   #levelnav.columns
     .column.is-10
       .columns
-        router-link(:to='"/level/" + currentSubject + "/" + level').column.is-one-quarter(v-for='level in studentLevels', :key='level').tab
+        router-link(v-for='level in studentLevels', :key='level', :to='"/level/" + currentSubject + "/" + level').column.is-one-quarter.tab
           .columns
             .column.is-two-fifths.chart
               progresschart(:level='level', type='small')
             .column.is-three-fifths.desc
               .level {{ level }}
-              p Lorem ipsum dolor sit amet, consectetur.
+              p Lorem ipsum dolor sit amet, consectetur
     router-link(:to='"/project/" + currentSubject', :class="{ 'is-not-lit' : currentLevel }").column.is-2.themen-link Themen
     //- router-link(:to='"/project/" + currentSubject').column.is-2.themen-link Themen
 </template>
 
 <script>
 import progresschart from '@/components/projectview/progresschart.vue'
+
 export default {
   name: 'levelnav',
   props: ['project'],
@@ -59,9 +60,21 @@ export default {
         this.subjects = response.studiesSubjects
         // console.log(this.subjects)
         this.studentCurrentSubjectData = response.studiesSubjects.find(subject => subject.slug === this.currentSubject)
-        this.studentLevels = this.studentCurrentSubjectData.levels
+        this.studentLevels = this.sortLevels(this.studentCurrentSubjectData.levels)
       })
-    }
+    },
+
+    sortLevels (arrayToSort) {
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
+    },
   },
 }
 </script>

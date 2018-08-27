@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import gql from 'graphql-tag'
 
 import { createProvider } from './vue-apollo'
 const provide = createProvider().provide()
@@ -17,35 +18,7 @@ export default new Vuex.Store({
     userId: null,
     db: null,
     myData: null,
-
-    lernLevels: {
-      history: {
-        verstehen: {
-          bk: 3,
-          gk: 5,
-          ak1: 8,
-          ak2: 7
-        },
-        lesen: {
-          bk: 1,
-          gk: 2,
-          ak1: 8,
-          ak2: 4
-        },
-        schreiben: {
-          bk: 6,
-          gk: 4,
-          ak1: 3,
-          ak2: 0
-        },
-        sprechen: {
-          bk: 8,
-          gk: 4,
-          ak1: 2,
-          ak2: 1
-        }
-      }
-    }
+    apolloClient: apolloClient
   },
   mutations: {
     setUserId (state, value) {
@@ -144,9 +117,45 @@ export default new Vuex.Store({
             variables: {
               id: state.userId
             },
+            // subscribeToMore: {
+            //   document: gql`subscription updateUser($id: ID!) {
+            //     User(
+            //       filter: {
+            //         mutation_in: [UPDATED]
+            //         node: {
+            //           id: $id
+            //         }
+            //       }
+            //     ) {
+            //       mutation
+            //       node {
+            //         studiesSubjects {
+            //           name
+            //         }
+            //         studiesProjects {
+            //           name
+            //         }
+            //       }
+            //       updatedFields
+            //     }
+            //   }`,
+            //   // Variables passed to the subscription. Since we're using a function,
+            //   // they are reactive
+            //   variables: {
+            //     id: state.userId
+            //   },
+            //   // Mutate the previous result
+            //   updateQuery: (previousResult, { subscriptionData }) => {
+            //     // Here, return the new result from the previous with the new data
+            //     console.log('update from subscription...')
+            //     console.log(subscriptionData)
+            //   },
+            // },
           })
           .then(response => {
             const myData = JSON.parse(JSON.stringify(response.data.User))
+            // console.log('--state: setApolloUserToStore then...--')
+            // console.log(myData.studiesProjects)
             commit('setMyData', myData)
             resolve()
           })
@@ -169,7 +178,19 @@ export default new Vuex.Store({
       await dispatch('setUserId')
       await dispatch('setApolloUserToStore')
       return state.myData
+    },
+    async updateMyDataStudiesProjects({ self, state, commit }, update) {
+      // console.log('--current data--');
+      // console.log(this.state.myData.studiesProjects)
+      // console.log('--data from component--')
+      // console.log(update);
+      let myData = state.myData
+      myData.studiesProjects = update
+      commit('setMyData', myData)
+      // await dispatch('forceGetUserData')
+      // return state.myData.studiesProjects
     }
+
 
   }
 })

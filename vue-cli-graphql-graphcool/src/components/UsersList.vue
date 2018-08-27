@@ -8,19 +8,19 @@
       el-tab-pane(v-for='type in userTypes', :key='type', v-else)
         span(slot='label', v-if='type == "Admin"')
           icon(icon='energy', color='lightgray').icon
-          | Admins
+          | Administration
         span(slot='label', v-if='type == "Lehrer"')
           icon(icon='eyeglass', color='lightgray').icon
-          | Lehrer
+          | Lehrpersonen
         span(slot='label', v-if='type == "Schueler"')
           icon(icon='graduation', color='lightgray').icon
-          | Schüler
+          | Schüler*innen
 
         el-table(:data='usersByType[type]', style='width: 100%', :default-sort="{prop: 'surname', order: 'ascending'}")
           el-table-column(prop='firstname', label='Vorname', sortable)
           el-table-column(prop='surname', label='Nachname', sortable)
           el-table-column(prop='username', label='Nutzername', sortable)
-          el-table-column(label='Operationen', width="300")
+          el-table-column(label='Operationen', width="210")
             template(slot-scope='scope')
               el-button(size='mini', @click='handleEdit(scope.$index, scope.row)', icon='el-icon-edit') Edit
               DeleteUserButton(:id='scope.row.id')

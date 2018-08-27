@@ -13,7 +13,7 @@
     ul.levels
      li(v-for='level in subjectLevels', :class="{ 'is-active' : (level == currentLevel) }") {{ level }}
     .orbit-wrap(:class='moonCount')
-      router-link(v-for='project in projects', :key='project.slug', @mouseover.native='moonHover = project.slug', @mouseleave.native='moonHover = null',  :to='"/project/" + currentSubject + "/" + project.slug').orbit
+      router-link(v-for='project in projects', :key='project.slug', @mouseover.native='moonHover = project.name', @mouseleave.native='moonHover = null',  :to='"/project/" + currentSubject + "/" + project.slug').orbit
         moon
 </template>
 
@@ -37,6 +37,7 @@ export default {
     }
   },
   mounted () {
+    // console.log('subjectview mounted')
     this.getDb()
     this.getMyData()
   },
@@ -59,13 +60,9 @@ export default {
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = response
-        // console.log(response)
-
         this.projects = response.studiesProjects.filter(s => s.subject.slug === this.currentSubject)
-        console.log(this.projects)
 
         let currentLevel
-
         currentLevel = response.studentLevels.find(o => o.subject.slug === this.currentSubject)
         if (currentLevel) {
           currentLevel = currentLevel.level
@@ -74,7 +71,6 @@ export default {
         }
 
         this.currentLevel = currentLevel
-
         this.loading = false
       })
     },
@@ -92,9 +88,7 @@ export default {
     getDb () {
       this.$store.dispatch('getDb').then((response) => {
           this.db = response
-          // console.log(response)
           this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
-          console.log(this.currentSubjectData)
           this.subjectLevels = this.sortLevels(this.currentSubjectData.levels)
         })
     },

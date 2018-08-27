@@ -31,14 +31,14 @@
         template(slot='title')
           //- icon(name='user-graduate')
           icon(icon='graduation')
-          span Schüler
+          span Schüler*innen
 
       //- Prefects
       el-menu-item(index='/vertrauensschueler', disabled)
         template(slot='title')
           //- icon(name='hands-helping')
           icon(icon='emotsmile')
-          span Vertrauensschüler
+          span Vertrauensschüler*innen
 
       //- Account
       el-menu-item(index='/benutzerkonto')

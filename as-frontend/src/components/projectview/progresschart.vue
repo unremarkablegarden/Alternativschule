@@ -5,7 +5,7 @@
       .line(v-for='index in 10')
     .gridlines
   .bars
-    .bar(v-for='(evaluation, index) in evaluations', :data-bar-n='(index+1)', :class='barClass', :key='index', :data-competence-name='evaluation.competence.slug', :data-value='evaluation.value', :style="{ height: (evaluation.value*10)+'%' }")
+    .bar(v-for='(evaluation, index) in evaluations', :data-bar-n='(index+1)', :class='barClass', :key='index', :data-competence-name='evaluation.competence.slug', :data-value='evaluation.value', :style="{ height: (evaluation.value*10)+'%' }", @click='selectCompetence(evaluation.competence, barClass)')
       .inner &nbsp;
 </template>
 
@@ -41,6 +41,12 @@ export default {
     }
   },
   methods: {
+    selectCompetence (competence, barClass) {
+      // only from the main chart, not mini charts
+      if (barClass === 'large') {
+        this.$parent.$emit('setCompetence', competence)
+      }
+    },
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         // console.log(response)

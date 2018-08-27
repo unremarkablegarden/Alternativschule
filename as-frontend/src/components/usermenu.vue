@@ -3,7 +3,7 @@
   .top.btn
     router-link(to='/settings', v-if="routeName == 'home'")
       img(src='@/assets/gfx/icons/settings.svg')
-    router-link(to='/solarsystem', v-else)
+    router-link(:to='closeLink', v-else)
       img(src='@/assets/gfx/icons/close-btn.svg')
   .add.btn(v-if='addLink')
     router-link(:to='addLink')
@@ -27,6 +27,12 @@ export default {
       const r = this.$route.name
       if (r == 'home') return '/areas'
       if (r == 'subjectView') return '/project/' + this.$route.params.subject
+    },
+    closeLink () {
+      const r = this.$route.name
+      if (r == 'projectview') return '/subject/' + this.$route.params.subject
+      if (r == 'levelview') return '/project/' + this.$route.params.subject
+      else return '/solarsystem'
     },
     routeName () {
       return this.$route.name
