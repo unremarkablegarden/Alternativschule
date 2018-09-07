@@ -2,9 +2,9 @@
   .container
     el-container#wrapper
       el-header#header
-        h1(v-if='userId')#logo Alternativschule Berlin
+        h1(v-if='showMenu()')#logo Alternativschule Berlin
       el-container#main
-        el-aside(width='220px', v-if='userId')
+        el-aside(width='220px', v-if='showMenu()')
           MainNav
         el-main
           router-view()
@@ -34,6 +34,14 @@ export default {
     }
   },
   methods: {
+    showMenu () {
+      if (this.userId && this.$route.path !== '/') {
+        return true
+      }
+      else {
+        return false
+      }
+    },
     checkLoggedIn() {
       const userId = localStorage.getItem('userId')
       if (userId !== 'null') {

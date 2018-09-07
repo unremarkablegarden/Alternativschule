@@ -10,8 +10,8 @@ type User @model {
   surname: String
   # admin, teacher, student (enum)
   userType: UserTypes
-  avatar: Int
-  avatarColor: String
+  avatar: Int @defaultValue(value: "1")
+  avatarColor: String @defaultValue(value: "blue")
 
   prefect: Boolean @defaultValue(value: "false") @migrationValue(value: "false")
   # relations
@@ -115,6 +115,8 @@ type StudentLevels @model {
 
 type Evaluation @model {
   id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   value: Int! # max 10
   student: User! @relation(name: "StudentSelfEvaluation")
   competence: Competence! @relation(name: "CompetenceEvaluation")

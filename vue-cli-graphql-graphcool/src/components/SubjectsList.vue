@@ -2,14 +2,13 @@
   #subjectslist
     el-card(v-loading='$apollo.loading').subjects
       div(slot="header").header
-        span Meine Themen
+        span Meine Fächer
       el-collapse(v-model='activeSubjects', v-if='!loading')
         el-collapse-item(:title='subject.name', :name='subject.name', v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
           el-row
-            el-col(:span='11')
+            el-col(:span='9')
               .description {{ subject.description }}
-
-            el-col(:span='11', :offset='2')
+            el-col(:span='13', :offset='2')
               ProjectsList(:projects='mySubjects.teachesProjects', :subjectId='subject.id', :user='userId')
 </template>
 

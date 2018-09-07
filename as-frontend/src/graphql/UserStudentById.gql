@@ -39,10 +39,16 @@ query userStudentById($id: ID!) {
           }
       }
     }
-    studiesProjects {
+    studiesProjects(
+      filter: {
+        isPublished: true
+      }
+    ) {
       id
       name
       slug
+      level
+      selfLearn
       subject {
         id
         slug
@@ -50,6 +56,14 @@ query userStudentById($id: ID!) {
     }
     studentLevels {
       level
+      subject {
+        id
+        slug
+        name
+      }
+    }
+    selfEvaluations {
+      updatedAt
       subject {
         id
         slug

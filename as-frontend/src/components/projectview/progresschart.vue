@@ -4,7 +4,7 @@
     .line-box
       .line(v-for='index in 10')
     .gridlines
-  .bars
+  .bars(:class='level')
     .bar(v-for='(evaluation, index) in evaluations', :data-bar-n='(index+1)', :class='barClass', :key='index', :data-competence-name='evaluation.competence.slug', :data-value='evaluation.value', :style="{ height: (evaluation.value*10)+'%' }", @click='selectCompetence(evaluation.competence, barClass)')
       .inner &nbsp;
 </template>
@@ -18,12 +18,21 @@ export default {
       return this.$route.params.subject
     },
     barClass () {
+      let size
       if (this.type == 'large') {
-        return 'large'
+        size = 'large'
       } else {
-        return 'small'
+        size = 'small'
       }
-    }
+      let levelClass
+      if (this.level == 'BK') levelClass = 'levels-3'
+      if (this.level == 'GK') levelClass = 'levels-3'
+      if (this.level == 'AK') levelClass = 'levels-3'
+      if (this.level == 'AK1') levelClass = 'levels-4'
+      if (this.level == 'AK2') levelClass = 'levels-4'
+      const output = size+" "+levelClass
+      return output
+    },
   },
   data () {
     return {
@@ -49,7 +58,9 @@ export default {
     },
     selectCompetence (competence, barClass) {
       // only from the main chart, not mini charts
-      if (barClass === 'large') {
+      // console.log(competence + ' ' + barClass);
+      if (barClass.includes('large')) {
+        console.log('yes');
         this.$parent.$emit('setCompetence', competence)
       }
     },
@@ -127,7 +138,6 @@ export default {
     padding: 0 7% 0 5%
   .bar
     width: 12.5%
-    // height: 100%
     overflow: hidden
     margin: 0
     padding: 0
@@ -141,20 +151,26 @@ export default {
       opacity: .8
       cursor: pointer
 
-    // &[data-bar-n="1"]
-    //   .inner
-    //     background-image: linear-gradient(-180deg, #ED1D23 0%, #F5A61B 58%)
-    // &[data-bar-n="2"]
-    //   .inner
-    //     background-image: linear-gradient(-180deg, #9748B4 0%, #ED1D23 56%)
-    // &[data-bar-n="3"]
-    //   .inner
-    //     background-image: linear-gradient(-180deg, #4AA8DA 0%, #653393 53%)
-    // &[data-bar-n="4"]
-    //   .inner
-    //     background-image: linear-gradient(-180deg, #0B643A 0%, #48A7D6 54%)
+
     &.large
       border: 1px white solid
-    .inner
-      background-image: linear-gradient(180deg, #056537 0%, #44A6D8 33%, #653393, 75%, #ED1E23 85%, #FCB714 100%)
+
+  .levels-3
+    .bars.BK .bar .inner
+      background-image: linear-gradient(180deg, #DC1F32 0%, #FCB814 100%)
+    .bars.GK .bar .inner
+      background-image: linear-gradient(180deg, #653393 0%, #ED1D25 100%)
+    .bars.AK .bar .inner
+      background-image: linear-gradient(180deg, #0B663D 0%, #66BAE6 50%, #653494 100%)
+
+  .levels-4
+    .bars.BK .bar .inner
+      background-image: linear-gradient(180deg, #DC1F32 0%, #FCB814 100%)
+    .bars.GK .bar .inner
+      background-image: linear-gradient(180deg, #653393 0%, #ED1D25 100%)
+    .bars.AK1 .bar .inner
+      background-image: linear-gradient(180deg, #66BEE9 0%, #653393 100%)
+    .bars.AK2 .bar .inner
+      background-image: linear-gradient(180deg, #0B663D 0%, #47A7D6 100%)
+
 </style>

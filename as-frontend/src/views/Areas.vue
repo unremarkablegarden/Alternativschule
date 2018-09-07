@@ -2,8 +2,8 @@
 #areas
   .areas.guibox.columns.is-multiline
     router-link(v-for='area in areas', :class='area', :to='"/area/" + area', :key='area').area.column.is-6
-      h2.title {{ area }}
-      planet(v-for='subject in db.areas[area]', :subject="subject.slug", :key="subject.slug")   
+      h2.title {{ areaname(area) }}
+      planet(v-for='subject in db.areas[area]', :subject="subject.slug", :key="subject.slug")
 </template>
 
 <script>
@@ -15,20 +15,29 @@ export default {
   data () {
     return {
       db: null,
-      areas: []
+      areas: [],
+      areanames: []
     }
   },
   mounted () {
     this.getDb()
   },
   methods: {
+    areaname (slug) {
+      return this.areanames.find(o => o.slug === slug).name
+    },
     getDb () {
       this.$store.dispatch('getDb').then((res) => {
         this.db = res
-        for (let key in res.areas) {
-          this.areas.push(key)
+        for (let area in res.areas) {
+          this.areas.push(area)
+
+          const a = {
+            slug: area,
+            name: res.areas[area][0].area.name
+          }
+          this.areanames.push(a)
         }
-        // console.log(res)
       })
     }
   },
@@ -36,7 +45,7 @@ export default {
 </script>
 
 <style lang="sass">
-@import "@/assets/styles/variables.sass"  
+@import "@/assets/styles/variables.sass"
 .guibox
   width: calc(100vw - 200px)
   height: calc(100vh - 100px)
@@ -53,7 +62,7 @@ export default {
 </style>
 
 <style lang="sass" scoped>
-@import "@/assets/styles/variables.sass"  
+@import "@/assets/styles/variables.sass"
 .area
   position: relative
   transition: all 300ms
@@ -73,6 +82,7 @@ export default {
     line-height: 1
     position: absolute
     text-transform: capitalize
+    color: #999
   .planet
     width: 30px
     height: 30px
@@ -95,6 +105,9 @@ export default {
       &:nth-child(5)
         top: 23vh
         left: 5vw
+      &:nth-child(6)
+        top: 27vh
+        left: 15vw
   &:nth-child(2)
     .planet
       &:nth-child(2)

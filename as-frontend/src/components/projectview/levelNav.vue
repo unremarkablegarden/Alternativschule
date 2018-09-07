@@ -9,7 +9,8 @@
             .column.is-three-fifths.desc
               .level.padfix {{ level }}
               //- p Lorem ipsum dolor sit amet, consectetur
-              LoremIpsum(add="1s")
+              .lorem
+                LoremIpsum(add="1s")
     router-link(:to='"/project/" + currentSubject', :class="{ 'is-not-lit' : currentLevel }").column.is-2.themen-link Themen
 </template>
 
@@ -28,7 +29,8 @@ export default {
     return {
       db: null,
       myData: null,
-      studentLevels: null
+      studentLevels: null,
+      availableLevels: null
     }
   },
   computed: {
@@ -37,10 +39,7 @@ export default {
     },
     currentLevel () {
       return this.$route.params.level
-    },
-    // studentLevels () {
-    //   return this.studentCurrentSubjectData.levels
-    // }
+    }
   },
   mounted () {
     this.getDb()
@@ -63,7 +62,35 @@ export default {
         // console.log(this.subjects)
         this.studentCurrentSubjectData = response.studiesSubjects.find(subject => subject.slug === this.currentSubject)
         this.studentLevels = this.sortLevels(this.studentCurrentSubjectData.levels)
+
+        let studentsLevel = this.myData.studentLevels.find(o => o.subject.id === this.studentCurrentSubjectData.id)
+        if (!studentsLevel) {
+          studentsLevel = { level: 'BK' }
+        }
+
+        let filteredLevels = []
+        this.studentLevels.forEach(o => {
+          if (this.levelValue(o) <= this.levelValue(studentsLevel.level)) {
+            filteredLevels.push(o)
+          }
+        })
+        this.studentLevels = filteredLevels
+
+        // console.log(filteredLevels)
+        // bk, gk, ak, ak1, ak2
+        // if (studentsLevel == 'BK') {
+        //   this.studentLevels
+        // }
+        // this.availableLevels =
       })
+    },
+
+    levelValue (level) {
+      if (level == 'BK') return 1
+      if (level == 'GK') return 2
+      if (level == 'AK') return 3
+      if (level == 'AK1') return 3
+      if (level == 'AK2') return 4
     },
 
     sortLevels (arrayToSort) {
@@ -85,6 +112,9 @@ export default {
   @import "@/assets/styles/variables.sass"
   .padfix
     margin-bottom: 0.7em
+  .lorem
+    height: 6em
+    overflow: hidden
   #levelnav
     font-size: .8em
     margin-bottom: 4vh

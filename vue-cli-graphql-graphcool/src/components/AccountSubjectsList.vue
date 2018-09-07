@@ -1,8 +1,8 @@
 <template lang="pug">
   #subjectslist
-    el-row
+    //- el-row
       el-col(:span='22', :offset='2')
-        h1 Meine Themen
+        strong Meine Themen
     //- div(v-if='loadingSubjects') Loading...
     .allSubjects(v-loading='$apollo.loading')
       el-row(v-for='(subject, index) in allSubjects', :key='subject.name').subject

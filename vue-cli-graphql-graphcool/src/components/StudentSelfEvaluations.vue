@@ -3,11 +3,10 @@
     .title Kompetenzen
     .evals(v-if='selfEvaluations')
       el-tabs(type='card', :loading='loading')
-        //- xmp {{ competences }}
-        //- xmp {{ subjectLevels }}
-        el-tab-pane(v-for='(level, index) in subjectLevels', :key='level', :label='level')
+        el-tab-pane(v-for='(level, index) in subjectLevels', :key='level', :label='level', :class='level')
           .eval(v-for='e in competences', v-if='competencesLoaded')
             strong {{ e.name }}
+            span &nbsp;— {{ getEvalValue(e.id, level) }}/10
             .circles
               .circle(v-for='val in [1,2,3,4,5,6,7,8,9,10]', :class='{ active : (val == getEvalValue(e.id, level)) }', @click='setEvalValue(e.id, level, val)')
                 .inner
@@ -49,7 +48,9 @@ export default {
   },
 
   methods: {
-
+    // levelsN () {
+    //   return this.subjectLevels.length
+    // },
     getEvalValue (competenceId, level) {
       let returnVal
       // subject and student set in query
@@ -292,22 +293,112 @@ export default {
       width: 22px
       border: 2px white solid
       border-radius: 20px
-    &:nth-child(1), &:nth-child(2)
-      .inner
-        background: $c1
-    &:nth-child(3), &:nth-child(4)
-      .inner
-        background: $c2
-    &:nth-child(5), &:nth-child(6)
-      .inner
-        background: $c3
-    &:nth-child(7), &:nth-child(8)
-      .inner
-        background: $c4
-    &:nth-child(9), &:nth-child(10)
-      .inner
-        background: $c5
 
+  .BK .circle:nth-child(1) .inner
+    background: #FCB814
+  .BK .circle:nth-child(2) .inner
+    background: #F7A318
+  .BK .circle:nth-child(3) .inner
+    background: #F38F1B
+  .BK .circle:nth-child(4) .inner
+    background: #EF7D1F
+  .BK .circle:nth-child(5) .inner
+    background: #ED7122
+  .BK .circle:nth-child(6) .inner
+    background: #EB6624
+  .BK .circle:nth-child(7) .inner
+    background: #E75328
+  .BK .circle:nth-child(8) .inner
+    background: #E4442B
+  .BK .circle:nth-child(9) .inner
+    background: #E0332E
+  .BK .circle:nth-child(10) .inner
+    background: #DC2031
+
+
+  .GK .circle:nth-child(1) .inner
+  	background: #ED1D25
+  .GK .circle:nth-child(2) .inner
+  	background: #DC1F32
+  .GK .circle:nth-child(3) .inner
+  	background: #CF223E
+  .GK .circle:nth-child(4) .inner
+  	background: #BE244B
+  .GK .circle:nth-child(5) .inner
+  	background: #B22654
+  .GK .circle:nth-child(6) .inner
+  	background: #A22961
+  .GK .circle:nth-child(7) .inner
+  	background: #962B6C
+  .GK .circle:nth-child(8) .inner
+  	background: #862D78
+  .GK .circle:nth-child(9) .inner
+  	background: #783084
+  .GK .circle:nth-child(10) .inner
+  	background: #653393
+
+  .AK .circle:nth-child(1) .inner
+  	background: #653594
+  .AK .circle:nth-child(2) .inner
+  	background: #6557A9
+  .AK .circle:nth-child(3) .inner
+  	background: #6672BA
+  .AK .circle:nth-child(4) .inner
+  	background: #6690CC
+  .AK .circle:nth-child(5) .inner
+  	background: #66A9DC
+  .AK .circle:nth-child(6) .inner
+  	background: #5AAFCF
+  .AK .circle:nth-child(7) .inner
+  	background: #479DAD
+  .AK .circle:nth-child(8) .inner
+  	background: #308881
+  .AK .circle:nth-child(9) .inner
+  	background: #207963
+  .AK .circle:nth-child(10) .inner
+  	background: #0B663D
+
+  .AK1 .circle:nth-child(1) .inner
+  	background: #653393
+  .AK1 .circle:nth-child(2) .inner
+  	background: #65429C
+  .AK1 .circle:nth-child(3) .inner
+  	background: #6554A7
+  .AK1 .circle:nth-child(4) .inner
+  	background: #6561AF
+  .AK1 .circle:nth-child(5) .inner
+  	background: #6670B9
+  .AK1 .circle:nth-child(6) .inner
+  	background: #657FC2
+  .AK1 .circle:nth-child(7) .inner
+  	background: #668ECB
+  .AK1 .circle:nth-child(8) .inner
+  	background: #669CD4
+  .AK1 .circle:nth-child(9) .inner
+  	background: #66AADD
+  .AK1 .circle:nth-child(10) .inner
+  	background: #66BCE8
+
+  .AK2 .circle:nth-child(1) .inner
+  	background: #47A7D6
+  .AK2 .circle:nth-child(2) .inner
+  	background: #3F9FC2
+  .AK2 .circle:nth-child(3) .inner
+  	background: #3997B1
+  .AK2 .circle:nth-child(4) .inner
+  	background: #3290A0
+  .AK2 .circle:nth-child(5) .inner
+  	background: #2C8990
+  .AK2 .circle:nth-child(6) .inner
+  	background: #25827F
+  .AK2 .circle:nth-child(7) .inner
+  	background: #1F7B6F
+  .AK2 .circle:nth-child(8) .inner
+  	background: #19745F
+  .AK2 .circle:nth-child(9) .inner
+  	background: #126D4F
+  .AK2 .circle:nth-child(10) .inner
+  	background: #0B663D
 
 </style>
 

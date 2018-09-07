@@ -1,12 +1,9 @@
 <template lang="pug">
   #accountedit
-    div(style='margin-left: 120px')
+    br
+    //- div(style='margin-left: 120px')
       h1 Kennwort zurücksetsen
-    el-form(:model='accountForm', ref='accountForm', label-width='120px', v-loading='$apollo.loading', :rules='rules', :status-icon='formIcon').accountForm
-      //- el-form-item(label='Betnutzername', prop='username')
-        el-input(type='text', v-model='accountForm.username')
-      //- el-form-item(label='Email', prop='email')
-        el-input(type='text', v-model='accountForm.email')
+    el-form(:model='accountForm', ref='accountForm', label-width='150px', v-loading='$apollo.loading', :rules='rules', :status-icon='formIcon').accountForm
       el-form-item(label='Kennwort', prop='password')
         el-input(type='password', v-model='accountForm.password', placeholder='Type password')
       el-form-item(label='Bestätigen', prop='checkPassword')

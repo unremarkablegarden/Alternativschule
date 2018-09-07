@@ -36,12 +36,18 @@ query allSubjects {
       slug
       id
     }
-    projects {
+    projects(
+      filter: {
+        isPublished: true
+      }
+    ) {
       id
       name
       slug
       description
       level
+      isPublished
+      selfLearn
     }
   }
 }

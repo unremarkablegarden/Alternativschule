@@ -20,11 +20,11 @@
           span Benutzer
 
       //- Subjects
-      el-menu-item(index='/themen')
+      el-menu-item(index='/faecher')
         template(slot='title')
           //- icon(name='book-open')
           icon(icon='book-open')
-          span Themen
+          span Fächer
 
       //- Students
       el-menu-item(index='/schueler')

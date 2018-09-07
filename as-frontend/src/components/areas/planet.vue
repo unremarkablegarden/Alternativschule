@@ -1,5 +1,5 @@
 <template lang="pug">
-  .planet
+  .planet(:data-subject='subject')
     img(:src='src')
 </template>
 
@@ -15,7 +15,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">  
+<style scoped lang="sass">
   .planet
     width: 30px
     height: auto
@@ -24,4 +24,17 @@ export default {
     img
       width: 100%
       height: auto
+
+  .planetzone .planet
+    img
+      transform: scale(1.03)
+    &[data-subject="englisch"]
+      img
+        transform: scale(1.75)
+    &[data-subject="franzoesisch"]
+      img
+        transform: scale(1.66)
+    &[data-subject="geografie"]
+      img
+        transform: scale(1.54)
 </style>

@@ -19,7 +19,8 @@
             el-col(:span='14')
               ProjectEdit(:projectData='{ id: project.id, name: project.name, description: project.description, level: project.level, selfLearn: project.selfLearn, isPublished: project.isPublished }')
             el-col(:span='10')
-              DeleteProjectButton(:id='project.id')
+              DeleteProjectButton(:id='project.id').right
+          MaterialsList(:id='project.id', :materials='project.materials')
 
     ProjectAdd(:subject='subjectId', :projects='projects')
 </template>
@@ -37,6 +38,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+  .description
+    border-top: 1px #eee solid
+    padding-top: 1em
   .meta
     margin-top: 1em
     font-size: 0.9em

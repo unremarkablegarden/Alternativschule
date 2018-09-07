@@ -3,8 +3,8 @@
   .loading(v-if='!db')
     h1 Loading...
   .areas(v-else).guibox.columns.is-multiline
-    router-link(v-for='subject in db.areas[currentArea]', :to='subject.area.slug + "/" + subject.slug', :key='subject.slug').area.column.is-6
-      h2.title {{ subject.name }}
+    router-link(v-for='(subject, index) in db.areas[currentArea]', :to='subject.area.slug + "/" + subject.slug', :key='subject.slug', :data-index='index').area.column.is-6
+      .name {{ subject.name }}
       planet(:subject="subject.slug")
 </template>
 
@@ -54,7 +54,6 @@ export default {
     justify-content: center
     position: relative
     transition: background-color 200ms
-
     &:nth-child(1)
       border-right: 1px solid $grey
       border-bottom: 1px solid $grey
@@ -65,14 +64,20 @@ export default {
       border-top: 1px solid $grey
     &:hover
       background: #00094880
-    .title
-      bottom: 0
-      left: 1em
-      font-size: 1em
+    .name
+      // bottom: 0
+      // right: 0
+      font-size: 0.9em
       position: absolute
       text-transform: capitalize
       font-size: 1.3rem
-      background: #11111199
+      color: $teal
+      // background: #11111199
+      transform: translate(0, 13vh)
     .planet
       width: 12vw
+  .area[data-index='4']
+      position: absolute
+      width: 20vw
+      transform: translate(33vw, 25vh)
 </style>

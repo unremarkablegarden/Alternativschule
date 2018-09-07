@@ -5,14 +5,13 @@
     .columns
       .column.is-3.chart
         progresschart(:level='currentLevel', type='large', ref='chart')
-        ul.chart-legend
-          li(:class='{ current : (currentCompetence.slug === subject.competences[0].slug) }') A
-          li(:class='{ current : (currentCompetence.slug === subject.competences[1].slug) }') B
-          li(:class='{ current : (currentCompetence.slug === subject.competences[2].slug) }') C
-          li(:class='{ current : (currentCompetence.slug === subject.competences[3].slug) }') D
+        .chart-legend
+          .inner
+            .letter(v-for='(competence, index) in subject.competences', :class='{ current : (currentCompetence.slug === subject.competences[index].slug) }') {{ alphabet[index] }}
         ul.competence-names
           li(v-for='competence in subject.competences', :key='competence.slug')
             | {{ competence.name }}
+
       .column.is-7.is-offset-1.text
         h3 Kurs: {{ currentLevel }}
         p {{ subject.description }}
@@ -38,7 +37,8 @@ export default {
       subject: null,
       loading: true,
       currentLevel: null,
-      currentCompetence: null
+      currentCompetence: null,
+      alphabet: ['A', 'B', 'C', 'D', 'E', 'F']
     }
   },
   components: {
@@ -122,24 +122,28 @@ export default {
       font-size: .875rem
       margin-bottom: 2em
 
-  ul.chart-legend
-    display: flex
-    justify-content: space-around
-    padding-left: 12%
-    margin-bottom: 1em
-    // font-weight: bold
-    li
+
+  .chart-legend
+    padding: 0 0 0 15%
+    .inner
+      display: flex
+      justify-content: space-between
+      margin-bottom: 1em
+      padding: 0 5.5% 0 3.5%
+    .letter
       padding: 1px 8px 0
       border-radius: 5px
       border: 1px transparent solid
-    li.current
+    .letter.current
       font-weight: bold
       border: 1px white solid
 
   .competence-names
-    font-size: .9em
-    line-height: 2
+    font-size: .8em
+    line-height: 1.4
     color: #BBB
+    li
+      padding-bottom: 0.7em
     li::before
       font-weight: bold
     li:nth-child(1)::before
@@ -150,6 +154,8 @@ export default {
       content: 'C:  '
     li:nth-child(4)::before
       content: 'D:  '
+    li:nth-child(5)::before
+      content: 'E:  '
 
   .lernlevel-info
     margin-top: 2em

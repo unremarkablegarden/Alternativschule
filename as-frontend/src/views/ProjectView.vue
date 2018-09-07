@@ -12,13 +12,22 @@
               li(v-for="project in myProjects")
                 router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                   | {{ project.name }}
+                  | ({{ project.level }})
 
-            li.section-title(v-if="currentSubjectData.projects") Alle anderen Projekte
-            li(v-for="project in currentSubjectData.projects", v-if='!projectInUserData(project)')
+            li.section-title(v-if="availableProjects.length") Anderen Projekte
+            li(v-for="project in availableProjects", v-if="availableProjects.length")
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                 | {{ project.name }}
+                | ({{ project.level }})
+
+            li.section-title(v-if="availableSelfLearnProjects") Selbslernbox
+            li(v-for="project in availableSelfLearnProjects", v-if='availableSelfLearnProjects.length')
+              router-link(:to="'/project/' + currentSubject + '/' + project.slug")
+                | {{ project.name }}
+                | ({{ project.level }})
 
         .main.column.is-8.is-offset-1
+          //- xmp {{ availableProjects }}
           .tabs.is-boxed(v-if="tab !== 'projectview-home'")
             ul
               li(:class="{ 'is-active' : (tab == 'projectview') }")
@@ -26,14 +35,14 @@
               li(:class="{ 'is-active' : (tab == 'projectview-material') }")
                 router-link(:to='"/project/" + currentSubject + "/" + project + "/material"') Material
           .tab-content.info(v-if="tab == 'projectview-home'")
-            h2.title Select a project...
+            h2.title Wählen Sie ein Projekt aus...
 
           .tab-content.info(v-if="tab == 'projectview'")
             //- xmp {{ currentProjectData }}
             .columns.is-gapless.no-mb
               .column.is-9
-                h2.title Project: {{ currentProjectData.name }}
-              .column.is-3
+                h2.title Projekt: {{ currentProjectData.name }}
+              .column.is-3(v-if='studentCanAdd(currentProjectData)')
                 el-button(v-if='projectAvailable === true', type='danger', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
                 el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)', :loading='submitting') Löschen
 
@@ -96,12 +105,13 @@ export default {
       db: null,
       subjects: null,
       currentSubjectData: null,
-      myProjects: null,
+      // myProjects: null,
       loadingUser: true,
       loadingData: true,
       currentProjectData: null,
       projectAvailable: null,
-      submitting: false
+      submitting: false,
+      selfLearnProjects: null
     }
   },
   computed: {
@@ -114,9 +124,59 @@ export default {
     project () {
       return this.$route.params.project
     },
+    myProjects () {
+      if (this.myData) {
+        return this.myData.studiesProjects.filter(o => o.subject.slug === this.currentSubject)
+      }
+    },
+    availableProjects () {
+      if (this.currentSubjectData) {
+        let availableProjects = []
+        this.currentSubjectData.projects.forEach(p => {
+          if (! this.myProjects.find(mp => mp.id === p.id) && p.selfLearn === false) {
+            // this isn't in myProjects
+            availableProjects.push(p)
+          }
+        })
+        return availableProjects
+      }
+    },
+    availableSelfLearnProjects () {
+      if (this.currentSubjectData) {
+        let availableProjects = []
+        this.currentSubjectData.projects.forEach(p => {
+          if (! this.myProjects.find(mp => mp.id === p.id) && p.selfLearn === true) {
+            // this isn't in myProjects
+            availableProjects.push(p)
+          }
+        })
+        return availableProjects
+      }
+    }
+
   },
   methods: {
-
+    studentCanAdd(currentProjectData) {
+      let studentSubjectLevel
+      const studentSubjectLevelObj = this.myData.studentLevels.find(o => o.subject.id === this.currentSubjectData.id)
+      if (studentSubjectLevelObj) {
+        studentSubjectLevel = studentSubjectLevelObj.level
+      } else {
+        studentSubjectLevel = 'BK'
+      }
+      if (this.levelValue(studentSubjectLevel) >= this.levelValue(currentProjectData.level)) {
+        return true
+      } else {
+        return false
+      }
+    },
+    levelValue (level) {
+      if (level == 'BK') return 1
+      if (level == 'GK') return 2
+      if (level == 'AK') return 3
+      if (level == 'AK1') return 3
+      if (level == 'AK2') return 4
+    },
     addProject (projectId) {
       const id = localStorage.getItem('userId')
       this.submitting = true
@@ -225,7 +285,7 @@ export default {
 
     updateStateMyData () {
       console.log('projectview: update the store somehow?')
-      // dirty hack
+      // dirty hack to get it to show up when you nav back to moons or solarsystem
       location.reload()
       // console.log('myprojects');
       // console.log(this.myProjects);
@@ -250,6 +310,16 @@ export default {
       })
       return foundIt
     },
+    hasProjectsNotInUserData () {
+      // let foundIt = false
+      // this.currentSubjectData.projects.forEach(o => {
+      //   if (! this.projectInUserData(o)) {
+      //     foundIt = true
+      //   }
+      // })
+      // return foundIt
+      return true
+    },
     getDb () {
       this.$store.dispatch('getDb')
         .then((response) => {
@@ -261,7 +331,7 @@ export default {
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = JSON.parse(JSON.stringify(response))
-        this.myProjects = response.studiesProjects.filter(o => o.subject.slug === this.currentSubject)
+        // this.myProjects = response.studiesProjects.filter(o => o.subject.slug === this.currentSubject)
         // console.log(response)
         this.isProjectAvailable()
         this.loadingData = false

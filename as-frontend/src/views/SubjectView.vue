@@ -64,6 +64,8 @@ export default {
 
         let currentLevel
         currentLevel = response.studentLevels.find(o => o.subject.slug === this.currentSubject)
+        // console.log('currentLevel')
+        // console.log(currentLevel.level)
         if (currentLevel) {
           currentLevel = currentLevel.level
         } else {
@@ -130,17 +132,18 @@ $moon: 4vh
   height: $planet
   transition: box-shadow 400ms ease
   z-index: 2
-  &[data-levels="bk"]
+  &[data-levels="BK"]
     box-shadow: 0px 0px 3vh #fff
-  &[data-levels="gk"]
+  &[data-levels="GK"]
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6
-  &[data-levels="ak1"]
+  &[data-levels="AK1"], &[data-levels="AK"]
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6, 0 0 0 4vh #7397C1
-  &[data-levels="ak2"]
+  &[data-levels="AK2"]
     box-shadow: 0 0 0 .5vh #fff, 0 0 0 2vh #9DB7D6, 0 0 0 4vh #7397C1, 0 0 0 6vh #5477A1
   img
     width: $planet
     height: $planet
+
 
 .levels
   text-transform: uppercase

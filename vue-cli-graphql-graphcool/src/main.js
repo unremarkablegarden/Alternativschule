@@ -72,6 +72,10 @@ Vue.component('StudentProjectsList', StudentProjectsList)
 import StudentSelfEvaluations from '@/components/StudentSelfEvaluations.vue'
 Vue.component('StudentSelfEvaluations', StudentSelfEvaluations)
 
+import MaterialsList from '@/components/MaterialsList.vue'
+Vue.component('MaterialsList', MaterialsList)
+
+
 
 
 Vue.config.productionTip = false

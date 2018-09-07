@@ -1,10 +1,6 @@
 <template lang="pug">
 #lernlevel
-  //- div
-    h2 {{ competence }}
-    h2 {{ level }}
-    h2 {{ currentSubject }}
-  img(src="@/assets/gfx/graphs/lernlevel.svg")
+  img(:src="lernLevelImgSrc(level)").lernlevelimg
   .select-level
     button(v-if='currentEvaluation', v-for="(item, i) in [1,2,3,4,5,6,7,8,9,10]", :class="{ 'is-selected' : (currentEvaluation.value === item) }", @click='levelChange(item)', :key="item")
 </template>
@@ -43,6 +39,9 @@ export default {
     // console.log(this.competenceId)
   },
   methods: {
+    lernLevelImgSrc () {
+      return require('@/assets/gfx/graphs/lernlevels/' + (this.level.toLowerCase()) + '.svg')
+    },
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.subjectData = response.studiesSubjects.find(o => o.slug === this.currentSubject)
@@ -174,24 +173,31 @@ export default {
 <style lang="sass" scoped>
   #lernlevel
     position: relative
+  img.lernlevelimg
+    width: 40vw !important
+    // border: 1px white solid
   .select-level
+    // border: 1px white solid
     position: absolute
-    top: 47px
-    left: -4px
+    margin-top: -4px
+    transform: translateY(-100%)
+    height: 100%
+    width: 40vw !important
+    display: flex
+    justify-content: space-between
+    align-items: center
     button
-      height: 30px
-      width: 30px
-      border-radius: 15px
+      height: 2vw
+      width: 2vw
+      border-radius: 5vw
       border: 1px solid transparent
       background: none
-      margin-right: 18.2px
       outline: none
       transition: border 200ms
       &:last-child
         margin-right: 0
       &:hover, &.is-selected
-        border: 1px solid #fff
+        border: 2px solid #fff
         cursor: pointer
-
 
 </style>

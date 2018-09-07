@@ -74,7 +74,7 @@ export default {
     logout() {
       localStorage.removeItem('authenticate-user-token')
       localStorage.removeItem('userId')
-      this.$store.dispatch('logoutAction').then(() => this.$router.push({ name: 'login' }) )
+      this.$store.dispatch('logoutAction').then(() => window.location.href = window.location.origin + '/' )
     }
   }
 }
@@ -90,7 +90,7 @@ export default {
 <style lang="sass">
   @import "~bulma"
   @import "@/assets/styles/variables.sass"
-  @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Roboto')
+  @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Roboto+Mono')
 
   html,body
     font-family: $R
@@ -113,7 +113,7 @@ export default {
       color: white
 
   #app
-    font-family: 'Roboto', Helvetica, Arial, sans-serif
+    font-family: 'Roboto Mono', Helvetica, Arial, sans-serif
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
     text-align: center

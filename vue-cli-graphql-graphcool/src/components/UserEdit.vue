@@ -8,7 +8,7 @@
 
         el-form-item(label='Benutzertyp', prop='userType')
           el-select(v-model='editUserForm.userType', placeholder='Account type')
-            el-option(v-for='(item, index) in userTypes', :key='index', :label="Cfirst(item)", :value='item')
+            el-option(v-for='(item, index) in userTypes', :key='index', :label="transLabel(item)", :value='item')
 
         el-form-item(label='E-Mail', prop='email')
           el-input(type='email', v-model='editUserForm.email', placeholder="Your email address")
@@ -102,6 +102,11 @@ export default {
   },
 
   methods: {
+    transLabel (label) {
+      if (label == 'Admin') return 'Administration'
+      if (label == 'Lehrer') return 'Lehrpersonen'
+      if (label == 'Schueler') return 'Schüler*innen'
+    },
     hideDialog () {
       this.$emit('update:dialogVisible', false)
     },

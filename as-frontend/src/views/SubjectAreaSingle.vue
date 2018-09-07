@@ -1,5 +1,5 @@
 <template lang="pug">
-.wrapper
+.wrapper.subjectarea
   .loading(v-if='!currentSubjectData') Loading...
   div(v-else)
     .guibox.columns
@@ -16,7 +16,8 @@
         .teacher(v-if='currentSubjectData.teachers.length')
           strong Lehrer:&nbsp;
           span(v-for='teacher in currentSubjectData.teachers')
-            | {{ teacher.firstname }} {{ teacher.lastname }}
+            | {{ teacher.firstname }}
+            //- {{ teacher.surname }}
         .description
           | {{ currentSubjectData.description }}
 </template>
@@ -59,6 +60,7 @@ export default {
         const subject = this.db.subjects.find(o => o.id === subjectId)
         console.log('Add ' + subject.name + ' [' + subject.id + ']')
         const id = localStorage.getItem('userId')
+        console.log(id)
 
         if (id) {
           this.$apollo.mutate({
@@ -126,7 +128,7 @@ export default {
           // console.log(response)
           this.currentSubjectData = response.subjects.find(subject => subject.slug === this.currentSubject)
           this.subjectLevels = this.sortLevels(this.currentSubjectData.levels)
-          console.log(this.currentSubjectData)
+          // console.log(this.currentSubjectData)
         })
     },
     getMyData () {

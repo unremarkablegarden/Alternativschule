@@ -20,7 +20,7 @@ export default new Router({
     // { path: '/posts', component: Posts },
     { path: '/benutzerkonto', component: Account, name: 'account' },
     { path: '/benutzer', component: Users, name: 'users' },
-    { path: '/themen', component: Subjects, name: 'subjects' },
+    { path: '/faecher', component: Subjects, name: 'subjects' },
     { path: '/schueler', component: Students, name: 'students' },
     { path: '/vertrauensschueler', component: Prefect, name: 'prefect' }
   ]
