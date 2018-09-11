@@ -96,16 +96,6 @@ export default {
           teacher: localStorage.getItem('userId'),
           subject: this.subject
         },
-        // updateQueries: {
-        //   mySubjects: (prev, { mutationResult }) => {
-        //     console.log('--updateQueries--')
-        //     console.log(prev)
-        //     console.log(mutationResult)
-        //     return {
-        //       mySubjects: [mutationResult.data.createProject, ...prev.mySubjects],
-        //     }
-        //   }
-        // }
       })
       .then((data) => {
         console.log('--projectAdd then()--')

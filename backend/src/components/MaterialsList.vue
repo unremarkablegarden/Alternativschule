@@ -19,9 +19,9 @@
         .name {{ material.name }}
       //- a(:href='material.linkUrl', target='_blank') {{ material.name }}
 
-    //- MaterialAdd(:id='id', :projects='projects')
-    br
-    el-button(size='mini', icon='el-icon-upload2', disabled) Material hochladen
+    MaterialAdd(:id='id')
+    //- br
+    //- el-button(size='mini', icon='el-icon-upload2') Material hochladen
 </template>
 
 <script>

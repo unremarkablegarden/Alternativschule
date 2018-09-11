@@ -6,14 +6,20 @@ import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/gra
 // import { InMemoryCache } from 'apollo-cache-inmemory'
 // import { HttpLink } from 'apollo-link-http'
 
-
-// Install the vue plugin
 Vue.use(VueApollo)
 
 // Name of the localStorage item
 // const AUTH_TOKEN = 'apollo-token'
 const AUTH_TOKEN = 'authenticate-user-token'
-const graphcoolURI = 'https://api.graph.cool/simple/v1/cjjzt28rc13n90179vyze0inq'
+
+// const graphcoolURI = 'https://api.graph.cool/simple/v1/cjjzt28rc13n90179vyze0inq'
+// const graphcoolURI = 'https://api.graph.cool/simple/v1/cjluwggxg2ail0195ilui6u3j'
+const graphcoolURI = 'https://api.graph.cool/simple/v1/cjlw6enft0hds016406xkhcjh'
+
+// const wsEndpointURI = 'wss://subscriptions.graph.cool/v1/cjjzt28rc13n90179vyze0inq'
+// const wsEndpointURI = 'wss://subscriptions.graph.cool/v1/cjluwggxg2ail0195ilui6u3j'
+const wsEndpointURI = 'wss://subscriptions.graph.cool/v1/cjlw6enft0hds016406xkhcjh'
+
 
 // Config
 const defaultOptions = {
@@ -23,7 +29,7 @@ const defaultOptions = {
   // You can use `wss` for secure connection (recommended in production)
   // Use `null` to disable subscriptions
   // wsEndpoint: process.env.VUE_APP_GRAPHQL_WS || 'ws://localhost:4000/graphql',
-  wsEndpoint: 'wss://subscriptions.graph.cool/v1/cjjzt28rc13n90179vyze0inq',
+  wsEndpoint: wsEndpointURI,
   // LocalStorage token
   tokenName: AUTH_TOKEN,
   // Enable Automatic Query persisting with Apollo Engine

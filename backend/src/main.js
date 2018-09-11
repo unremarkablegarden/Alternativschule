@@ -74,9 +74,11 @@ Vue.component('StudentSelfEvaluations', StudentSelfEvaluations)
 
 import MaterialsList from '@/components/MaterialsList.vue'
 Vue.component('MaterialsList', MaterialsList)
+import MaterialAdd from '@/components/MaterialAdd.vue'
+Vue.component('MaterialAdd', MaterialAdd)
 
 
-
+// Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
 
 Vue.config.productionTip = false
 

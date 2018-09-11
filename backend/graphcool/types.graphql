@@ -1,6 +1,17 @@
 # The following types define the data model of the example service
 # based on which the GraphQL API is generated
 
+type Material @model {
+  id: ID! @isUnique
+  name: String!
+  description: String
+  contentType: String
+  uploadUrl: String
+  linkUrl: String
+  project: Project! @relation(name: "ProjectMaterials")
+  # file: File @relation(name: "MaterialFile")
+}
+
 type User @model {
   id: ID! @isUnique
   username: String @isUnique
@@ -16,7 +27,6 @@ type User @model {
   prefect: Boolean @defaultValue(value: "false") @migrationValue(value: "false")
   # relations
 
-  # prefectStudents: [User!]! @relation(name: "PrefectStudent")
   prefectLinks: [User!]! @relation(name: "PrefectLinks")
 
   teachesSubjects: [Subject!]! @relation(name: "TeacherSubject")
@@ -79,7 +89,7 @@ type Project @model {
   slug: String! @isUnique
   description: String!
   subject: Subject! @relation(name: "SubjectProject")
-  materials: [Material!]! @relation(name: "ProjectMaterial")
+  materials: [Material!]! @relation(name: "ProjectMaterials")
   teacher: User! @relation(name: "TeacherProject")
   students: [User!]! @relation(name: "StudentProject")
   selfLearn: Boolean! @defaultValue(value: "false")
@@ -124,16 +134,6 @@ type Evaluation @model {
   level: Levels!
 }
 
-type Material @model {
-  id: ID! @isUnique
-  name: String!
-  description: String
-  project: [Project!]! @relation(name: "ProjectMaterial")
-  contentType: String
-  uploadUrl: String
-  linkUrl: String
-}
-
 type StudentNote @model {
   id: ID! @isUnique
   createdAt: DateTime!
@@ -144,11 +144,23 @@ type StudentNote @model {
   teacher: User! @relation(name: "TeacherStudentNotes")
 }
 
+
+# shitty API broken
+# type File @model {
+#   id: ID! @isUnique
+#   path: String!
+#   filename: String!
+#   mimetype: String!
+#   encoding: String!
+#   # material: Material @relation(name: "MaterialFile")
+# }
+
+
 # testing...
-type Post @model {
-  id: ID! @isUnique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  description: String!
-  imageUrl: String!
-}
+# type Post @model {
+#   id: ID! @isUnique
+#   createdAt: DateTime!
+#   updatedAt: DateTime!
+#   description: String!
+#   imageUrl: String!
+# }
