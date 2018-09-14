@@ -75,16 +75,25 @@ export default new Vuex.Store({
             const subjects = JSON.parse(JSON.stringify(response.data.allSubjects))
 
             let areas = {}
+            let spacestation = []
+            const spacestationId = 'cjlw88xwq0ihy01986jjplx1o'
+
             subjects.forEach((subject) => {
-              if (!areas[subject.area.slug]) {
-                areas[subject.area.slug] = []
+              if (subject.area.id !== spacestationId) {
+                if (!areas[subject.area.slug]) {
+                  areas[subject.area.slug] = []
+                }
+                areas[subject.area.slug].push(subject)
+              } else {
+                // is spacestation
+                spacestation.push(subject)
               }
-              areas[subject.area.slug].push(subject)
             })
 
             const db = {
               areas: areas,
-              subjects: subjects
+              subjects: subjects,
+              spacestation: spacestation[0]
             }
 
             commit('setDb', db)
@@ -117,40 +126,6 @@ export default new Vuex.Store({
             variables: {
               id: state.userId
             },
-            // subscribeToMore: {
-            //   document: gql`subscription updateUser($id: ID!) {
-            //     User(
-            //       filter: {
-            //         mutation_in: [UPDATED]
-            //         node: {
-            //           id: $id
-            //         }
-            //       }
-            //     ) {
-            //       mutation
-            //       node {
-            //         studiesSubjects {
-            //           name
-            //         }
-            //         studiesProjects {
-            //           name
-            //         }
-            //       }
-            //       updatedFields
-            //     }
-            //   }`,
-            //   // Variables passed to the subscription. Since we're using a function,
-            //   // they are reactive
-            //   variables: {
-            //     id: state.userId
-            //   },
-            //   // Mutate the previous result
-            //   updateQuery: (previousResult, { subscriptionData }) => {
-            //     // Here, return the new result from the previous with the new data
-            //     console.log('update from subscription...')
-            //     console.log(subscriptionData)
-            //   },
-            // },
           })
           .then(response => {
             const myData = JSON.parse(JSON.stringify(response.data.User))

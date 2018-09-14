@@ -1,5 +1,3 @@
-#import "./ProjectFragment.gql"
-
 query subjectsByUser($id: ID!) {
 	User(id: $id) {
 		teachesSubjects {
@@ -52,7 +50,66 @@ query subjectsByUser($id: ID!) {
 			}
 		}
 		teachesProjects {
-			...Project
+		  id
+		  name
+		  slug
+		  description
+		  selfLearn
+		  isPublished
+		  level
+		  subject {
+		    id
+				slug
+		  }
+		  materials {
+		    id
+		    name
+		    description
+		    contentType
+		    uploadUrl
+		    linkUrl
+		  }
+			students {
+				id
+				firstname
+				surname
+				username
+				prefectLinks {
+					id
+					username
+					firstname
+					surname
+				}
+				studentStudentNotes {
+					id
+					createdAt
+					text
+					subject {
+						id
+						slug
+					}
+					teacher {
+						id
+						username
+					}
+					student {
+						id
+						username
+					}
+				}
+				studentLevels {
+					id
+					level
+					student {
+						id
+						username
+					}
+					subject {
+						id
+						slug
+					}
+				}
+			}
 		}
 	}
 }

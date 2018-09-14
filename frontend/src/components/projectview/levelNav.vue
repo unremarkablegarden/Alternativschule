@@ -1,29 +1,26 @@
 <template lang="pug">
   #levelnav.columns
-    .column.is-10
-      .columns
-        router-link(v-for='level in studentLevels', :key='level', :to='"/level/" + currentSubject + "/" + level').column.is-one-quarter.tab
-          .columns
-            .column.is-two-fifths.chart
+    .column.is-10.levelsWrapper
+      .columns.is-gapless.inner
+        router-link(v-for='level in studentLevels', :key='level', :to='"/level/" + currentSubject + "/" + level').level.column.is-3.tab
+          .columns.is-gapless
+            .column.is-8
               progresschart(:level='level', type='small')
-            .column.is-three-fifths.desc
+            .column.is-4
               .level.padfix {{ level }}
-              //- p Lorem ipsum dolor sit amet, consectetur
-              .lorem
-                LoremIpsum(add="1s")
     router-link(:to='"/project/" + currentSubject', :class="{ 'is-not-lit' : currentLevel }").column.is-2.themen-link Themen
 </template>
 
 <script>
 import progresschart from '@/components/projectview/progresschart.vue'
-import LoremIpsum from 'vue-lorem-ipsum'
+// import LoremIpsum from 'vue-lorem-ipsum'
 
 export default {
   name: 'levelnav',
   props: ['project'],
   components: {
     progresschart,
-    LoremIpsum
+    // LoremIpsum
   },
   data () {
     return {
@@ -133,11 +130,13 @@ export default {
       font-weight: bold
       display: flex
       align-items: center
-      border-top-right-radius: .8rem
+      // border-top-right-radius: .8rem
+      border-top-right-radius: 0.3rem
       transition: all, 200ms
       background: $teal
       border: 1px solid $teal
       margin-bottom: 1em
+      // margin-bottom: 1.8em
       padding-left: 2em
     .themen-link.is-not-lit
       background: none
@@ -151,5 +150,8 @@ export default {
     .bar
     .competence-names
       display: none
-
+  .levelsWrapper
+    padding: 1em 0 0 2em
+    .inner
+      max-width: 768px
 </style>

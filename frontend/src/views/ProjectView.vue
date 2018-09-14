@@ -3,7 +3,8 @@
   .guibox
     .loading(v-if='loadingData || loadingUser') Loading...
     div(v-else)
-      levelnav
+      levelnav(v-if='!isSpacestation')
+      .spacestationspacer(v-else)
       .columns.under-level-nav
         .side-menu.column.is-3
           ul
@@ -14,13 +15,13 @@
                   | {{ project.name }}
                   | ({{ project.level }})
 
-            li.section-title(v-if="availableProjects.length") Anderen Projekte
+            li.section-title(v-if="availableProjects.length") Verfügbare Projekte
             li(v-for="project in availableProjects", v-if="availableProjects.length")
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                 | {{ project.name }}
                 | ({{ project.level }})
 
-            li.section-title(v-if="availableSelfLearnProjects") Selbslernbox
+            li.section-title(v-if="availableSelfLearnProjects.length") Selbslernbox
             li(v-for="project in availableSelfLearnProjects", v-if='availableSelfLearnProjects.length')
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                 | {{ project.name }}
@@ -152,7 +153,15 @@ export default {
         })
         return availableProjects
       }
-    }
+    },
+    isSpacestation () {
+      const spacestationId = 'cjlw89ql20imy0149cdcs3ze0'
+      if (this.currentSubjectData.id == spacestationId) {
+        return true
+      } else {
+        return false
+      }
+    },
 
   },
   methods: {
@@ -164,7 +173,7 @@ export default {
       } else {
         studentSubjectLevel = 'BK'
       }
-      if (this.levelValue(studentSubjectLevel) >= this.levelValue(currentProjectData.level)) {
+      if (this.levelValue(studentSubjectLevel) >= this.levelValue(currentProjectData.level) || this.isSpacestation) {
         return true
       } else {
         return false
@@ -310,7 +319,7 @@ export default {
       })
       return foundIt
     },
-    hasProjectsNotInUserData () {
+    // hasProjectsNotInUserData () {
       // let foundIt = false
       // this.currentSubjectData.projects.forEach(o => {
       //   if (! this.projectInUserData(o)) {
@@ -318,8 +327,8 @@ export default {
       //   }
       // })
       // return foundIt
-      return true
-    },
+      // return true
+    // },
     getDb () {
       this.$store.dispatch('getDb')
         .then((response) => {
@@ -377,6 +386,9 @@ export default {
     overflow-y: auto
     // div
       border: 1px red solid
+
+  .spacestationspacer
+    height: 20px
 
   .under-level-nav
     // background: blue

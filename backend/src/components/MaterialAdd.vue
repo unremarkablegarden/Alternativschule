@@ -1,6 +1,6 @@
 <template lang="pug">
   #materialadd
-    el-button(type="primary", @click='dialogVisible = true', icon='el-icon-plus', size='mini').add Material Hinzufügen
+    el-button(type="", @click='dialogVisible = true', icon='el-icon-plus', size='mini').add Material Hinzufügen
 
     el-dialog(title='Material hinzufügen', :visible.sync='dialogVisible', width='800', :close-on-click-modal='false')
 
@@ -14,14 +14,14 @@
 
         el-form-item(label='Type', prop='type')
           el-radio-group(v-model='form.type', size='small')
-            el-radio(v-for='type in fileTypes', :key='type', :label='type', border) {{ type }}
+            el-radio-button(v-for='type in fileTypes', :key='type', :label='type') {{ type }}
 
         el-form-item(label='Link', prop='link', v-if='isLink()')
           el-input(type='text', v-model='form.link', placeholder="Link URL")
 
         el-form-item(label='File', prop='file', v-if='isFile()')
           el-upload.file(ref='file', action='/', :auto-upload='false', v-model='form.file')
-            el-button(slot='trigger', size='small', type='primary', icon='el-icon-document') Select file
+            el-button(slot='trigger', size='small', type='', icon='el-icon-document') Select file
 
         el-form-item
           el-button(type='primary', @click="submitForm('form')", :loading='loading', icon='el-icon-plus')
@@ -39,7 +39,7 @@ export default {
   props: ['id'],
   data () {
     return {
-      fileTypes: ['Link', 'Video', 'Image', 'PDF'],
+      fileTypes: ['Link', 'Video', 'Bild', 'PDF'],
       loading: false,
       uploadedFile: null,
       form: {
@@ -54,7 +54,7 @@ export default {
           { required: true, message: 'Please input a title', trigger: 'change' }
         ],
         description: [
-          { required: true, message: 'Please input a description', trigger: 'change' }
+          { required: false, message: 'Please input a description', trigger: 'change' }
         ],
         type: [
           { required: true, message: 'Select a type', trigger: ['blur', 'change'] }
@@ -73,7 +73,7 @@ export default {
       }
     },
     isFile () {
-      if (this.form.type == 'Image' || this.form.type == 'PDF') {
+      if (this.form.type == 'Bild' || this.form.type == 'PDF') {
         return true
       }
     },
@@ -115,7 +115,7 @@ export default {
           const response = res.data
           const url = response.secure_url
           this.uploadedFile = url
-          this.apolloMutation()
+          this.addMaterialApollo()
         })
         .catch((err) => {
           this.loading = false
@@ -127,11 +127,12 @@ export default {
         })
     },
 
-    apolloMutation () {
+    addMaterialApollo () {
 
       this.$apollo.mutate({
-        mutation: gql`mutation ($id: ID!, $name: String!, $description: String!, $projectId: ID!, $contentType: String, $uploadUrl: String, $linkUrl: String) {
-          createMaterial(name: $name, description: $description, materialsprojectId: $projectId, contentType: $contentType, uploadUrl: $uploadUrl, linkUrl: $linkUrl) {
+        // $id: ID!,
+        mutation: gql`mutation ($name: String!, $description: String!, $projectId: ID!, $contentType: String, $uploadUrl: String, $linkUrl: String) {
+          createMaterial(name: $name, description: $description, projectId: $projectId, contentType: $contentType, uploadUrl: $uploadUrl, linkUrl: $linkUrl) {
             id
             name
             description
@@ -161,7 +162,7 @@ export default {
         this.$refs.form.resetFields()
         this.$message({
           type: 'success',
-          message: 'Material Hinzufügt: ' + this.uploadedFile
+          message: 'Material Hinzufügt: ' + this.form.name
         })
       })
       .catch((error) => {
@@ -183,5 +184,5 @@ export default {
 
 <style lang="sass" scoped>
   .add
-    margin-top: 1em
+    margin-top: 0.5em
 </style>

@@ -23,6 +23,10 @@ Vue.use(Element, { locale })
 import SimpleLineIcons from 'vue-simple-line'
 Vue.component('icon', SimpleLineIcons)
 
+import Loading from '@/components/Loading'
+Vue.component('Loading', Loading)
+
+
 import DeleteUserButton from '@/components/DeleteUserButton'
 Vue.component('DeleteUserButton', DeleteUserButton)
 
@@ -76,6 +80,8 @@ import MaterialsList from '@/components/MaterialsList.vue'
 Vue.component('MaterialsList', MaterialsList)
 import MaterialAdd from '@/components/MaterialAdd.vue'
 Vue.component('MaterialAdd', MaterialAdd)
+import MaterialDelete from '@/components/MaterialDelete.vue'
+Vue.component('MaterialDelete', MaterialDelete)
 
 
 // Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'

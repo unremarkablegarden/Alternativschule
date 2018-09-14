@@ -2,8 +2,9 @@
   #solarsystem
     .info
       div(v-if='planetHover')
-        strong Planet&nbsp;
+        strong(v-if="planetHover !== 'Space Station AGs'") Planet&nbsp;
         | {{ planetHover }}
+
     .solarsystem
       .sun
         img(src="../assets/gfx/planets/sun@3x.png")
@@ -12,16 +13,21 @@
           router-link(:to=' "subject/" + subject.slug', @mouseover.native='planetHover = subject.name', @mouseleave.native='planetHover = null', data-planet-n='index').planet-link
             planet(:subject="subject.slug", :class="{ inactive : isInactive(subject.id) }")
     .orbit-circle(v-for="subject in subjects")
-    .guibox.inactivity
-      .inner
-        strong Inactivity alert
-        p {{ inactivityMsg }}
+
+    .guibox.message(v-if='msg')
+      .inner(v-if='msgText.text')
+        strong {{ msgText.title }}
+        p(v-html='msgText.text')
+
+    .spacestation
+      router-link(to='/project/space-station', @mouseover.native="planetHover = 'Space Station AGs'", @mouseleave.native='planetHover = null')
+        img(src='../assets/gfx/planets/space-station.svg')
 </template>
 
 <script>
 import addYears from 'date-fns/add_years'
 import differenceInCalendarYears from 'date-fns/difference_in_calendar_years'
-import differenceInCalendarDays from 'date-fns/difference_in_calendar_days'
+// import differenceInCalendarDays from 'date-fns/difference_in_calendar_days'
 
 import planet from '@/components/areas/planet.vue'
 export default {
@@ -37,7 +43,11 @@ export default {
       db: null,
       subjects: null,
       alertSubjects: [],
-      inactivityMsg: null
+      msg: false,
+      msgText: {
+        title: null,
+        text: null,
+      }
     }
   },
   mounted () {
@@ -50,6 +60,17 @@ export default {
     }
   },
   methods: {
+    noPlanets () {
+      if (this.subjects.length === 0) {
+
+        this.msg = true
+        this.msgText = {
+          title: 'Hallo ' + this.myData.firstname + '!',
+          text: 'Willkommen in deiner persönlichen Noten-Galaxy!<br><br>Um einen Planeten (ein Fach) hinzuzufügen, klickst du unten links neben deinem Avatar auf das „+“.'
+        }
+        console.log();
+      }
+    },
     isInactive (id) {
       if (this.alertSubjects.find(s => s.id === id)) {
         return true
@@ -64,6 +85,7 @@ export default {
         this.subjects.forEach(subject => subject.rotate = this.rotate())
         this.loading = false
         this.inactivityAlert()
+        this.noPlanets()
       })
     },
     rotate () {
@@ -79,12 +101,13 @@ export default {
               this.alertSubjects.push(d.subject)
             }
           }
-          if (differenceInCalendarDays(new Date(), d.updatedAt) > 8) {
-            if (! this.alertSubjects.find(o => o.id === d.subject.id)) {
-              // console.log('last update to ' + d.subject.name + ' was over 8 days ago')
-              this.alertSubjects.push(d.subject)
-            }
-          }
+          // test one day
+          // if (differenceInCalendarDays(new Date(), d.updatedAt) > 1) {
+          //   if (! this.alertSubjects.find(o => o.id === d.subject.id)) {
+          //     // console.log('last update to ' + d.subject.name + ' was over 8 days ago')
+          //     this.alertSubjects.push(d.subject)
+          //   }
+          // }
         })
 
         if (this.alertSubjects.length) {
@@ -92,7 +115,12 @@ export default {
           this.alertSubjects.forEach(s => {
             subjects.push(s.name)
           })
-          this.inactivityMsg = "You haven't made any progress in " + subjects.join(", ") + " for 8 days"
+          this.msgText = {
+            title: 'INAKTIVITÄTS ALARM',
+            text: "Du hast in " + subjects.join(", ") + "über 1 Jahr keine Fortschritte gemacht."
+          }
+
+          this.msg = true
         }
       }
 
@@ -119,6 +147,13 @@ $sun: 10vh
     transform: rotate3d(0,0,1,0deg)
   to
     transform: rotate3d(0,0,1,360deg)
+
+@keyframes rotating2
+  from
+    transform: rotate3d(0,0,1,0deg)
+  to
+    transform: rotate3d(0,0,1,-360deg)
+
 
 .info
   strong
@@ -200,19 +235,22 @@ $orbital: 6vh
   .orbit-circle:nth-child(#{$i})
     height: $orbital
     width: $orbital
-.guibox.inactivity
+
+.guibox.message
   position: fixed
-  width: 20vw
+  width: 40vw
   height: auto
   z-index: 999
   padding: 30px
   right: 2vw
-  bottom: 2vw
+  top: 2vw
   margin: 0
   // transform: translate(-50%, -50%)
   display: flex
   justify-content: center
   align-items: center
+  text-align: left
+  padding: 1.5em 2em 2em 2em
   strong
     color: $teal
     text-transform: uppercase
@@ -221,4 +259,14 @@ $orbital: 6vh
     display: block
   p
     line-height: 1.2em
+
+.spacestation
+  position: fixed
+  bottom: 2em
+  right: 4em
+  animation: rotating2 90s linear infinite
+  transform-origin: center center
+  transition: all 250ms
+  &:hover
+    transform: scale(2)
 </style>

@@ -14,7 +14,10 @@
 
       .column.is-7.is-offset-1.text
         h3 Kurs: {{ currentLevel }}
-        p {{ subject.description }}
+
+        //- p {{ subject.description }}
+        p {{ subjectLevelDescription }}
+
         h3 Mein lernlevel: {{ currentCompetence.name }}
         lernlevel(:competence='currentCompetence.slug', :competenceId='currentCompetence.id', :level='currentLevel')
         ul.lernlevel-info
@@ -38,7 +41,8 @@ export default {
       loading: true,
       currentLevel: null,
       currentCompetence: null,
-      alphabet: ['A', 'B', 'C', 'D', 'E', 'F']
+      alphabet: ['A', 'B', 'C', 'D', 'E', 'F'],
+      subjectLevelDescription: null
     }
   },
   components: {
@@ -61,6 +65,7 @@ export default {
   watch: {
     '$route' () {
       this.routeUpdate()
+      this.setLevelDescription()
     }
   },
   computed: {
@@ -73,6 +78,19 @@ export default {
     // this.getMyData()
   },
   methods: {
+    levelValue (level) {
+      if (level == 'BK') return 1
+      if (level == 'GK') return 2
+      if (level == 'AK') return 3
+      if (level == 'AK1') return 3
+      if (level == 'AK2') return 4
+    },
+    setLevelDescription () {
+      if (this.subject.levelDescriptions) {
+        const descriptionsArr = this.subject.levelDescriptions.split('//')
+        this.subjectLevelDescription = descriptionsArr[this.levelValue(this.currentLevel)-1]
+      }
+    },
     routeUpdate () {
       this.currentLevel = this.$route.params.level
     },
@@ -82,7 +100,8 @@ export default {
           this.db = response
           this.subject = response.subjects.find(subject => subject.slug === this.currentSubject)
           this.currentCompetence = this.subject.competences[0]
-          console.log(this.currentCompetence)
+          // console.log(this.currentCompetence)
+          this.setLevelDescription()
           this.loading = false
         })
     },
@@ -124,12 +143,13 @@ export default {
 
 
   .chart-legend
-    padding: 0 0 0 15%
+    padding: 0 8% 0 13%
+    // background: red
     .inner
       display: flex
       justify-content: space-between
       margin-bottom: 1em
-      padding: 0 5.5% 0 3.5%
+      // padding: 0 5.5% 0 3.5%
     .letter
       padding: 1px 8px 0
       border-radius: 5px

@@ -160,9 +160,10 @@ export default {
 
   #logo
     // text-align: center
+    font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif
     font-weight: normal
     font-size: 1.2em
-    letter-spacing: 0.01em
+    letter-spacing: 0.02em
     margin-left: 222px
     margin-top: 1.3em
 

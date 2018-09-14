@@ -4,6 +4,7 @@ query allSubjects($id: ID!) {
 	  name
 	  slug
 	  description
+		levels
 	  area {
 	    id
 	    name

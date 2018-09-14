@@ -1,6 +1,6 @@
 <template lang="pug">
   #userslist
-    el-tabs(type='border-card', v-loading='!usersByType')
+    el-tabs(type='border-card', stretch, v-loading='!usersByType')
       el-tab-pane(v-if='!usersByType')
         span(slot='label')
           i.el-icon-loading

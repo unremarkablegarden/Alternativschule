@@ -107,25 +107,36 @@ export default {
     width: 100%
     // min-height: 7em
     min-width: 20px
-    background: url('../../assets/gfx/graphs/chart-lines.svg')
-    background-repeat: no-repeat
-    background-size: cover
     &.small
       height: 13vh
+      .bars
+        background: url('../../assets/gfx/graphs/chart-lines.svg')
+        background-repeat: no-repeat
+        background-size: cover
+        // padding-right: 8%
+        background-position: -1em 0
+        max-width: 100px
+        border-bottom: 1px white solid
       .bar .inner
         height: 13vh
     &.large
       height: 33vh
+      background: url('../../assets/gfx/graphs/chart-lines.svg')
+      background-repeat: no-repeat
+      background-size: cover
+      .bars
+        padding-right: 10%
       .bar .inner
         height: 33vh
   #levelnav
     .tab:hover .progresschart .bar .inner
         background-image: linear-gradient(-180deg, $teal 0%, $teal 58%)
-    .tab:hover .progresschart
+    .tab:hover .progresschart .bars
       background: url('../../assets/gfx/graphs/chart-lines-teal.svg')
       background-repeat: no-repeat
       background-size: cover
-      background-position: 7% 100%
+      // background-position: 7% 100%
+      background-position: -1em 0
   #leveView
     .progresschart
       height: 90px
@@ -135,7 +146,8 @@ export default {
     align-items: flex-end
     justify-content: space-between
     height: 100%
-    padding: 0 7% 0 5%
+    // padding: 0 7% 0 5%
+    // padding: 0 1% 0 0%
   .bar
     width: 12.5%
     overflow: hidden

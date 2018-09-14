@@ -1,10 +1,15 @@
 <template lang="pug">
   #subjectslist
-    el-card(v-loading='$apollo.loading').subjects
+    el-card(v-loading='$apollo.loading', shadow='never').subjects
       div(slot="header").header
         span Meine Fächer
       el-collapse(v-model='activeSubjects', v-if='!loading')
-        el-collapse-item(:title='subject.name', :name='subject.name', v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
+        el-collapse-item(v-for='subject in mySubjects.teachesSubjects', :key='subject.name', :title='subject.name', :name='subject.name').subject
+          template(slot='title')
+            icon(icon='docs')
+            | &nbsp;
+            | {{ subject.name }}
+          //- el-card(shadow='never').box
           el-row
             el-col(:span='9')
               .description {{ subject.description }}
@@ -52,7 +57,16 @@ export default {
 }
 </script>
 
+<style lang="sass">
+#subjectslist .el-collapse-item__header
+  .sli-svg
+    transform: scale(0.8) translate(0px, 6px)
+</style>
+
 <style lang="sass" scoped>
   .subjects
     min-height: 30vh
+  .box
+    padding-top: 1em
+    padding-bottom: 1em
 </style>

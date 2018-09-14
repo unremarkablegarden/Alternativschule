@@ -22,7 +22,7 @@
 
         el-form-item(label='Level', prop='level')
           el-radio-group(v-model='form.level', size='small')
-            el-radio(v-for='level in levelsOptions', :key='level', :label='level', border) {{ level }}
+            el-radio(v-for='level in subjectLevels', :key='level', :label='level', border) {{ level }}
 
         el-form-item
           el-button(type='primary', @click="submitForm('form')", :loading='loading', icon='el-icon-plus')
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 import slug from 'slug'
 import PROJECT_ADD from '../graphql/ProjectAdd.gql'
 
@@ -39,7 +40,7 @@ export default {
   props: ['subject'],
   data () {
     return {
-      levelsOptions: ['GK', 'BK', 'AK', 'AK1', 'AK2'],
+      // levelsOptions: ['BK', 'GK', 'AK', 'AK1', 'AK2'],
       form: {
         name: '',
         description: '',
@@ -119,6 +120,37 @@ export default {
 
     clearObjProps (obj) {
       Object.keys(obj).forEach((k) => { obj[k] = null })
+    },
+
+    sortLevels (arrayToSort) {
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
+    }
+
+  },
+  apollo: {
+    subjectLevels: {
+      query: gql`query ($subjectId: ID!) {
+        Subject(id: $subjectId) {
+          levels
+        }
+      }`,
+      variables () {
+        return {
+          subjectId: this.subject,
+        }
+      },
+      update (result) {
+        // console.log(result);
+        return this.sortLevels(result.Subject.levels)
+      },
     }
   }
 }

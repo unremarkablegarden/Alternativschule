@@ -2,8 +2,8 @@
   #studentprojectslist
     .title Projekten
     .projects(v-if='!loading')
-      div(v-if='projects.length')
-        div(v-for='(project, index) in projects', :key='project.slug')
+      ul(v-if='projects.length')
+        li(v-for='(project, index) in projects', :key='project.slug')
           | {{ project.name }}
       div(v-else)
         i (Keine)
@@ -55,4 +55,10 @@ export default {
 <style lang="sass" scoped>
   .title
     font-weight: bold
+  ul, li
+    margin: 0
+    padding: 0
+  ul
+    margin-top: 0.5em
+    margin-left: 1.25em
 </style>

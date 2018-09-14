@@ -2,25 +2,44 @@
   #projectslist
     .projects
       el-collapse(v-for='(project, index) in projects', :key='project.slug', v-model='activeElCollapse', v-if='project.subject.id == subjectId').subject
-        el-collapse-item(:title='!project.selfLearn ? project.name : project.name + " (Selbstlernbox)"', :name='project.name')
+        el-collapse-item(:name='project.name')
+          template(slot='title')
+            //- .title(v-if='project.selfLearn')
+            //- {{ !project.selfLearn ? project.name + " (" + project.level + ")" : project.name + " (" + project.level + ", Selbstlernbox)" }}
+            icon(icon='doc')
+            | {{ project.name }}
+
+            strong.level.right
+              | {{ project.level }}
+              | &nbsp;&nbsp;&nbsp;
+            //- el-icon-news
           .description {{ project.description }}
-          .level.meta
-            i.el-icon-d-caret
-            | Level
-            .level-box {{ project.level }}
-          .isPublished.meta(v-if='project.isPublished')
-            i.el-icon-check
-            | Ist veröffentlicht
-          .isPublished.meta(v-else)
-            i.el-icon-close
-            | Nicht veröffentlicht
+          .horizontal
+            .level.meta
+              i.el-icon-d-caret
+              | Level
+              .level-box {{ project.level }}
+            .isPublished.meta(v-if='project.isPublished')
+              i.el-icon-check
+              | Ist veröffentlicht
+            .isPublished.meta(v-else)
+              i.el-icon-close
+              | Nicht veröffentlicht
           br
-          el-row
+          //- el-row
             el-col(:span='14')
-              ProjectEdit(:projectData='{ id: project.id, name: project.name, description: project.description, level: project.level, selfLearn: project.selfLearn, isPublished: project.isPublished }')
-            el-col(:span='10')
-              DeleteProjectButton(:id='project.id').right
+            //- el-col(:span='10')
+          .horizontal
+            ProjectEdit(:projectData='{ id: project.id, name: project.name, description: project.description, level: project.level, selfLearn: project.selfLearn, isPublished: project.isPublished, subject: subjectId }')
+
+            DeleteProjectButton(:id='project.id')
+
           MaterialsList(:id='project.id', :materials='project.materials')
+
+          el-card(shadow='never', v-if='project.students.length').box.students
+            strong Eingeschriebene Schüler*innen
+            ul.student(v-for='student in project.students')
+              li {{ student.firstname }} {{ student.surname }}
 
     ProjectAdd(:subject='subjectId', :projects='projects')
 </template>
@@ -36,6 +55,19 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+  .el-collapse-item .el-collapse-item .el-collapse-item__header.is-active
+    font-weight: bold !important
+  .horizontal
+    display: flex
+  .horizontal > *
+    margin-right: 1em
+
+  #projectslist .el-collapse-item__header
+     .sli-svg
+       transform: scale(0.66) translate(-3px, 9px) !important
+</style>
 
 <style lang="sass" scoped>
   .description
@@ -55,4 +87,15 @@ export default {
     border: 1px #CCC solid
     border-radius: 3px
     display: inline-block
+  .box
+    padding: 1em 0
+    margin: 1em 0
+  .level
+    font-size: 0.86em
+  ul, li
+    padding: 0
+    margin: 0
+  ul
+    margin-top: 0.5em
+    padding-left: 1.25em
 </style>

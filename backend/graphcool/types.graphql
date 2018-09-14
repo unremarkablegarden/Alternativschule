@@ -71,6 +71,7 @@ type Subject @model {
   slug: String@isUnique
   area: Area! @relation(name: "SubjectArea")
   description: String!
+  levelDescriptions: String
   projects: [Project!]! @relation(name: "SubjectProject")
   students: [User!]! @relation(name: "StudentSubject")
   teachers: [User!]! @relation(name: "TeacherSubject")
@@ -104,6 +105,7 @@ type Competence @model {
   slug: String
   subject: Subject! @relation(name: "SubjectCompetences")
   evaluations: [Evaluation!]! @relation(name: "CompetenceEvaluation")
+  # levelDescription: String
   # levels determined by subject
   #levels: [Levels!]!
 }

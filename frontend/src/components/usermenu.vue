@@ -23,15 +23,24 @@ export default {
     }
   },
   computed: {
+    isSpacestation () {
+      if (this.$route.params.subject == 'space-station') {
+        return true
+      } else {
+        return false
+      }
+    },
     addLink () {
       const r = this.$route.name
       if (r == 'home') return '/areas'
       if (r == 'subjectView') return '/project/' + this.$route.params.subject
+      if (r == 'subjectViewLevel') return '/project/' + this.$route.params.subject
     },
     closeLink () {
       const r = this.$route.name
-      if (r == 'projectview') return '/subject/' + this.$route.params.subject
-      if (r == 'levelview') return '/project/' + this.$route.params.subject
+      if (this.isSpacestation && r == 'projectview') return '/solarsystem'
+      else if (r == 'projectview') return '/subject/' + this.$route.params.subject
+      else if (r == 'levelview') return '/project/' + this.$route.params.subject
       else return '/solarsystem'
     },
     routeName () {

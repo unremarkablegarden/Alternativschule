@@ -2,7 +2,7 @@
   .studentNote
     el-form(:model='form', ref='form')
       el-input(type='textarea', v-model='form.text', placeholder='New note about the student...').note
-      el-button(@click='submit()', size='mini', type='primary', icon='el-icon-check', :loading='loading').submit Speichern
+      el-button(@click='submit()', size='mini', type='', icon='el-icon-document', :loading='loading').submit Note Speichern
     .clearfix
 </template>
 
@@ -103,7 +103,7 @@ export default {
   .note
     margin-bottom: 1em
   .submit
-    float: right
+    // float: right
   .clearfix
     clear: both
 </style>

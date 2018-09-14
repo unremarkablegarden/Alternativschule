@@ -40,6 +40,11 @@ export default new Router({
       component: SubjectView
     },
     {
+      path: '/subject/:subject/:level',
+      name: 'subjectViewLevel',
+      component: SubjectView
+    },
+    {
       path: '/areas',
       name: 'areas',
       component: Areas

@@ -1,18 +1,29 @@
 <template lang="pug">
   .loading(v-if='loading') Loading...
   .planetzone(v-else)
+
+    .guibox.message(v-if='noMoons')
+      .msg
+        strong Monde
+        p Um nun einen Mond (ein Projekt) hinzuzufügen, klickst du ebenfalls unten links neben deinem Avatar auf das „+“.
+
     .info
       div
         strong(v-if='currentSubjectData') Planet&nbsp;{{ currentSubjectData.name }}
       div(v-if='moonHover')
         strong Moon&nbsp;
         | {{ moonHover }}
-    planet(:subject='currentSubject', :data-levels='currentLevel')
-    .orbit-circle(v-if='projects.length')
+
+    planet(:subject='currentSubject', :data-levels='viewLevel')
+
     ul.levels
-     li(v-for='level in subjectLevels', :class="{ 'is-active' : (level == currentLevel) }") {{ level }}
-    .orbit-wrap(:class='moonCount')
-      router-link(v-for='project in projects', :key='project.slug', @mouseover.native='moonHover = project.name', @mouseleave.native='moonHover = null',  :to='"/project/" + currentSubject + "/" + project.slug').orbit
+      li(v-for='level in subjectLevels', :class="{ 'is-active' : (level == viewLevel), 'levelUnavailable': (levelValue(level) > levelValue(currentLevel)) }")
+        router-link(:to=" '/subject/' + currentSubject + '/' + level ", v-if="levelValue(level) <= levelValue(currentLevel)") {{ level }}
+        .level(v-else) {{ level }}
+
+    .orbit-circle(v-if='projects.length')
+    .orbit-wrap(:class="moonCount")
+      router-link(v-for='project in projectsPerLevel[viewLevel]', :key='project.slug', @mouseover.native='moonHover = project.name', @mouseleave.native='moonHover = null',  :to='"/project/" + currentSubject + "/" + project.slug', :class="{ 'hideMoons': hideMoons }").orbit
         moon
 </template>
 
@@ -33,13 +44,37 @@ export default {
       moonHover: null,
       loading: true,
       currentLevel: null,
-      subjectLevels: null
+      viewLevel: null,
+      subjectLevels: null,
+      projectsPerLevel: null,
+      hideMoons: false,
+      moonCount: 'moonN_0'
+    }
+  },
+  created () {
+    if (this.$route.params.level) {
+      this.viewLevel = this.$route.params.level
     }
   },
   mounted () {
     // console.log('subjectview mounted')
     this.getDb()
     this.getMyData()
+  },
+  watch: {
+    '$route' () {
+      if (this.$route.params.level !== this.viewLevel) {
+        this.hideMoons = true
+        setTimeout(t => {
+          this.viewLevel = this.$route.params.level
+          setTimeout(t => {
+            this.hideMoons = false
+            this.moonCount = 'moonN_' + this.projectsPerLevel[this.viewLevel].length
+          }, 500)
+        }, 500)
+      }
+
+    }
   },
   computed: {
     currentArea () {
@@ -48,13 +83,26 @@ export default {
     currentSubject () {
       return this.$route.params.subject
     },
-    moonCount () {
-      if (!this.projects) {
-        return 'moonN_0'
-      } else {
-        return 'moonN_' + this.projects.length
+    noMoons () {
+      if (this.projectsPerLevel[this.viewLevel].length < 1) {
+        return true
       }
     },
+    // moonCount () {
+    //   if (!this.projects) {
+    //     return 'moonN_0'
+    //   } else {
+    //     // return 'moonN_' + this.projects.length
+    //     return this.projectsPerLevel[this.viewLevel].length
+    //   }
+    // },
+    // moonCount () {
+    //   if (!this.projects) {
+    //     return 'moonN_0'
+    //   } else {
+    //     return 'moonN_' + this.projects.length
+    //   }
+    // },
   },
   methods: {
     getMyData () {
@@ -71,10 +119,28 @@ export default {
         } else {
           currentLevel = 'BK'
         }
+        this.viewLevel = currentLevel
+
+        this.setProjectsPerLevel()
 
         this.currentLevel = currentLevel
         this.loading = false
       })
+    },
+    setProjectsPerLevel () {
+      let perLevel = {
+        BK: [],
+        GK: [],
+        AK: [],
+        AK1: [],
+        AK2: []
+      }
+      this.projects.forEach(p => {
+        perLevel[p.level].push(p)
+      })
+      this.projectsPerLevel = perLevel
+
+      this.moonCount = 'moonN_' + this.projectsPerLevel[this.viewLevel].length
     },
     sortLevels (arrayToSort) {
       // useage: levels = this.sortLevels(levels)
@@ -86,6 +152,13 @@ export default {
         }
       })
       return newArray
+    },
+    levelValue (level) {
+      if (level == 'BK') return 1
+      if (level == 'GK') return 2
+      if (level == 'AK') return 3
+      if (level == 'AK1') return 3
+      if (level == 'AK2') return 4
     },
     getDb () {
       this.$store.dispatch('getDb').then((response) => {
@@ -107,6 +180,7 @@ export default {
 $orbit: 30vh
 $planet: 25vh
 $moon: 4vh
+$moonFix: 4.2vh
 
 @keyframes rotating
   from
@@ -144,6 +218,10 @@ $moon: 4vh
     width: $planet
     height: $planet
 
+.hideMoons
+  transition: all 500ms
+  opacity: 0
+
 
 .levels
   text-transform: uppercase
@@ -152,7 +230,8 @@ $moon: 4vh
   right: 2em
   display: flex
   font-size: .815rem
-  color: #fff
+  a
+    color: #fff
   line-height: .815
   li
     margin-left: .5em
@@ -161,10 +240,15 @@ $moon: 4vh
     padding: .6em
     &.is-active
       border: 1px solid $teal
-      color: $teal
-    &.is-active ~ li
+      a
+        color: $teal
+    // &.is-active ~ li
+    &.levelUnavailable
       border: 1px solid $lightgrey
-      color: $lightgrey
+      cursor: no-drop
+      a
+        color: $lightgrey
+    .levelUnavailable
 
 .orbit-circle
   height: ($orbit*2) - $moon
@@ -186,8 +270,9 @@ $moon: 4vh
     height: $orbit
     position: absolute
     transform-origin: bottom
+    transition: all 500ms
     .moon
-      width: $moon
+      width: $moonFix
       height: $moon
       border-radius: $moon/2
       &:hover
@@ -202,4 +287,30 @@ $rotation: 0
       $rotation: $rotation + (360deg / $ii)
       .orbit:nth-child(#{$i})
         transform: rotate($rotation)
+
+.guibox.message
+  position: fixed
+  width: 40vw
+  height: auto
+  z-index: 999
+  padding: 30px
+  left: 50vw
+  bottom: 10vh
+  margin: 0
+  transform: translateX(-50%)
+  display: flex
+  justify-content: center
+  align-items: center
+  text-align: left
+  padding: 1.5em 2em 2em 2em
+  .msg
+    width: 100%
+  strong
+    color: $teal
+    text-transform: uppercase
+    font-size: 1.1em
+    margin-bottom: 0.5em
+    display: block
+  p
+    line-height: 1.2em
 </style>

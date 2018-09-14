@@ -38,6 +38,7 @@ export default {
           }
           this.areanames.push(a)
         }
+        console.log(this.db);
       })
     }
   },

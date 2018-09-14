@@ -1,14 +1,18 @@
 <template lang="pug">
   #subjectslist
     div(v-if='loading')
-      h1 Loading...
-      //- subjects ...
-    el-card(v-else).subjects
+      Loading
+    el-card(shadow='never', v-else).subjects
       div(slot="header").header
-        span Meine Schüler
+        span Meine Schüler*innen
       el-collapse(v-model='activeSubjects')
-        el-collapse-item(:title='subject.name', :name='subject.name', v-for='subject in mySubjects.teachesSubjects', :key='subject.name').subject
-          el-card
+        el-collapse-item(v-for='subject in mySubjects.teachesSubjects', :key='subject.name', :title='subject.name', :name='subject.name', v-if="allMyStudents[subject.slug]").subject
+          template(slot='title')
+            icon(icon='people')
+            | &nbsp;
+            | {{ subject.name }}
+          el-card(shadow='never')
+            //- StudentList(:students='allMyStudents[subject.slug]', :subjectId='subject.id')
             StudentList(:students='subject.students', :subjectId='subject.id')
 </template>
 
@@ -20,13 +24,22 @@ export default {
   data () {
     return {
       activeSubjects: [],
-      loading: true
+      loading: true,
+      allMyStudents: {}
     }
   },
 
   computed: {
     userId () {
       return localStorage.getItem('userId')
+    }
+  },
+
+  methods: {
+    myStudents (subject) {
+      // console.log(subject);
+
+      return subject.students
     }
   },
 
@@ -42,14 +55,32 @@ export default {
         // simplify the response
         let teacher = JSON.parse(JSON.stringify(response.User))
         // add full names to students
-        teacher.teachesSubjects.forEach((subj) => {
-          subj.students.forEach((stud) => {
-            stud.fullName = stud.firstname + ' ' + stud.surname
-          })
-        })
+        // teacher.teachesSubjects.forEach((subj) => {
+        //   subj.students.forEach((stud) => {
+        //     stud.fullName = stud.firstname + ' ' + stud.surname
+        //   })
+        // })
+        // teacher.teachesProjects.forEach((proj) => {
+        //   proj.students.forEach((stud) => {
+        //     stud.fullName = stud.firstname + ' ' + stud.surname
+        //   })
+        // })
         return teacher
       },
       result (result) {
+        // fill out allMyStudents with student objects based on which classes the teacher owns, that the students have added
+        result.data.User.teachesProjects.forEach(p => {
+          if ( ! this.allMyStudents.hasOwnProperty(p.subject.slug)) {
+            this.allMyStudents[p.subject.slug] = []
+          }
+          p.students.forEach(s => {
+            if (! this.allMyStudents[p.subject.slug].find(n => n.id === s.id)) {
+              this.allMyStudents[p.subject.slug].push(s)
+            }
+          })
+        })
+        console.log(this.allMyStudents)
+
         this.loading = false
       }
     }
@@ -64,6 +95,10 @@ export default {
     border-bottom: 0 !important
 
   #subjectslist
+    .el-collapse-item__header
+      .sli-svg
+        transform: scale(0.8) translate(0px, 6px)
+
     .header
       font-weight: bold
       text-transform: uppercase

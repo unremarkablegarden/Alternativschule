@@ -2,8 +2,12 @@
   #selfEvaluations
     .title Kompetenzen
     .evals(v-if='selfEvaluations')
-      el-tabs(type='card', :loading='loading')
-        el-tab-pane(v-for='(level, index) in subjectLevels', :key='level', :label='level', :class='level')
+      el-tabs(type='border-card', :loading='loading', stretch)
+        el-tab-pane(v-for='(level, index) in subjectLevels', :key='level', :label="level", :class='level')
+          template(slot='label')
+            | &nbsp;&nbsp;&nbsp;&nbsp;
+            | {{ level }}
+            | &nbsp;&nbsp;&nbsp;&nbsp;
           .eval(v-for='e in competences', v-if='competencesLoaded')
             strong {{ e.name }}
             span &nbsp;— {{ getEvalValue(e.id, level) }}/10
@@ -403,7 +407,10 @@ export default {
 </style>
 
 <style lang="sass">
+  .el-tabs--border-card
+    box-shadow: none !important
   #selfEvaluations .el-tabs__item
     height: 32px
     font-size: 12px
+    line-height: 2.6em
 </style>

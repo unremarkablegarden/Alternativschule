@@ -1,9 +1,5 @@
 <template lang="pug">
   #subjectslist
-    //- el-row
-      el-col(:span='22', :offset='2')
-        strong Meine Themen
-    //- div(v-if='loadingSubjects') Loading...
     .allSubjects(v-loading='$apollo.loading')
       el-row(v-for='(subject, index) in allSubjects', :key='subject.name').subject
         el-col(:span='2').toggle
@@ -13,7 +9,7 @@
             el-collapse-item(:title='subject.name', :name='subject.name')
               .description {{ subject.description }}
               el-checkbox-group(v-model='subject.tutorLevels[0].levels', size='small', v-if='subject.toggle', @change='changeLevels(subject, subject.tutorLevels[0].levels)')
-                el-checkbox(v-for='level in levelsOptions', :key='level', :label='level', border) {{ level }}
+                el-checkbox(v-for='level in subject.levels', :key='level', :label='level', border) {{ level }}
 </template>
 
 <script>
@@ -31,7 +27,7 @@ export default {
       activeSubjects: [],
       dialogVisible: false,
       loadingSubjects: true,
-      levelsOptions: ['GK', 'BK', 'AK1', 'AK2'],
+      levelsOptions: ['BK', 'GK', 'AK', 'AK1', 'AK2'],
       userId: null
     }
   },
@@ -58,6 +54,8 @@ export default {
 
         // loop through subjects
         subjects.forEach((subject) => {
+          subject.levels = this.sortLevels(subject.levels)
+
           // add toggle to subjects the user is a teacher of
           subject.teachers.forEach((teacher) => {
             if (teacher.id == userId) {
@@ -86,6 +84,18 @@ export default {
   },
 
   methods: {
+    sortLevels (arrayToSort) {
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
+    },
+
     changeLevels (subject, newLevels) {
       let action
       let vars
@@ -109,7 +119,7 @@ export default {
           console.error('MISSING new tutorLevels object Id')
         }
       }
-      console.log(vars)
+      // console.log(vars)
 
       this.$apollo
         .mutate({
@@ -172,10 +182,12 @@ export default {
               subjectName = data.data.removeFromTeacherSubject.teachesSubjectsSubject.name
               this.activeSubjects = this.activeSubjects.filter(e => e !== subjectName)
             }
+            this.$apolloProvider.defaultClient.reFetchObservableQueries()
             this.$message({
               type: 'success',
               message: 'Subject ' + subjectName + ' ' + actionName
             })
+
           })
           .catch((error) => {
             console.error(error)
