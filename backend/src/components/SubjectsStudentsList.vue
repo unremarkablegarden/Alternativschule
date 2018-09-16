@@ -11,6 +11,8 @@
             icon(icon='people')
             | &nbsp;
             | {{ subject.name }}
+            span.right.count
+              | {{ subject.students.length }}&nbsp;&nbsp;
           el-card(shadow='never')
             //- StudentList(:students='allMyStudents[subject.slug]', :subjectId='subject.id')
             StudentList(:students='subject.students', :subjectId='subject.id')
@@ -37,8 +39,6 @@ export default {
 
   methods: {
     myStudents (subject) {
-      // console.log(subject);
-
       return subject.students
     }
   },
@@ -79,8 +79,7 @@ export default {
             }
           })
         })
-        console.log(this.allMyStudents)
-
+        // console.log(this.allMyStudents)
         this.loading = false
       }
     }

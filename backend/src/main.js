@@ -20,6 +20,25 @@ Vue.use(Element, { locale })
 // import AlertIcon from 'vue-ionicons/dist/ios-alert.vue'
 // Vue.component('alert-icon', AlertIcon)
 
+// import GlobalMethods from '@/mixins/GlobalMethods'
+// Vue.mixin(GlobalMethods)
+
+// import GlobalMethods from './plugins/GlobalMethods'
+// Vue.use(GlobalMethods)
+
+Vue.prototype.$sortLevels = function (arrayToSort) {
+  // useage: levels = this.sortLevels(levels)
+  let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+  let newArray = []
+  arrayOrder.forEach((level) => {
+    if (arrayToSort.includes(level)) {
+      newArray.push(level)
+    }
+  })
+  return newArray
+}
+
+
 import SimpleLineIcons from 'vue-simple-line'
 Vue.component('icon', SimpleLineIcons)
 

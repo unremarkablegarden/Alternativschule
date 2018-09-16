@@ -6,6 +6,7 @@ query userStudentById($id: ID!) {
     surname
     avatar
     avatarColor
+    avatarImg
     studiesSubjects {
       id
       name
@@ -47,7 +48,7 @@ query userStudentById($id: ID!) {
       id
       name
       slug
-      level
+      levels
       selfLearn
       subject {
         id

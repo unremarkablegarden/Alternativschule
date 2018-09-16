@@ -9,7 +9,9 @@
     router-link(:to='addLink')
       img(src='@/assets/gfx/icons/add.svg')
   .avatar(:data-color='myData.avatarColor')
-    img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"')
+    .avatarImg-wrapper(v-if='myData.avatarImg')
+      img(:src='myData.avatarImg').avatarImg
+    img(v-else, :src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"')
 </template>
 
 <script>
@@ -72,6 +74,7 @@ export default {
             node {
               avatar
               avatarColor
+              avatarImg
             }
             updatedFields
           }
@@ -82,9 +85,10 @@ export default {
           }
         },
         result (data) {
-          // console.log('subscription')
+          console.log('subscription: avatar updated');
           this.myData.avatar = data.data.User.node.avatar
           this.myData.avatarColor = data.data.User.node.avatarColor
+          this.myData.avatarImg = data.data.User.node.avatarImg
         }
       }
     }
@@ -121,9 +125,18 @@ export default {
         right: -45px
         // right: 0
     .avatar
+      .avatarImg-wrapper
+        height: 90px
+        width: 90px
+        overflow: hidden
+        border-radius: 90px
+      .avatarImg
+        height: 90px
+        width: auto !important
+        max-width: none
       width: 100px
       height: 100px
-      padding: 20px
+      padding: 5px
       display: flex
       align-items: center
       justify-content: center

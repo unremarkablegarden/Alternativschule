@@ -115,8 +115,9 @@ export default {
         background-size: cover
         // padding-right: 8%
         background-position: -1em 0
-        max-width: 100px
+        max-width: 90px
         border-bottom: 1px white solid
+        // border-left: 1px white solid
       .bar .inner
         height: 13vh
     &.large

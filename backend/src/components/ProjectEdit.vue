@@ -20,9 +20,9 @@
             el-form-item(label='Published', prop='published')
               el-switch(v-model='form.isPublished')
 
-        el-form-item(label='Level', prop='level')
-          el-radio-group(v-model='form.level', size='small')
-            el-radio(v-for='level in subjectLevels', :key='level', :label='level', border) {{ level }}
+        el-form-item(label='Levels', prop='levels')
+          el-checkbox-group(v-model='form.levels', size='small')
+            el-checkbox(v-for='level in subjectLevels', :key='level', :label='level', border) {{ level }}
 
         el-form-item
           el-button(type='primary', @click="submitForm('form')", :loading='loading', icon='el-icon-check')
@@ -46,7 +46,7 @@ export default {
           name: '',
           description: '',
           selfLearn: false,
-          isPublished: false,
+          isPublished: true,
           subject: ''
         }
       }
@@ -63,7 +63,7 @@ export default {
         description: [
           { required: true, message: 'Please input a description', trigger: 'change' }
         ],
-        level: [
+        levels: [
           { required: true, message: 'Select a level', trigger: ['blur', 'change'] }
         ]
       },
@@ -74,6 +74,7 @@ export default {
   },
   created() {
     this.form = JSON.parse(JSON.stringify(this.projectData))
+    // console.log(this.form);
   },
   methods: {
     submitForm(formName) {
@@ -92,8 +93,8 @@ export default {
 
     apolloMutation () {
       this.loading = true
-      const formCopy = Object.assign({}, this.form)
-      this.$refs.form.resetFields()
+      let formCopy = Object.assign({}, this.form)
+      // this.$refs.form.resetFields()
 
       this.$apollo.mutate({
         mutation: PROJECT_EDIT,
@@ -104,7 +105,7 @@ export default {
           description: formCopy.description,
           selfLearn: formCopy.selfLearn,
           isPublished: formCopy.isPublished,
-          level: formCopy.level
+          levels: formCopy.levels
         },
         // updateQueries: {
         //   mySubjects: (prev, { mutationResult }) => {
@@ -122,7 +123,8 @@ export default {
         console.log(data)
 
         this.$apolloProvider.defaultClient.reFetchObservableQueries()
-
+        formCopy = null
+        this.$refs.form.resetFields()
         this.loading = false
         this.dialogVisible = false
       })
@@ -141,18 +143,6 @@ export default {
       Object.keys(obj).forEach((k) => { obj[k] = null })
     },
 
-    sortLevels (arrayToSort) {
-      // useage: levels = this.sortLevels(levels)
-      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
-      let newArray = []
-      arrayOrder.forEach((level) => {
-        if (arrayToSort.includes(level)) {
-          newArray.push(level)
-        }
-      })
-      return newArray
-    }
-
   },
   apollo: {
     subjectLevels: {
@@ -167,7 +157,7 @@ export default {
         }
       },
       update (result) {
-        return this.sortLevels(result.Subject.levels)
+        return this.$sortLevels(result.Subject.levels)
       },
     }
   }

@@ -9,8 +9,11 @@ import locale from 'element-ui/lib/locale/lang/de'
 import Element from 'element-ui'
 Vue.use(Element, { locale })
 
-import TreeView from "vue-json-tree-view"
-Vue.use(TreeView)
+// import TreeView from "vue-json-tree-view"
+// Vue.use(TreeView)
+
+import Loading from '@/components/Loading'
+Vue.component('Loading', Loading)
 
 Vue.config.productionTip = false
 

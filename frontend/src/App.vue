@@ -103,6 +103,20 @@ export default {
   body
     background-image: url('assets/gfx/stars.svg')
     background-size: contain
+  body, body *, .side-menu
+    &::-webkit-scrollbar
+      background-color: #33336675
+      width: 8px
+      border-radius: 8px
+    &::-webkit-scrollbar-track
+      // background-color: #00000075
+    &::-webkit-scrollbar-thumb
+      background-color: #24dcb3
+      border-radius: 8px
+      // border: 4px solid #0FF
+    &::-webkit-scrollbar-button
+      display: none
+
 
   .logout
     position: fixed

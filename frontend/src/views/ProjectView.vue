@@ -1,91 +1,68 @@
 <template lang="pug">
 .levelNav
   .guibox
-    .loading(v-if='loadingData || loadingUser') Loading...
+    .loading(v-if='loadingData || loadingUser')
+      Loading
     div(v-else)
       levelnav(v-if='!isSpacestation')
       .spacestationspacer(v-else)
       .columns.under-level-nav
-        .side-menu.column.is-3
+        .side-menu.column.is-4
           ul
             div(v-if='myProjects.length').my-projects
               li.section-title(v-if="myProjects") Meine Projekte
               li(v-for="project in myProjects")
                 router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                   | {{ project.name }}
-                  | ({{ project.level }})
+                  | ({{ project.levels.join('/') }})
 
             li.section-title(v-if="availableProjects.length") Verfügbare Projekte
             li(v-for="project in availableProjects", v-if="availableProjects.length")
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                 | {{ project.name }}
-                | ({{ project.level }})
+                | ({{ project.levels.join('/') }})
 
             li.section-title(v-if="availableSelfLearnProjects.length") Selbslernbox
             li(v-for="project in availableSelfLearnProjects", v-if='availableSelfLearnProjects.length')
               router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                 | {{ project.name }}
-                | ({{ project.level }})
+                | ({{ project.levels.join('/') }})
 
-        .main.column.is-8.is-offset-1
+        .main.column.is-8
           //- xmp {{ availableProjects }}
           .tabs.is-boxed(v-if="tab !== 'projectview-home'")
             ul
               li(:class="{ 'is-active' : (tab == 'projectview') }")
                 router-link(:to='"/project/" + currentSubject + "/" + project') Info
               li(:class="{ 'is-active' : (tab == 'projectview-material') }")
-                router-link(:to='"/project/" + currentSubject + "/" + project + "/material"') Material
+                router-link(:to='"/project/" + currentSubject + "/" + project + "/material"', v-if=' currentProjectData.materials.length')
+                  | Material ({{ currentProjectData.materials.length }})
+                .txt(v-else)
+                  | Material
           .tab-content.info(v-if="tab == 'projectview-home'")
             h2.title Wählen Sie ein Projekt aus...
 
           .tab-content.info(v-if="tab == 'projectview'")
-            //- xmp {{ currentProjectData }}
             .columns.is-gapless.no-mb
               .column.is-9
-                h2.title Projekt: {{ currentProjectData.name }}
-              .column.is-3(v-if='studentCanAdd(currentProjectData)')
-                el-button(v-if='projectAvailable === true', type='danger', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
+                h2.title
+                  | Projekt: {{ currentProjectData.name }}
+                  span(v-if='currentProjectData.selfLearn') &nbsp;(Selbslernbox)
+              .column.is-3(v-if='studentCanAdd(currentProjectData)').addButtonContainer
+                el-button(v-if='projectAvailable === true', type='success', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
                 el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)', :loading='submitting') Löschen
 
             .level
-              strong Level:&nbsp;
-                | {{ currentProjectData.level }}
+              strong Levels:&nbsp;
+                | {{ currentProjectData.levels.join('/') }}
             p.description {{ currentProjectData.description }}
 
-          .tab-content.material(v-if="tab == 'projectview-material'")
-            ul
-              li(data-type = 'pdf')
+          ul.tab-content.material(v-if="tab == 'projectview-material'")
+            a(v-for='(material, index) in currentProjectData.materials', :key='index', , :href='materialLink(material)', target='_blank').materialLink
+              li(:data-type='material.contentType')
                 .text
-                  .title Arbeitsbogen
-                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
-              li(data-type = 'video')
-                .text
-                  .title Video
-                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
-              li(data-type = 'pdf')
-                .text
-                  .title Arbeitsbogen
-                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
-              li(data-type = 'video')
-                .text
-                  .title Video
-                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
-              li(data-type = 'pdf')
-                .text
-                  .title Arbeitsbogen
-                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
-              li(data-type = 'video')
-                .text
-                  .title Video
-                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
-              li(data-type = 'pdf')
-                .text
-                  .title Arbeitsbogen
-                  p Nam porttitor blandit accumsan. Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur.
-              li(data-type = 'video')
-                .text
-                  .title Video
-                  p Ut vel dictum sem, a pretium dui. In malesuada enim in dolor euismod, id commodo mi consectetur. Nam porttitor blandit accumsan.
+                  .title {{ material.name }}
+                  p {{ material.description }}
 </template>
 
 <script>
@@ -165,6 +142,10 @@ export default {
 
   },
   methods: {
+    materialLink(material) {
+      if (material.uploadUrl) return material.uploadUrl
+      else return material.linkUrl
+    },
     studentCanAdd(currentProjectData) {
       let studentSubjectLevel
       const studentSubjectLevelObj = this.myData.studentLevels.find(o => o.subject.id === this.currentSubjectData.id)
@@ -173,10 +154,14 @@ export default {
       } else {
         studentSubjectLevel = 'BK'
       }
-      if (this.levelValue(studentSubjectLevel) >= this.levelValue(currentProjectData.level) || this.isSpacestation) {
-        return true
+
+      // let highestProjectLevel = this.sortLevels(currentProjectData.levels)
+      // highestProjectLevel = highestProjectLevel[highestProjectLevel.length-1]
+      let lowestProjectLevel = this.sortLevels(currentProjectData.levels)
+      if (this.levelValue(studentSubjectLevel) >= this.levelValue(lowestProjectLevel[0]) || this.isSpacestation) {
+      	return true
       } else {
-        return false
+      	return false
       }
     },
     levelValue (level) {
@@ -185,6 +170,17 @@ export default {
       if (level == 'AK') return 3
       if (level == 'AK1') return 3
       if (level == 'AK2') return 4
+    },
+    sortLevels (arrayToSort) {
+      // useage: levels = this.sortLevels(levels)
+      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+      let newArray = []
+      arrayOrder.forEach((level) => {
+        if (arrayToSort.includes(level)) {
+          newArray.push(level)
+        }
+      })
+      return newArray
     },
     addProject (projectId) {
       const id = localStorage.getItem('userId')
@@ -352,7 +348,6 @@ export default {
     },
 
     isProjectAvailable() {
-      // console.log('avail?')
       if (this.currentProjectData) {
         if (this.myProjects.find(o => o.id === this.currentProjectData.id)) {
           this.projectAvailable = false
@@ -376,32 +371,59 @@ export default {
 }
 </script>
 
+<style lang="sass">
+  @import "@/assets/styles/variables.sass"
+  .levelNav .el-button--success
+    background-color: darken($teal, 10)
+    text-shadow: 0.5px 0.5px 3px darken($teal, 25)
+    &:hover
+      background-color: lighten($teal, 10)
+</style>
+
+
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
+
+
+  $guiH: calc(100vh - 100px)
+  // $levelNav: 16vh + margin-bottom: 4vh
+  $wrapH: calc(80vh - 108px)
+  $contentH: calc(80vh - 139px - 3rem)
+
+  .addButtonContainer *
+    float: right
 
   .guibox
     text-align: left
     padding: 1.5em
+    padding-bottom: 0
     overflow-x: hidden
-    overflow-y: auto
+    // overflow-y: auto
+    overflow-y: hidden
     // div
-      border: 1px red solid
+    // border: 1px red solid
+    height: $guiH
 
   .spacestationspacer
     height: 20px
 
   .under-level-nav
     // background: blue
-    height: calc(77vh - 100px)
+    // height: calc(77vh - 100px)
+    // height: calc(77vh - 86px)
+    height: $wrapH
 
   .no-mb
     margin-bottom: 0 !important
 
   .side-menu
     font-family: $A
-    font-size: 1.125em
+    // font-size: 1.125em
+    font-size: 1.1em
+    padding-right: 1.5em
+    padding-bottom: 0
     position: relative
-    overflow-y: scroll
+    overflow-y: auto
     // height: calc(70vh - 100px - 3rem)
     ul
       border-top: 1px solid $lightgrey
@@ -410,7 +432,7 @@ export default {
         margin-bottom: 1.2em
         padding-bottom: 1.2em
         border-bottom: 1px solid $lightgrey
-        line-height: 1
+        line-height: 1.2
         a
           color: #fff
           &:hover, &.router-link-active
@@ -427,9 +449,15 @@ export default {
         padding: 0 .5em 0 0
         border: none
   .main
+    padding-bottom: 0
     .tabs
       a
         color: #fff
+      .txt
+        // background: red
+        padding: 0 1em
+        opacity: 0.5
+        cursor: no-drop
       ul
         border-color: $teal
         li.is-active a, li a:hover
@@ -441,36 +469,60 @@ export default {
       color: #fff
       margin-bottom: .75em
     .tab-content
-      overflow-x: scroll
-      max-height: calc(70vh - 100px - 2rem)
+      overflow-x: hidden
+      // max-height: calc(70vh - 100px - 2rem)
+      max-height: $contentH
+      // background: red
       &.info
-        padding-right: 2em
+        // padding-right: 2em
       p.description
         margin-bottom: 2em
       strong
         color: #fff
     .material
+      .materialLink:hover
+        cursor: pointer
+        li
+          background-color: #70F3D220
       li
+        &:hover
+          cursor: pointer
         font-family: $A
         display: flex
-        margin-bottom: 2em
+        padding: 1em
+        border-radius: 10px
         .title
-          font-size: 1.2rem
+          font-size: 1.1rem
+          line-height: 1.2em
+          margin-bottom: 0.5em
+          margin-top: 0.2em
           color: #fff
           text-transform: uppercase
         p
           font-size: .8rem
-          color: #666
+          color: #AAA
         &::before
           content: ''
-          width: 120px
           height: auto
           display: block
-          margin-right: 1em
-      li[data-type='pdf']::before
-        background: url('../assets/gfx/icons/pdf_icon.svg')
+          margin-right: 1.5em
+
+      li[data-type='Link']::before
+        background: url('../assets/gfx/icons/link_icon.svg')
         background-repeat: no-repeat
-      li[data-type='video']::before
-        background: url('../assets/gfx/icons/video_icon.svg')
+        background-size: contain
+        width: 60px
+        height: 60px
+      li[data-type='PDF']::before
+        background: url('../assets/gfx/icons/text_document_icon.svg')
         background-repeat: no-repeat
+        background-size: contain
+        width: 60px
+        height: 60px
+      li[data-type='Video']::before, li[data-type='Bild']::before
+        background: url('../assets/gfx/icons/rich_media_icon.svg')
+        background-repeat: no-repeat
+        background-size: contain
+        width: 60px
+        height: 60px
 </style>

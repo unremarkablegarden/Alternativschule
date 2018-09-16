@@ -6,23 +6,24 @@
           template(slot='title')
             //- .title(v-if='project.selfLearn')
             //- {{ !project.selfLearn ? project.name + " (" + project.level + ")" : project.name + " (" + project.level + ", Selbstlernbox)" }}
-            icon(icon='doc')
+            icon(icon='doc', v-if='project.isPublished')
+            icon(icon='ghost', v-else)
             | {{ project.name }}
 
-            strong.level.right
-              | {{ project.level }}
+            .levels.right
+              | {{ project.levels.join('/') }}
               | &nbsp;&nbsp;&nbsp;
             //- el-icon-news
           .description {{ project.description }}
           .horizontal
             .level.meta
               i.el-icon-d-caret
-              | Level
-              .level-box {{ project.level }}
+              | Levels
+              .level-box(v-for='level in project.levels') {{ level }}
             .isPublished.meta(v-if='project.isPublished')
               i.el-icon-check
               | Ist veröffentlicht
-            .isPublished.meta(v-else)
+            .isPublished.not.meta(v-else)
               i.el-icon-close
               | Nicht veröffentlicht
           br
@@ -30,7 +31,7 @@
             el-col(:span='14')
             //- el-col(:span='10')
           .horizontal
-            ProjectEdit(:projectData='{ id: project.id, name: project.name, description: project.description, level: project.level, selfLearn: project.selfLearn, isPublished: project.isPublished, subject: subjectId }')
+            ProjectEdit(:projectData='{ id: project.id, name: project.name, description: project.description, levels: project.levels, selfLearn: project.selfLearn, isPublished: project.isPublished, subject: subjectId }')
 
             DeleteProjectButton(:id='project.id')
 
@@ -82,15 +83,15 @@ export default {
   i
     margin-right: 5px
   .level-box
-    margin-left: 10px
+    margin-left: 5px
     padding: 0 5px
     border: 1px #CCC solid
-    border-radius: 3px
+    border-radius: 4px
     display: inline-block
   .box
     padding: 1em 0
     margin: 1em 0
-  .level
+  .level, .levels
     font-size: 0.86em
   ul, li
     padding: 0
@@ -98,4 +99,6 @@ export default {
   ul
     margin-top: 0.5em
     padding-left: 1.25em
+  .isPublished.not
+    color: #e53c3c
 </style>

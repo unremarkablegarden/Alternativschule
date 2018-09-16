@@ -83,7 +83,12 @@ export default {
         let fileOrLink = false
         if (valid && localStorage.getItem('userId') && this.id) {
           this.loading = true
-          this.uploadFile()
+          if (this.isFile()) {
+            this.uploadFile()
+          }
+          if (this.isLink()) {
+            this.addMaterialApollo()
+          }
         } else {
           this.$message({
             type: 'error',
@@ -93,6 +98,7 @@ export default {
         }
       });
     },
+
 
     uploadFile () {
       const file = this.$refs.file.$children[0].fileList[0].raw
@@ -119,10 +125,17 @@ export default {
         })
         .catch((err) => {
           this.loading = false
-          this.$message({
-            type: 'error',
-            message: err
-          })
+          // if (err.data.error.message == 'Invalid resource') {
+          //   this.$message({
+          //     type: 'error',
+          //     message: 'File rejected. Try another one.'
+          //   })
+          // } else {
+            this.$message({
+              type: 'error',
+              message: err
+            })
+          // }
           console.error('err', err)
         })
     },

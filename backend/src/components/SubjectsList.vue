@@ -9,7 +9,8 @@
             icon(icon='docs')
             | &nbsp;
             | {{ subject.name }}
-          //- el-card(shadow='never').box
+            span.right.count
+              | {{ countProjectsBySubject(subject.slug) }}&nbsp;&nbsp;&nbsp;
           el-row
             el-col(:span='9')
               .description {{ subject.description }}
@@ -46,14 +47,28 @@ export default {
       update (response) {
         // simplify the response
         // console.log(response.User)
-        return JSON.parse(JSON.stringify(response.User))
+        const subs = JSON.parse(JSON.stringify(response.User))
+        subs.teachesProjects.forEach(p => {
+          p.levels = this.$sortLevels(p.levels)
+        })
+        return subs
       },
       result (result) {
         this.loading = false
-        console.log(this.mySubjects)
+      }
+    }
+  },
+  methods: {
+    countProjectsBySubject (slug) {
+      const projects = this.mySubjects.teachesProjects.filter(s => s.subject.slug === slug)
+      if (projects.length) {
+        return projects.length
+      } else {
+        return 0
       }
     }
   }
+
 }
 </script>
 
@@ -61,9 +76,26 @@ export default {
 #subjectslist .el-collapse-item__header
   .sli-svg
     transform: scale(0.8) translate(0px, 6px)
+  .count
+    font-size: 0.7em
+    background: #f0f0f0
+    width: 25px
+    text-align: center
+    display: flex
+    justify-content: center
+    align-items: center
+    padding-left: 8px
+    height: 20px
+    margin-right: 15px
+    margin-top: 14px
+    border-radius: 10px
+    // font-weight: bold
 </style>
 
 <style lang="sass" scoped>
+  .description
+    font-size: 1em
+    line-height: 1.66em
   .subjects
     min-height: 30vh
   .box

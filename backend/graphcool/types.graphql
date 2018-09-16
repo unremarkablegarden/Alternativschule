@@ -23,6 +23,7 @@ type User @model {
   userType: UserTypes
   avatar: Int @defaultValue(value: "1")
   avatarColor: String @defaultValue(value: "blue")
+  avatarImg: String
 
   prefect: Boolean @defaultValue(value: "false") @migrationValue(value: "false")
   # relations
@@ -95,7 +96,7 @@ type Project @model {
   students: [User!]! @relation(name: "StudentProject")
   selfLearn: Boolean! @defaultValue(value: "false")
   isPublished: Boolean! @defaultValue(value: "true")
-  level: Levels!
+  levels: [Levels!]! @migrationValue(value: "[BK]") # was singular
 }
 
 type Competence @model {

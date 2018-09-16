@@ -46,9 +46,21 @@ query allSubjects {
       name
       slug
       description
-      level
+      levels
       isPublished
       selfLearn
+      materials {
+        id
+        name
+        description
+        contentType
+        uploadUrl
+        linkUrl
+        project {
+          id
+          slug
+        }
+      }
     }
   }
 }

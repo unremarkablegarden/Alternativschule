@@ -5,8 +5,10 @@
         el-row.material(v-for='(material, index) in sortedMaterials', :key='material.id')
           el-col(:span='3')
             .typ
-              i(v-if="material.contentType == 'Bild'").el-icon-picture
-              i(v-if="material.contentType == 'PDF'").el-icon-document
+              icon(icon='picture', v-if="material.contentType == 'Bild'")
+              icon(icon='notebook', size='small', v-if="material.contentType == 'PDF'")
+              icon(icon='link', v-if="material.contentType == 'Link'")
+              icon(icon='film', v-if="material.contentType == 'Video'")
               | &nbsp;
           el-col(:span='16')
             .name {{ material.name }}
@@ -15,11 +17,7 @@
           el-col(:span='2').delete
             MaterialDelete(:id='material.id')
 
-          //- a(:href='material.linkUrl', target='_blank') {{ material.name }}
-
       MaterialAdd(:id='id')
-      //- br
-      //- el-button(size='mini', icon='el-icon-upload2') Material hochladen
 </template>
 
 <script>
@@ -90,6 +88,14 @@ export default {
 <style lang="sass">
   .smallbutt
     padding: 0 !important
+    font-size: 1.4em
+  .materialslist
+    i
+      // height: 18px
+      // width: 18px
+      // font-size: 2em
+    button i
+      // font-size: 1em
 </style>
 
 <style lang="sass" scoped>
@@ -106,8 +112,12 @@ export default {
   .materials
     margin-bottom: 1em
   .typ
-    padding-left: 3px
-    padding-top: 1px
+    // padding-left: 3px
+    // padding-top: 1px
+    svg
+      width: 17px
+      height: 17px
+      margin-top: 2px
     i
       font-size: 18px
 

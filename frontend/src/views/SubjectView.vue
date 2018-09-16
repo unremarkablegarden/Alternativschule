@@ -4,7 +4,7 @@
 
     .guibox.message(v-if='noMoons')
       .msg
-        strong Monde
+        strong {{ viewLevel }} Monde
         p Um nun einen Mond (ein Projekt) hinzuzufügen, klickst du ebenfalls unten links neben deinem Avatar auf das „+“.
 
     .info
@@ -136,7 +136,9 @@ export default {
         AK2: []
       }
       this.projects.forEach(p => {
-        perLevel[p.level].push(p)
+        p.levels.forEach(l => {
+          perLevel[l].push(p)
+        })
       })
       this.projectsPerLevel = perLevel
 
@@ -295,7 +297,7 @@ $rotation: 0
   z-index: 999
   padding: 30px
   left: 50vw
-  bottom: 10vh
+  bottom: 3vh
   margin: 0
   transform: translateX(-50%)
   display: flex

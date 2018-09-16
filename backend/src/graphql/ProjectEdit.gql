@@ -1,6 +1,6 @@
 #import "./ProjectFragment.gql"
 
-mutation projectEdit ($id: ID!, $name: String!, $slug: String!, $description: String!, $selfLearn: Boolean!, $isPublished: Boolean!, $level: Levels!) {
+mutation projectEdit ($id: ID!, $name: String!, $slug: String!, $description: String!, $selfLearn: Boolean!, $isPublished: Boolean!, $levels: [Levels!]!) {
   updateProject(
     id: $id
     name: $name
@@ -8,7 +8,7 @@ mutation projectEdit ($id: ID!, $name: String!, $slug: String!, $description: St
     description: $description
     selfLearn: $selfLearn
     isPublished: $isPublished
-    level: $level
+    levels: $levels
   ) {
     ...Project
   }

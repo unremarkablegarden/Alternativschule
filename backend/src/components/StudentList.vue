@@ -53,22 +53,11 @@ export default {
       update (result) {
         // console.log('apollo sub levels')
         // console.log(result);
-        return this.sortLevels(result.Subject.levels)
+        return this.$sortLevels(result.Subject.levels)
       },
     }
   },
   methods: {
-    sortLevels (arrayToSort) {
-      // useage: levels = this.sortLevels(levels)
-      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
-      let newArray = []
-      arrayOrder.forEach((level) => {
-        if (arrayToSort.includes(level)) {
-          newArray.push(level)
-        }
-      })
-      return newArray
-    },
     buttonType (i, is) {
       if (i === is) return 'primary'
     },
@@ -201,8 +190,9 @@ export default {
   .note
     margin: 1em 0
   .studentlevels
-    margin-bottom: 1em
+    // margin-bottom: 1em
     margin-top: 1em
+    padding-bottom: 1em
   .studentlevels
     button
       margin: 0 0.5em 0 0
@@ -225,7 +215,8 @@ export default {
     border-bottom: 0 !important
 
   .subject.is-active .el-collapse-item__content .el-card__body
-    padding-bottom: 0.3em !important
+    // padding-bottom: 0.3em !important
+    padding-bottom: 0.0em !important
 
   #userslist .el-collapse-item__wrap
     border-bottom: 0 !important

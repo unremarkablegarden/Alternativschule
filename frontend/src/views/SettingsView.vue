@@ -1,6 +1,8 @@
 <template lang="pug">
 .wrapper
-  .guibox.columns(v-if='!loading')
+  .loading(v-if='loading')
+    Loading
+  .guibox.columns(v-else)
     .column.is-6.left-zone
       .avatar-grid.columns.is-multiline
          .column.is-3(v-for='(avatar, index) in avatars').avatar
@@ -12,8 +14,24 @@
     .column.right-zone
       .flex-wrap
         .avatar-wrap
-          .avatar.image(:class='myData.avatarColor')
-            img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"')
+          .uploadingImg(v-if='uploadingImg')
+            i.el-icon-loading
+            br
+            strong Uploading...
+          .avatar.image(:class='myData.avatarColor', v-else)
+            .avatarImg-wrapper(v-if='uploadUrl')
+              img(:src='uploadUrl').builtin
+            .avatarImg-wrapper(v-else-if='myData.avatarImg')
+              img(:src='myData.avatarImg').builtin
+            img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"', v-else).builtin
+
+            //- img(:src='uploadUrl', v-else).builtin
+
+            el-upload.avatar-uploader.hide(action='/', :auto-upload='false', :show-file-list='false', drag, accept='image/*', :on-change='formChanged', ref='file', v-if='uploadUrl == false')
+              //- , :class='{ hide : (uploadUrl == false) }'
+              //- img.avatar(v-if='uploadUrl', :src='uploadUrl')
+              i.el-icon-upload.avatar-uploader-icon
+
         .info
           el-form(:model='form', ref='form', :rules='rules', @keyup.enter.native="submitForm('form')").form
             p Benutzername
@@ -32,6 +50,7 @@
 
 <script>
 import gql from 'graphql-tag'
+import axios from 'axios'
 // import ACCOUNT_PASSWORD_RESET from '../graphql/AccountPasswordReset.gql'
 import bcryptjs from 'bcryptjs'
 
@@ -63,8 +82,11 @@ export default {
     };
 
     return {
+      fileToUpload: null,
+      uploadUrl: false,
       disableSubmit: true,
       loading: true,
+      uploadingImg: false,
       avatars: [
         '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
       ],
@@ -101,11 +123,14 @@ export default {
         this.myData = data
         this.form.username = this.myData.username
         // console.log(this.myData)
+        console.log('ava img: '+this.myData.avatarImg)
         this.loading = false
       })
     },
     changeAvatar (i) {
       this.myData.avatar = i
+      this.uploadUrl = null
+      this.myData.avatarImg = null
       this.apolloAvatar()
       console.log(this.myData)
     },
@@ -115,22 +140,32 @@ export default {
     },
     apolloAvatar () {
       const id = localStorage.getItem('userId')
+      let newImage
+      if (this.uploadUrl) {
+        newImage = this.uploadUrl
+      } else if (this.myData.avatarImg) {
+        newImage = this.myData.avatarImg
+      } else {
+        newImage = null
+      }
       this.$apollo.mutate({
-        mutation: gql`mutation ($id: ID!, $avatar: Int!, $avatarColor: String!) {
-          updateUser(id: $id, avatar: $avatar, avatarColor: $avatarColor) {
+        mutation: gql`mutation ($id: ID!, $avatar: Int!, $avatarColor: String!, $avatarImg: String) {
+          updateUser(id: $id, avatar: $avatar, avatarColor: $avatarColor, avatarImg: $avatarImg) {
             id
             username
             avatar
             avatarColor
+            avatarImg
           }
         }`,
         variables: {
           id: id,
           avatar: this.myData.avatar,
-          avatarColor: this.myData.avatarColor
+          avatarColor: this.myData.avatarColor,
+          avatarImg: newImage
         },
         update: (store, { data }) => {
-          this.$apolloProvider.defaultClient.reFetchObservableQueries()
+
         }
       }).then((data) => {
         // console.log('then')
@@ -138,6 +173,8 @@ export default {
            type: 'success',
            message: 'Avatar Gespeichert'
         })
+        this.$apolloProvider.defaultClient.reFetchObservableQueries()
+        this.uploadingImg = false
         console.log(data)
       }).catch((error) => {
         console.error(error)
@@ -145,6 +182,7 @@ export default {
           type: 'error',
           message: error
         })
+        this.uploadingImg = false
       })
     },
 
@@ -208,16 +246,123 @@ export default {
             })
           })
         }
-    }
+    },
+
+    formChanged () {
+      this.uploadingImg = true
+      const file = this.$refs.file.$children[0].fileList[0].raw
+      this.$refs.file.clearFiles()
+      const maxFileSize = 500 * 1024 // 500kb
+      if (file.size > maxFileSize) {
+        this.$message({
+          type: 'error',
+          message: 'File too large (max 500kb)'
+        })
+        this.uploadingImg = false
+      } else if (!file.type.includes('image')) {
+        this.$message({
+          type: 'error',
+          message: 'File must be an image'
+        })
+        this.uploadingImg = false
+      } else {
+        this.fileToUpload = file
+        this.uploadFile()
+      }
+      console.log(file)
+      // this.uploadFile()
+    },
+
+    uploadFile () {
+      // const file = this.$refs.file.$children[0].fileList[0].raw
+      const file = this.fileToUpload
+      // this.form.file = file
+      const clConf = {
+        cloud_name: 'nilsolleoskar',
+        secure: true,
+        unsignedUploadPreset: 'jnlwa8it'
+      }
+      const url = 'https://api.cloudinary.com/v1_1/' + clConf.cloud_name + '/upload'
+
+      let fd = new FormData()
+      fd.append("upload_preset", clConf.unsignedUploadPreset)
+      fd.append("file", file)
+
+      const config = { headers: { "X-Requested-With": "XMLHttpRequest" } }
+
+      axios.post(url, fd, config)
+        .then((res) => {
+          const response = res.data
+          const url = response.secure_url
+          this.uploadUrl = url
+          this.apolloAvatar()
+        })
+        .catch((err) => {
+          this.$message({
+            type: 'error',
+            message: err
+          })
+          console.error('err', err)
+          this.uploadingImg = false
+        })
+    },
   }
 }
 </script>
 
+<style lang="sass">
+  .el-upload-dragger
+    width: 27vw !important
+    height: 27vw !important
+    border-radius: 27vw !important
+    transition: all 500ms !important
+    border: 0
+    background: transparent
+    &.is-dragover
+      background: #FFF40 !important
+    .el-icon-upload
+      margin-top: 11vw !important
+  .hide .el-upload-dragger
+    opacity: 0 !important
+    border: 1px dashed #d9d9d9
+  .hide .el-upload-dragger.is-dragover
+    opacity: 1 !important
+</style>
+
 <style lang="sass" scoped>
   @import "@/assets/styles/variables.sass"
+
+  .avatarImg-wrapper
+    overflow: hidden
+    width: 22vw
+    height: 22vw
+    border-radius: 22vw
+
+  .builtin
+    height: 22vw !important
+    // width: 22vw !important
+    width: auto !important
+    max-width: none
+    border-radius: 22vw
+
+  .uploadingImg
+    width: 22vw
+    height: 22vw
+    display: flex
+    justify-content: center
+    align-items: center
+    color: #CCC !important
+
+  .avatar-uploader
+    position: fixed
+    width: 27vw
+    height: 27vw
+    border-radius: 27vw
+    // &.hide
+      // opacity: 0 !important
   .guibox
     text-align: left
-    overflow-x: scroll
+    overflow-x: hide
   .left-zone
     border-right: 2px solid $teal
     .avatar-grid
@@ -237,9 +382,9 @@ export default {
         display: flex
         align-items: center
         .dot
-          height: 50px
-          width: 50px
-          border-radius: 25px
+          height: 3.5vw
+          width: 3.5vw
+          border-radius: 3.5vw
           &:hover
             border: 2px solid #fff
             cursor: pointer
@@ -260,16 +405,17 @@ export default {
       .avatar-wrap
         padding: 2rem
         .avatar
-          width: 300px
-          height: 300px
-          border-radius: 150px
+          // width: 300px
+          // height: 300px
+          border-radius: 100%
           padding: 1em
           display: flex
           align-items: center
           justify-content: center
           margin: 0 auto
           img
-            width: 80%
+            width: 100%
+            // width: 80%
             height: auto
       .buttons
         display: flex
@@ -310,4 +456,5 @@ export default {
       margin: 1em 0 0.5em
     p.center
       margin-top: 1.5em
+
 </style>

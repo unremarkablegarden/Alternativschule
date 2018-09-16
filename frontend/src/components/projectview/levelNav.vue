@@ -133,7 +133,8 @@ export default {
       // border-top-right-radius: .8rem
       border-top-right-radius: 0.3rem
       transition: all, 200ms
-      background: $teal
+      background: darken($teal, 10)
+      text-shadow: 0.5px 0.5px 3px darken($teal, 25)
       border: 1px solid $teal
       margin-bottom: 1em
       // margin-bottom: 1.8em

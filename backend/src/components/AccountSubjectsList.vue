@@ -54,7 +54,7 @@ export default {
 
         // loop through subjects
         subjects.forEach((subject) => {
-          subject.levels = this.sortLevels(subject.levels)
+          subject.levels = this.$sortLevels(subject.levels)
 
           // add toggle to subjects the user is a teacher of
           subject.teachers.forEach((teacher) => {
@@ -84,17 +84,17 @@ export default {
   },
 
   methods: {
-    sortLevels (arrayToSort) {
-      // useage: levels = this.sortLevels(levels)
-      let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
-      let newArray = []
-      arrayOrder.forEach((level) => {
-        if (arrayToSort.includes(level)) {
-          newArray.push(level)
-        }
-      })
-      return newArray
-    },
+    //  (arrayToSort) {
+    //   // useage: levels = this.sortLevels(levels)
+    //   let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
+    //   let newArray = []
+    //   arrayOrder.forEach((level) => {
+    //     if (arrayToSort.includes(level)) {
+    //       newArray.push(level)
+    //     }
+    //   })
+    //   return newArray
+    // },
 
     changeLevels (subject, newLevels) {
       let action

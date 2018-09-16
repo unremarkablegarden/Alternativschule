@@ -100,6 +100,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+  .studentNote
+    margin-bottom: 1em
   .note
     margin-bottom: 1em
   .submit

@@ -2,7 +2,9 @@
   .container
     el-container#wrapper
       el-header#header
-        h1(v-if='showMenu()')#logo Alternativschule Berlin
+        //- h1(v-if='showMenu()')#logo Alternativschule Berlin
+        h1(v-if='showMenu()')#logo
+          img(src='@/assets/logo.gif', alt='Alternativschule Berlin').logoimg
       el-container#main
         el-aside(width='220px', v-if='showMenu()')
           MainNav
@@ -155,17 +157,19 @@ export default {
   @import "~bulma/sass/layout/section"
   @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Roboto')
 
-  // body *
-  //   transition: height 200ms
-
+  #header
+    height: 105px !important
   #logo
     // text-align: center
     font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif
     font-weight: normal
     font-size: 1.2em
     letter-spacing: 0.02em
-    margin-left: 222px
+    margin-left: 224px
     margin-top: 1.3em
+
+  .el-menu, .el-menu-item
+    background: #fdfdfd !important
 
   #app
     font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif
@@ -188,6 +192,8 @@ export default {
     margin: 0 0 0.8em
     font-weight: normal
     letter-spacing: 0.01em
+  .logoimg
+    width: 150px
 
   // partial bulma minireset
   body, html
