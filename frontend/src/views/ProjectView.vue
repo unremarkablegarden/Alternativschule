@@ -1,68 +1,69 @@
 <template lang="pug">
 .levelNav
-  .guibox
+  .inner
     .loading(v-if='loadingData || loadingUser')
       Loading
-    div(v-else)
-      levelnav(v-if='!isSpacestation')
-      .spacestationspacer(v-else)
-      .columns.under-level-nav
-        .side-menu.column.is-4
-          ul
-            div(v-if='myProjects.length').my-projects
-              li.section-title(v-if="myProjects") Meine Projekte
-              li(v-for="project in myProjects")
+    .guibox(:class="{ spacestationgui : (isSpacestation) }", v-else)
+      div
+        levelnav(v-if='!isSpacestation')
+        .spacestationspacer(v-else)
+        .columns.under-level-nav
+          .side-menu.column.is-4
+            ul
+              div(v-if='myProjects.length').my-projects
+                li.section-title(v-if="myProjects") Meine Projekte
+                li(v-for="project in myProjects")
+                  router-link(:to="'/project/' + currentSubject + '/' + project.slug")
+                    | {{ project.name }}
+                    | ({{ project.levels.join('/') }})
+
+              li.section-title(v-if="availableProjects.length") Verfügbare Projekte
+              li(v-for="project in availableProjects", v-if="availableProjects.length")
                 router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                   | {{ project.name }}
                   | ({{ project.levels.join('/') }})
 
-            li.section-title(v-if="availableProjects.length") Verfügbare Projekte
-            li(v-for="project in availableProjects", v-if="availableProjects.length")
-              router-link(:to="'/project/' + currentSubject + '/' + project.slug")
-                | {{ project.name }}
-                | ({{ project.levels.join('/') }})
+              li.section-title(v-if="availableSelfLearnProjects.length") Selbslernbox
+              li(v-for="project in availableSelfLearnProjects", v-if='availableSelfLearnProjects.length')
+                router-link(:to="'/project/' + currentSubject + '/' + project.slug")
+                  | {{ project.name }}
+                  | ({{ project.levels.join('/') }})
 
-            li.section-title(v-if="availableSelfLearnProjects.length") Selbslernbox
-            li(v-for="project in availableSelfLearnProjects", v-if='availableSelfLearnProjects.length')
-              router-link(:to="'/project/' + currentSubject + '/' + project.slug")
-                | {{ project.name }}
-                | ({{ project.levels.join('/') }})
+          .main.column.is-8
+            //- xmp {{ availableProjects }}
+            .tabs.is-boxed(v-if="tab !== 'projectview-home'")
+              ul
+                li(:class="{ 'is-active' : (tab == 'projectview') }")
+                  router-link(:to='"/project/" + currentSubject + "/" + project') Info
+                li(:class="{ 'is-active' : (tab == 'projectview-material') }")
+                  router-link(:to='"/project/" + currentSubject + "/" + project + "/material"', v-if=' currentProjectData.materials.length')
+                    | Material ({{ currentProjectData.materials.length }})
+                  .txt(v-else)
+                    | Material
+            .tab-content.info(v-if="tab == 'projectview-home'")
+              h2.title Wählen Sie ein Projekt aus...
 
-        .main.column.is-8
-          //- xmp {{ availableProjects }}
-          .tabs.is-boxed(v-if="tab !== 'projectview-home'")
-            ul
-              li(:class="{ 'is-active' : (tab == 'projectview') }")
-                router-link(:to='"/project/" + currentSubject + "/" + project') Info
-              li(:class="{ 'is-active' : (tab == 'projectview-material') }")
-                router-link(:to='"/project/" + currentSubject + "/" + project + "/material"', v-if=' currentProjectData.materials.length')
-                  | Material ({{ currentProjectData.materials.length }})
-                .txt(v-else)
-                  | Material
-          .tab-content.info(v-if="tab == 'projectview-home'")
-            h2.title Wählen Sie ein Projekt aus...
+            .tab-content.info(v-if="tab == 'projectview'")
+              .columns.is-gapless.no-mb
+                .column.is-9
+                  h2.title
+                    | Projekt: {{ currentProjectData.name }}
+                    span(v-if='currentProjectData.selfLearn') &nbsp;(Selbslernbox)
+                .column.is-3(v-if='studentCanAdd(currentProjectData)').addButtonContainer
+                  el-button(v-if='projectAvailable === true', type='success', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
+                  el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)', :loading='submitting') Löschen
 
-          .tab-content.info(v-if="tab == 'projectview'")
-            .columns.is-gapless.no-mb
-              .column.is-9
-                h2.title
-                  | Projekt: {{ currentProjectData.name }}
-                  span(v-if='currentProjectData.selfLearn') &nbsp;(Selbslernbox)
-              .column.is-3(v-if='studentCanAdd(currentProjectData)').addButtonContainer
-                el-button(v-if='projectAvailable === true', type='success', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
-                el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)', :loading='submitting') Löschen
+              .level
+                strong Levels:&nbsp;
+                  | {{ currentProjectData.levels.join('/') }}
+              p.description {{ currentProjectData.description }}
 
-            .level
-              strong Levels:&nbsp;
-                | {{ currentProjectData.levels.join('/') }}
-            p.description {{ currentProjectData.description }}
-
-          ul.tab-content.material(v-if="tab == 'projectview-material'")
-            a(v-for='(material, index) in currentProjectData.materials', :key='index', , :href='materialLink(material)', target='_blank').materialLink
-              li(:data-type='material.contentType')
-                .text
-                  .title {{ material.name }}
-                  p {{ material.description }}
+            ul.tab-content.material(v-if="tab == 'projectview-material'")
+              a(v-for='(material, index) in currentProjectData.materials', :key='index', , :href='materialLink(material)', target='_blank').materialLink
+                li(:data-type='material.contentType')
+                  .text
+                    .title {{ material.name }}
+                    p {{ material.description }}
 </template>
 
 <script>
@@ -404,6 +405,9 @@ export default {
     // border: 1px red solid
     height: $guiH
 
+  .guibox.spacestationgui
+    height: calc(87vh - 100px)
+
   .spacestationspacer
     height: 20px
 
@@ -491,6 +495,8 @@ export default {
         display: flex
         padding: 1em
         border-radius: 10px
+        .text
+          max-width: 80%
         .title
           font-size: 1.1rem
           line-height: 1.2em

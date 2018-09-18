@@ -102,14 +102,26 @@ Vue.component('MaterialAdd', MaterialAdd)
 import MaterialDelete from '@/components/MaterialDelete.vue'
 Vue.component('MaterialDelete', MaterialDelete)
 
+import PrefectNotes from '@/components/PrefectNotes.vue'
+Vue.component('PrefectNotes', PrefectNotes)
 
-// Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
+
+
+// import Chart from '@/components/Chart.js'
+// Vue.component('Chart', Chart)
+
 
 Vue.config.productionTip = false
+
+// const provide = createProvider()
 
 new Vue({
   router,
   store,
-  provide: createProvider().provide(),
+  // createProvider,
+  // provide: createProvider().provide(),
+  // apolloProvider,
+  // provide,
+  apolloProvider: createProvider(),
   render: h => h(App)
 }).$mount('#app')

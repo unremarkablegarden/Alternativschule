@@ -8,6 +8,7 @@ import Users from './views/Users.vue'
 import Subjects from './views/Subjects.vue'
 import Students from './views/Students.vue'
 import Prefect from './views/Prefect.vue'
+import PrefectPrint from './views/PrefectPrint.vue'
 
 Vue.use(Router)
 
@@ -22,6 +23,7 @@ export default new Router({
     { path: '/benutzer', component: Users, name: 'users' },
     { path: '/faecher', component: Subjects, name: 'subjects' },
     { path: '/schueler', component: Students, name: 'students' },
-    { path: '/vertrauensschueler', component: Prefect, name: 'prefect' }
+    { path: '/vertrauensschueler', component: Prefect, name: 'prefect' },
+    { path: '/vertrauensschueler/print/:student', component: PrefectPrint, name: 'prefectprint' }
   ]
 })

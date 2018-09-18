@@ -1,0 +1,40 @@
+query allSubjects($id: ID!) {
+	allSubjects {
+		id
+	  name
+	  slug
+	  description
+		levels
+	  area {
+	    id
+	    name
+	  }
+	  projects {
+	    id
+	    name
+	  }
+	  teachers {
+	    id
+	    username
+	  }
+	  students {
+	    id
+	    firstname
+	    surname
+	  }
+	  tutorLevels(filter: {
+			teacher: {
+				id: $id
+			}
+		}) {
+	    id
+	    teacher {
+	      id
+	    }
+	    subject {
+	      id
+	    }
+	    levels
+	  }
+	}
+}

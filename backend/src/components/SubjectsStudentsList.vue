@@ -5,6 +5,7 @@
     el-card(shadow='never', v-else).subjects
       div(slot="header").header
         span Meine Schüler*innen
+      //- xmp {{ mySubjects.teachesSubjects }}
       el-collapse(v-model='activeSubjects')
         el-collapse-item(v-for='subject in mySubjects.teachesSubjects', :key='subject.name', :title='subject.name', :name='subject.name', v-if="allMyStudents[subject.slug]").subject
           template(slot='title')
@@ -12,10 +13,13 @@
             | &nbsp;
             | {{ subject.name }}
             span.right.count
-              | {{ subject.students.length }}&nbsp;&nbsp;
+              //-| {{ subject.students.length }}&nbsp;&nbsp;
+              | {{ allMyStudents[subject.slug].length }}
+              | &nbsp;&nbsp;
           el-card(shadow='never')
             //- StudentList(:students='allMyStudents[subject.slug]', :subjectId='subject.id')
-            StudentList(:students='subject.students', :subjectId='subject.id')
+            //- StudentList(:students='subject.students', :subjectId='subject.id')
+            StudentList(:students='allMyStudents[subject.slug]', :subjectId='subject.id')
 </template>
 
 <script>
@@ -53,19 +57,7 @@ export default {
       },
       update (response) {
         // simplify the response
-        let teacher = JSON.parse(JSON.stringify(response.User))
-        // add full names to students
-        // teacher.teachesSubjects.forEach((subj) => {
-        //   subj.students.forEach((stud) => {
-        //     stud.fullName = stud.firstname + ' ' + stud.surname
-        //   })
-        // })
-        // teacher.teachesProjects.forEach((proj) => {
-        //   proj.students.forEach((stud) => {
-        //     stud.fullName = stud.firstname + ' ' + stud.surname
-        //   })
-        // })
-        return teacher
+        return JSON.parse(JSON.stringify(response.User))
       },
       result (result) {
         // fill out allMyStudents with student objects based on which classes the teacher owns, that the students have added
@@ -75,11 +67,13 @@ export default {
           }
           p.students.forEach(s => {
             if (! this.allMyStudents[p.subject.slug].find(n => n.id === s.id)) {
-              this.allMyStudents[p.subject.slug].push(s)
+              // this.allMyStudents[p.subject.slug].push(s)
+              const studentFullObj = p.students.find(x => x.id === s.id)
+              this.allMyStudents[p.subject.slug].push(studentFullObj)
+
             }
           })
         })
-        // console.log(this.allMyStudents)
         this.loading = false
       }
     }
@@ -88,6 +82,10 @@ export default {
 </script>
 
 <style lang="sass">
+  xmp
+    font-size: 11px
+    line-height: 1.2em
+
   .el-card__body > .el-collapse:first-child
     border-top: 0 !important
   .el-card__body > .el-collapse:last-child

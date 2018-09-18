@@ -111,9 +111,20 @@ export default {
         'enumName': "UserTypes"
       },
       update (data) {
-        const values = data.__type.enumValues.map(o => o.name)
-        return values
+        this.loadingUserTypes = false
+        let userTypes = data.__type.enumValues.map(o => o.name)
+
+        if (this.userType !== 'Admin') {
+          userTypes = userTypes.filter(u => u !== 'Admin')
+        }
+        return userTypes
       }
+    }
+  },
+
+  computed: {
+    userType () {
+      return localStorage.getItem('userType')
     }
   },
 

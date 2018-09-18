@@ -1,0 +1,7 @@
+query userTypeById($userId: ID!) {
+  User(id: $userId) {
+    id
+    username
+    userType
+  }
+}

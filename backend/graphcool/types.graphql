@@ -43,6 +43,8 @@ type User @model {
 
   studentStudentNotes: [StudentNote!]!  @relation(name: "StudentStudentNotes")
   teacherStudentNotes: [StudentNote!]! @relation(name: "TeacherStudentNotes")
+
+  prefectNotes: [PrefectNote!]! @relation(name: "PrefectNotes")
 }
 
 enum UserTypes {
@@ -146,6 +148,15 @@ type StudentNote @model {
   student: User! @relation(name: "StudentStudentNotes")
   teacher: User! @relation(name: "TeacherStudentNotes")
 }
+
+type PrefectNote @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  text: String!
+  student: User! @relation(name: "PrefectNotes")
+}
+
 
 
 # shitty API broken

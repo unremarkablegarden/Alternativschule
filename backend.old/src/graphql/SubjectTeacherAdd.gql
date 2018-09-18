@@ -1,0 +1,13 @@
+mutation addToTeacherSubject($subjectId: ID!, $teacherId: ID!) {
+  addToTeacherSubject(
+    teachesSubjectsSubjectId: $subjectId
+    teachersUserId: $teacherId
+  ) {
+    teachersUser {
+      id
+    }
+    teachesSubjectsSubject {
+      name
+    }
+  }
+}

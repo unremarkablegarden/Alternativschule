@@ -20,7 +20,9 @@
                 strong Lernlevel
               el-button(v-for='level in subjectLevels', :key='level', size='mini', :type='buttonType(level, studentLevel(student.studentLevels))', @click='changeLevel(student, level)', plain) {{ level }}
 
-            StudentSelfEvaluations(:subjectId='subjectId', :studentId='student.id')
+            .selfEvals(v-if="subjectId !== 'cjlw89ql20imy0149cdcs3ze0'")
+              //- if not space-station
+              StudentSelfEvaluations(:subjectId='subjectId', :studentId='student.id')
 
           el-col(:span='6', :offset='2')
             StudentProjectsList(:subjectId='subjectId', :studentId='student.id')

@@ -52,9 +52,6 @@ export default {
   },
 
   methods: {
-    // levelsN () {
-    //   return this.subjectLevels.length
-    // },
     getEvalValue (competenceId, level) {
       let returnVal
       // subject and student set in query
@@ -105,17 +102,6 @@ export default {
     },
 
     createEvalValue (competenceId, level, val) {
-      // type Evaluation @model {
-      //   id: ID! @isUnique
-      //   value: Int! # max 10
-      //   student: User! @relation(name: "StudentSelfEvaluation")
-      //   competence: Competence! @relation(name: "CompetenceEvaluation")
-      //   subject: Subject! @relation(name: "EvaluationSubject")
-      //   level: Levels!
-      // }
-
-      // props: ['subjectId', 'studentId'],
-
       this.$apollo.mutate({
         mutation: gql`mutation ($value: Int!, $studentId: ID!, $competenceId: ID!, $subjectId: ID!, $level: Levels!) {
           createEvaluation(value: $value, studentId: $studentId, competenceId: $competenceId, subjectId: $subjectId, level: $level) {
@@ -154,18 +140,6 @@ export default {
       }
       return returnVal
     },
-
-    //  (arrayToSort) {
-    //   // useage: levels = this.sortLevels(levels)
-    //   let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
-    //   let newArray = []
-    //   arrayOrder.forEach((level) => {
-    //     if (arrayToSort.includes(level)) {
-    //       newArray.push(level)
-    //     }
-    //   })
-    //   return newArray
-    // },
 
     msg (type, message) {
       this.$message({
@@ -208,7 +182,6 @@ export default {
         }
       },
       update (result) {
-        // console.log(result)
         return result.Subject.competences
       },
       result (res) {

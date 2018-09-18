@@ -114,7 +114,7 @@ export default {
   .guibox
     text-align: left
     padding: 1.5rem
-    overflow-x: scroll
+    // overflow-x: scroll
     .progresschart
       // height: 60%
       width: auto

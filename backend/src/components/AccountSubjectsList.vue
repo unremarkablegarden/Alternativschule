@@ -35,7 +35,7 @@ export default {
 
   methods: {
     userId () {
-      console.log('method: ' + localStorage.getItem('userId'))
+      // console.log('method: ' + localStorage.getItem('userId'))
       return localStorage.getItem('userId')
     }
   },
@@ -74,7 +74,7 @@ export default {
         })
 
         // console.log(this.activeSubjects)
-        console.log(subjects)
+        // console.log(subjects)
         return subjects
       },
       result (data) {
@@ -82,19 +82,7 @@ export default {
       }
     }
   },
-
   methods: {
-    //  (arrayToSort) {
-    //   // useage: levels = this.sortLevels(levels)
-    //   let arrayOrder = ['BK', 'GK', 'AK', 'AK1', 'AK2']
-    //   let newArray = []
-    //   arrayOrder.forEach((level) => {
-    //     if (arrayToSort.includes(level)) {
-    //       newArray.push(level)
-    //     }
-    //   })
-    //   return newArray
-    // },
 
     changeLevels (subject, newLevels) {
       let action
@@ -182,7 +170,9 @@ export default {
               subjectName = data.data.removeFromTeacherSubject.teachesSubjectsSubject.name
               this.activeSubjects = this.activeSubjects.filter(e => e !== subjectName)
             }
+
             this.$apolloProvider.defaultClient.reFetchObservableQueries()
+
             this.$message({
               type: 'success',
               message: 'Subject ' + subjectName + ' ' + actionName
@@ -212,6 +202,8 @@ export default {
 </style>
 
 <style lang="sass" scoped>
+  .allSubjects
+    min-height: 300px
   .toggle
     height: 2em
     padding-top: 0.7em

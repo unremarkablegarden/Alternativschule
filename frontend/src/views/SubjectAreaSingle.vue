@@ -189,7 +189,8 @@ export default {
     .info
       text-align: left
       max-height: 90%
-      overflow-x: scroll
+      overflow-x: hidden
+      overflow-y: auto
     h1
       text-transform: capitalize
       color: $teal

@@ -4,7 +4,7 @@
       el-tab-pane
         span(slot='label')
           icon(icon='list', color='lightgray').icon
-          | Meine Themen
+          | Meine Fächer
         AccountSubjectsList
       el-tab-pane
         span(slot='label')

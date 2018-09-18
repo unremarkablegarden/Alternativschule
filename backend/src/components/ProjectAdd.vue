@@ -4,7 +4,7 @@
 
     el-dialog(title='Projekt hinzufügen', :visible.sync='dialogVisible', width='800', :close-on-click-modal='false')
 
-      el-form(:model='form', ref='form', :rules='rules', label-width='110px', v-loading='loading', status-icon, @keyup.enter.native="submitForm('form')").form
+      el-form(:model='form', ref='form', :rules='rules', label-width='110px', v-loading='loading', status-icon, @submit.native.prevent).form
 
         el-form-item(label='Title', prop='name')
           el-input(type='text', v-model='form.name', placeholder="Project title")

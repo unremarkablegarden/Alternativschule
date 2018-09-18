@@ -21,7 +21,7 @@
         el-form-item(label='Nutzername', prop='username')
           el-input(type='username', v-model='editUserForm.username', placeholder="Type in username")
 
-        el-form-item(label='Vertrauensschüler', prop='prefect', v-if='editUserForm.userType == "Lehrer"')
+        //- el-form-item(label='Vertrauensschüler', prop='prefect', v-if='editUserForm.userType == "Lehrer"')
           el-switch(v-model='editUserForm.prefect')
 
         el-form-item
@@ -89,6 +89,11 @@ export default {
       submitDisabled: false
     }
   },
+  computed: {
+    userType () {
+      return localStorage.getItem('userType')
+    }
+  },
   apollo: {
     userTypes: {
       query: USER_TYPES,
@@ -96,7 +101,12 @@ export default {
         'enumName': "UserTypes"
       },
       update (data) {
-        return data.__type.enumValues.map(o => o.name)
+        let userTypes = data.__type.enumValues.map(o => o.name)
+
+        if (this.userType !== 'Admin') {
+          userTypes = userTypes.filter(u => u !== 'Admin')
+        }
+        return userTypes
       }
     }
   },

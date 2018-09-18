@@ -81,7 +81,7 @@ export default {
     getMyData () {
       this.$store.dispatch('getUserData').then((response) => {
         this.myData = response
-        this.subjects = response.studiesSubjects
+        this.subjects = response.studiesSubjects.filter(s => s.id !== 'cjlw89ql20imy0149cdcs3ze0') // sans-space-station
         this.subjects.forEach(subject => subject.rotate = this.rotate())
         this.loading = false
         this.inactivityAlert()

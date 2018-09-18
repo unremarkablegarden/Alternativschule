@@ -1,0 +1,169 @@
+# The following types define the data model of the example service
+# based on which the GraphQL API is generated
+
+# type Material @model {
+#   id: ID! @isUnique
+#   name: String!
+#   description: String
+#   project: [Project!]! @relation(name: "MaterialsProject")
+#   contentType: String
+#   uploadUrl: String
+#   linkUrl: String
+#   # file: File @relation(name: "MaterialFile")
+# }
+
+type User @model {
+  id: ID! @isUnique
+  username: String @isUnique
+  email: String! @isUnique
+  password: String!
+  firstname: String
+  surname: String
+  # admin, teacher, student (enum)
+  userType: UserTypes
+  avatar: Int @defaultValue(value: "1")
+  avatarColor: String @defaultValue(value: "blue")
+
+  prefect: Boolean @defaultValue(value: "false") @migrationValue(value: "false")
+  # relations
+
+  # prefectStudents: [User!]! @relation(name: "PrefectStudent")
+  prefectLinks: [User!]! @relation(name: "PrefectLinks")
+
+  teachesSubjects: [Subject!]! @relation(name: "TeacherSubject")
+  teachesProjects: [Project!]! @relation(name: "TeacherProject")
+
+  tutorLevels: [TutorLevels!]! @relation(name: "TutorLevelsTeacher")
+  studentLevels: [StudentLevels!]! @relation(name: "StudentLevelsStudent")
+
+  studiesSubjects: [Subject!]! @relation(name: "StudentSubject")
+  studiesProjects: [Project!]! @relation(name: "StudentProject")
+
+  selfEvaluations: [Evaluation!]! @relation(name: "StudentSelfEvaluation")
+
+  studentStudentNotes: [StudentNote!]!  @relation(name: "StudentStudentNotes")
+  teacherStudentNotes: [StudentNote!]! @relation(name: "TeacherStudentNotes")
+}
+
+enum UserTypes {
+  Admin
+  Lehrer
+  Schueler
+}
+
+enum Levels {
+  BK
+  GK
+  AK
+  AK1
+  AK2
+}
+
+type Area @model {
+  id: ID! @isUnique
+  name: String! @isUnique
+  slug: String @isUnique
+  subjects: [Subject!]! @relation(name: "SubjectArea")
+}
+
+type Subject @model {
+  id: ID! @isUnique
+  name: String! @isUnique
+  slug: String@isUnique
+  area: Area! @relation(name: "SubjectArea")
+  description: String!
+  projects: [Project!]! @relation(name: "SubjectProject")
+  students: [User!]! @relation(name: "StudentSubject")
+  teachers: [User!]! @relation(name: "TeacherSubject")
+  competences: [Competence!]! @relation(name: "SubjectCompetences") # lesen/schreiben
+  levels: [Levels!]! #available in total?
+  tutorLevels: [TutorLevels!]! @relation(name: "TutorLevelsSubject")
+  studentLevels: [StudentLevels!]! @relation(name: "StudentLevelsSubject")
+  evaluations: [Evaluation!]! @relation(name: "EvaluationSubject")
+  isPublished: Boolean! @defaultValue(value: "true")
+  studentNotes: [StudentNote!]! @relation(name: "StudentNoteSubject")
+}
+
+type Project @model {
+  id: ID! @isUnique
+  name: String! @isUnique
+  slug: String! @isUnique
+  description: String!
+  subject: Subject! @relation(name: "SubjectProject")
+  # materials: [Material!]! @relation(name: "MaterialsProject")
+  teacher: User! @relation(name: "TeacherProject")
+  students: [User!]! @relation(name: "StudentProject")
+  selfLearn: Boolean! @defaultValue(value: "false")
+  isPublished: Boolean! @defaultValue(value: "true")
+  level: Levels!
+}
+
+type Competence @model {
+  id: ID! @isUnique
+  # i.e. Lesen, Schreiben
+  name: String
+  slug: String
+  subject: Subject! @relation(name: "SubjectCompetences")
+  evaluations: [Evaluation!]! @relation(name: "CompetenceEvaluation")
+  # levels determined by subject
+  #levels: [Levels!]!
+}
+
+# teachers
+type TutorLevels @model {
+  id: ID! @isUnique
+  teacher: User! @relation(name: "TutorLevelsTeacher")
+  subject: Subject! @relation(name: "TutorLevelsSubject")
+  levels: [Levels!]!
+}
+
+type StudentLevels @model {
+  id: ID! @isUnique
+  student: User! @relation(name: "StudentLevelsStudent")
+  subject: Subject! @relation(name: "StudentLevelsSubject")
+  level: Levels!
+}
+
+type Evaluation @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  value: Int! # max 10
+  student: User! @relation(name: "StudentSelfEvaluation")
+  competence: Competence! @relation(name: "CompetenceEvaluation")
+  subject: Subject! @relation(name: "EvaluationSubject")
+  level: Levels!
+}
+
+
+
+type StudentNote @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  text: String!
+  subject: Subject! @relation(name: "StudentNoteSubject")
+  student: User! @relation(name: "StudentStudentNotes")
+  teacher: User! @relation(name: "TeacherStudentNotes")
+}
+
+
+# shitty API broken
+# type File @model {
+#   id: ID! @isUnique
+#   path: String!
+#   filename: String!
+#   mimetype: String!
+#   encoding: String!
+#   # material: Material @relation(name: "MaterialFile")
+# }
+
+
+# testing...
+type Post @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  description: String!
+  imageUrl: String!
+}

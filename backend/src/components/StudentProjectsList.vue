@@ -1,12 +1,16 @@
 <template lang="pug">
   #studentprojectslist
-    .title Projekten
+    .title Projekte
     .projects(v-if='!loading')
-      ul(v-if='projects.length')
-        li(v-for='(project, index) in projects', :key='project.slug')
+      div(v-if='projects.length')
+        .project(v-for='(project, index) in projects', :key='project.slug')
+          icon(icon='doc')
           | {{ project.name }}
-      div(v-else)
-        i (Keine)
+        //- ul(v-if='projects.length')
+          li(v-for='(project, index) in projects', :key='project.slug')
+            | {{ project.name }}
+    div(v-else)
+      i (Keine)
 </template>
 
 <script>
@@ -61,4 +65,12 @@ export default {
   ul
     margin-top: 0.5em
     margin-left: 1.25em
+  .projects
+    margin: 3px 0 0 5px
+  .project
+    padding: 3px 0
+    svg
+      width: 16px
+      height: 16px
+      transform: translate(-4px, 2.5px)
 </style>

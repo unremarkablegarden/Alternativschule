@@ -55,6 +55,16 @@ export default {
     }
   },
 
+  computed: {
+    userType () {
+      return localStorage.getItem('userType')
+    }
+  },
+
+  mounted () {
+    // console.log(this.userType)
+  },
+
   apollo: {
     allUsers: {
       query: ALL_USERS,
@@ -67,7 +77,12 @@ export default {
       query: USER_TYPES,
       update (data) {
         this.loadingUserTypes = false
-        return data.__type.enumValues.map(o => o.name)
+        let userTypes = data.__type.enumValues.map(o => o.name)
+
+        if (this.userType !== 'Admin') {
+          userTypes = userTypes.filter(u => u !== 'Admin')
+        }
+        return userTypes
       }
     }
   },

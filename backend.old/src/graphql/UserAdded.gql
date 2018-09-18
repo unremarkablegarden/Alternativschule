@@ -1,0 +1,14 @@
+#import "./UserFragment.gql"
+
+subscription userAdded {
+  User(
+    filter: {
+      mutation_in: [CREATED]
+    }
+  ) {
+    mutation
+    node {
+      ...User
+    }
+  }
+}

@@ -58,8 +58,24 @@ export default {
             .then((res) => {
               localStorage.setItem('userId', res)
               // console.log('userId: ' + res)
+
+              this.$store.dispatch('getUserType', res)
+                .then((res) => {
+                  localStorage.setItem('userType', res)
+                  this.loading = false
+                  this.$router.push({ name: 'users' })
+                })
+                .catch((error) => {
+                  console.log(error)
+                  this.error = true
+                  this.loading = false
+                })
+
+            })
+            .catch((error) => {
+              console.log(error)
+              this.error = true
               this.loading = false
-              this.$router.push({ name: 'users' })
             })
 
     		})

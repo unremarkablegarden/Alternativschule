@@ -1,0 +1,115 @@
+query subjectsByUser($id: ID!) {
+	User(id: $id) {
+		teachesSubjects {
+			id
+			name
+			slug
+			description
+			isPublished
+			levels
+			students {
+				id
+				firstname
+				surname
+				username
+				prefectLinks {
+					id
+					username
+					firstname
+					surname
+				}
+				studentStudentNotes {
+					id
+					createdAt
+					text
+					subject {
+						id
+						slug
+					}
+					teacher {
+						id
+						username
+					}
+					student {
+						id
+						username
+					}
+				}
+				studentLevels {
+					id
+					level
+					student {
+						id
+						username
+					}
+					subject {
+						id
+						slug
+					}
+				}
+			}
+		}
+		teachesProjects {
+		  id
+		  name
+		  slug
+		  description
+		  selfLearn
+		  isPublished
+		  levels
+		  subject {
+		    id
+				slug
+		  }
+		  materials {
+		    id
+		    name
+		    description
+		    contentType
+		    uploadUrl
+		    linkUrl
+		  }
+			students {
+				id
+				firstname
+				surname
+				username
+				prefectLinks {
+					id
+					username
+					firstname
+					surname
+				}
+				studentStudentNotes {
+					id
+					createdAt
+					text
+					subject {
+						id
+						slug
+					}
+					teacher {
+						id
+						username
+					}
+					student {
+						id
+						username
+					}
+				}
+				studentLevels {
+					id
+					level
+					student {
+						id
+						username
+					}
+					subject {
+						id
+						slug
+					}
+				}
+			}
+		}
+	}
+}

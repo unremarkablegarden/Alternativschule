@@ -1,0 +1,8 @@
+mutation TutorLevelsEdit($tutorLevelsId: ID!, $levels: [Levels!]!) {
+	updateTutorLevels(
+		id: $tutorLevelsId
+		levels: $levels
+	) {
+		id
+	}
+}

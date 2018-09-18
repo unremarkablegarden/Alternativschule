@@ -1,0 +1,8 @@
+query userTypes {
+  __type(name: "UserTypes") {
+    name
+    enumValues {
+ 	    name
+    }
+  }
+}

@@ -1,0 +1,7 @@
+#import "./PostFragment.gql"
+
+query allPosts {
+	allPosts(orderBy: createdAt_DESC) {
+		...Post
+	}
+}

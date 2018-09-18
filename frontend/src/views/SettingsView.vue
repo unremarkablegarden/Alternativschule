@@ -18,19 +18,21 @@
             i.el-icon-loading
             br
             strong Uploading...
-          .avatar.image(:class='myData.avatarColor', v-else)
-            .avatarImg-wrapper(v-if='uploadUrl')
-              img(:src='uploadUrl').builtin
-            .avatarImg-wrapper(v-else-if='myData.avatarImg')
-              img(:src='myData.avatarImg').builtin
-            img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"', v-else).builtin
+          .moreWrap(:class='{ graphic : (!uploadUrl && !myData.avatarImg) }', v-else)
+            .avatar.image(:class='myData.avatarColor')
 
-            //- img(:src='uploadUrl', v-else).builtin
+              .avatarImg-wrapper(v-if='uploadUrl')
+                img(:src='uploadUrl').builtin
+              .avatarImg-wrapper(v-else-if='myData.avatarImg')
+                img(:src='myData.avatarImg').builtin
+              img(:src='"@/assets/gfx/avatars/avatar_" + myData.avatar + ".png"', v-else).builtin
 
-            el-upload.avatar-uploader.hide(action='/', :auto-upload='false', :show-file-list='false', drag, accept='image/*', :on-change='formChanged', ref='file', v-if='uploadUrl == false')
-              //- , :class='{ hide : (uploadUrl == false) }'
-              //- img.avatar(v-if='uploadUrl', :src='uploadUrl')
-              i.el-icon-upload.avatar-uploader-icon
+              //- img(:src='uploadUrl', v-else).builtin
+
+              el-upload.avatar-uploader.hide(action='/', :auto-upload='false', :show-file-list='false', drag, accept='image/*', :on-change='formChanged', ref='file', v-if='uploadUrl == false')
+                //- , :class='{ hide : (uploadUrl == false) }'
+                //- img.avatar(v-if='uploadUrl', :src='uploadUrl')
+                i.el-icon-upload.avatar-uploader-icon
 
         .info
           el-form(:model='form', ref='form', :rules='rules', @keyup.enter.native="submitForm('form')").form
@@ -112,6 +114,23 @@ export default {
       }
     }
   },
+  // computed: {
+  //   avatarSquare () {
+  //     let img
+  //     let img1 = this.myData.avatarImg
+  //     let img2 = this.uploadUrl
+  //     if (img1 || img2) {
+  //       if (img1) img = img1
+  //       else img = img2
+  //
+  //       upload/
+  //     } else {
+  //       return null
+  //     }
+  //       // https://res.cloudinary.com/nilsolleoskar/image/upload/c_fill,g_face,h_600,q_80,w_600/v1537183652/Alternativschule/ck5grli82thx3s78zezn.jpg
+  //
+  //   }
+  // },
   mounted () {
     // console.log(this.$apollo)
     this.getMyData()
@@ -142,7 +161,8 @@ export default {
       const id = localStorage.getItem('userId')
       let newImage
       if (this.uploadUrl) {
-        newImage = this.uploadUrl
+        newImage = this.uploadUrl.replace('upload/', 'upload/c_fill,g_face,h_600,q_80,w_600/')
+        this.uploadUrl = newImage
       } else if (this.myData.avatarImg) {
         newImage = this.myData.avatarImg
       } else {
@@ -314,10 +334,10 @@ export default {
   .el-upload-dragger
     width: 27vw !important
     height: 27vw !important
-    border-radius: 27vw !important
+    border-radius: 13.5vw !important
     transition: all 500ms !important
     border: 0
-    background: transparent
+    // background: #FF050
     &.is-dragover
       background: #FFF40 !important
     .el-icon-upload
@@ -336,14 +356,14 @@ export default {
     overflow: hidden
     width: 22vw
     height: 22vw
-    border-radius: 22vw
+    border-radius: 11vw
 
   .builtin
     height: 22vw !important
     // width: 22vw !important
     width: auto !important
     max-width: none
-    border-radius: 22vw
+    border-radius: 11vw
 
   .uploadingImg
     width: 22vw
@@ -357,7 +377,7 @@ export default {
     position: fixed
     width: 27vw
     height: 27vw
-    border-radius: 27vw
+    border-radius: 13.5vw
     // &.hide
       // opacity: 0 !important
   .guibox
@@ -407,7 +427,7 @@ export default {
         .avatar
           // width: 300px
           // height: 300px
-          border-radius: 100%
+          border-radius: 50%
           padding: 1em
           display: flex
           align-items: center
@@ -417,6 +437,11 @@ export default {
             width: 100%
             // width: 80%
             height: auto
+      .graphic .avatar
+        padding: 1em !important
+        img
+          border-radius: 0
+
       .buttons
         display: flex
         justify-content: center
