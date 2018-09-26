@@ -4,7 +4,7 @@
     //- div(style='margin-left: 120px')
       h1 Benutzerkonto
     el-form(:model='accountForm', ref='accountForm', label-width='150px', v-loading='$apollo.loading', :rules='rules', :status-icon='formIcon').accountForm
-      el-form-item(label='Betnutzername', prop='username')
+      el-form-item(label='Name', prop='username')
         el-input(type='text', v-model='accountForm.username')
       el-form-item(label='Email', prop='email')
         el-input(type='text', v-model='accountForm.email')

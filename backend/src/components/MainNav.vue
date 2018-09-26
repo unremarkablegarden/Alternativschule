@@ -44,7 +44,7 @@
       el-menu-item(index='/benutzerkonto')
         template(slot='title')
           icon(icon='settings')
-          span Benutzerkonto
+          span Konto
 
     el-menu(mode='vertical', :router='false')
 
@@ -68,6 +68,10 @@ export default {
     logout() {
       localStorage.removeItem('authenticate-user-token')
       localStorage.removeItem('userId')
+      sessionStorage.clear()
+      localStorage.clear()
+      this.$apolloProvider.defaultClient.resetStore()
+      this.$apolloProvider.defaultClient.cache.reset()
       this.$store.dispatch('logoutAction').then(() => this.$router.push({ name: 'login' }) )
     }
   }

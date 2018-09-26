@@ -45,6 +45,7 @@ type User @model {
   teacherStudentNotes: [StudentNote!]! @relation(name: "TeacherStudentNotes")
 
   prefectNotes: [PrefectNote!]! @relation(name: "PrefectNotes")
+  teacherPrefectNotes: [PrefectNote!]! @relation(name: "PrefectNotesTeacher")
 }
 
 enum UserTypes {
@@ -155,6 +156,7 @@ type PrefectNote @model {
   updatedAt: DateTime!
   text: String!
   student: User! @relation(name: "PrefectNotes")
+  teacher: User @relation(name: "PrefectNotesTeacher")
 }
 
 

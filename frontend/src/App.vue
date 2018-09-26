@@ -28,12 +28,14 @@ export default {
       this.login = true
     } else  {
       this.login = false
+      this.checkLoggedIn()
     }
   },
 
   watch: {
     $route (to, from) {
-      // this.checkLoggedIn()
+      // console.log('r');
+      this.checkLoggedIn()
       this.login = false
     }
   },
@@ -52,25 +54,28 @@ export default {
       document.body.style.backgroundPosition = moveX+'px '+moveY+'px'
 
     },
-    // checkLoggedIn() {
-    //   const userId = localStorage.getItem('userId')
-    //   if (userId !== 'null') {
-    //     this.userId = userId
-    //     console.log('---app-localstorage---\n' + userId);
-    //   } else {
-    //     this.$store.dispatch('getUserId')
-    //       .then((userId) => {
-    //         if (userId) {
-    //           this.userId = userId
-    //           console.log('---app-dispatch---\n' + userId)
-    //           localStorage.setItem('userId', userId)
-    //         } else {
-    //           this.userId = null
-    //           localStorage.removeItem('userId')
-    //         }
-    //       })
-    //   }
-    // },
+
+    checkLoggedIn() {
+      const userId = localStorage.getItem('userId')
+      if (userId !== 'null' && userId !== null) {
+        // this.userId = userId
+        // console.log('---app-localstorage---\n' + userId);
+      } else {
+        this.$store.dispatch('getUserId')
+          .then((userId) => {
+            if (userId) {
+              this.userId = userId
+              console.log('---app-dispatch---\n' + userId)
+              localStorage.setItem('userId', userId)
+            } else {
+              this.userId = null
+              localStorage.removeItem('userId')
+              this.logout()
+            }
+          })
+      }
+    },
+
     logout() {
       localStorage.removeItem('authenticate-user-token')
       localStorage.removeItem('userId')

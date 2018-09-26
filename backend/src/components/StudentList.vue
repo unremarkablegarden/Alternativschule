@@ -1,7 +1,6 @@
 <template lang="pug">
-  #userslist(v-if='students')
-    //- xmp {{ students }}
-    el-collapse(v-model='active', v-for='student in students', :key='student.username').students
+  #userslist(v-if='studentsMutable')
+    el-collapse(v-model='active', v-for='student in studentsMutable', :key='student.username').students
       el-collapse-item(:title=" student.firstname + ' ' + student.surname ", :name='student.username')
         template(slot='title')
           icon(icon='user')
@@ -37,8 +36,12 @@ export default {
   data () {
     return {
       active: [],
-      loading: false
+      loading: false,
+      studentsMutable: null
     }
+  },
+  created () {
+    this.studentsMutable = JSON.parse(JSON.stringify(this.students))
   },
   apollo: {
     subjectLevels: {
@@ -88,7 +91,8 @@ export default {
     },
 
     updateStudentLevel (levelObj) {
-      console.log(levelObj)
+      // console.log(levelObj)
+      const studs = this.students
       this.$apollo.mutate({
         mutation: gql`mutation ($id: ID!, $level: Levels!) {
           updateStudentLevels(id: $id, level: $level) {
@@ -100,8 +104,15 @@ export default {
           id: levelObj.id,
           level: levelObj.level
         },
+        update (data, response) {
+          // const stud = studs.find(o => o.id === levelObj.student.id)
+          // const newLevel = stud.studentLevels.find(o => o.new === true)
+          // newLevel.id = response.data.updateStudentLevels.level
+          // console.log('...');
+          // console.log(stud)
+        }
       }).then((data) => {
-        console.log(data)
+        // console.log(data)
         this.msg('success', 'Level saved')
       }).catch((error) => {
         console.error(error)

@@ -33,8 +33,8 @@ export default {
 
     createNote () {
       this.$apollo.mutate({
-        mutation: gql`mutation ($text: String!, $studentId: ID!) {
-          createPrefectNote(text: $text, studentId: $studentId) {
+        mutation: gql`mutation ($text: String!, $studentId: ID!, $teacherId: ID) {
+          createPrefectNote(text: $text, studentId: $studentId, teacherId: $teacherId) {
             id
             text
           }
@@ -42,6 +42,7 @@ export default {
         variables: {
           text: this.form.text,
           studentId: this.studentId,
+          teacherId: localStorage.getItem('userId')
         },
       }).then((data) => {
         console.log(data)

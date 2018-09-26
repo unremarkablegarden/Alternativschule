@@ -15,19 +15,22 @@
                 li(v-for="project in myProjects")
                   router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                     | {{ project.name }}
-                    | ({{ project.levels.join('/') }})
+                    span(v-if='!isSpacestation')
+                      | ({{ project.levels.join('/') }})
 
               li.section-title(v-if="availableProjects.length") Verfügbare Projekte
               li(v-for="project in availableProjects", v-if="availableProjects.length")
                 router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                   | {{ project.name }}
-                  | ({{ project.levels.join('/') }})
+                  span(v-if='!isSpacestation')
+                    | ({{ project.levels.join('/') }})
 
               li.section-title(v-if="availableSelfLearnProjects.length") Selbslernbox
               li(v-for="project in availableSelfLearnProjects", v-if='availableSelfLearnProjects.length')
                 router-link(:to="'/project/' + currentSubject + '/' + project.slug")
                   | {{ project.name }}
-                  | ({{ project.levels.join('/') }})
+                  span(v-if='!isSpacestation')
+                    | ({{ project.levels.join('/') }})
 
           .main.column.is-8
             //- xmp {{ availableProjects }}
@@ -53,7 +56,7 @@
                   el-button(v-if='projectAvailable === true', type='success', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
                   el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)', :loading='submitting') Löschen
 
-              .level
+              .level(v-if='!isSpacestation')
                 strong Levels:&nbsp;
                   | {{ currentProjectData.levels.join('/') }}
               p.description {{ currentProjectData.description }}

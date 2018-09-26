@@ -17,14 +17,20 @@
             el-card(shadow='never')
               br
               el-row
-                el-col(:span='9')
+                el-col(:span='11')
                   .notesWrapper
                     strong Notes
                     ul.notes
                       li.note(v-for='note in student.prefectNotes')
                         | {{ note.text }}&nbsp;
-                        span.small {{ formatDate(note.createdAt) }}
-                el-col(:span='14', :offset='1')
+                        div
+                          span.small
+                            span.name(v-if='note.teacher && userId !== note.teacher.id')
+                              | &mdash;{{ note.teacher.firstname }} {{ note.teacher.surname }}&nbsp;
+                            span.date
+                              | {{ formatDate(note.createdAt) }}
+                          el-button(size='mini', type='text', icon='el-icon-delete', @click='deletePrefectNote(note, student.id)').removeNote
+                el-col(:span='12', :offset='1')
                   PrefectNotes(:studentId='student.id')
 
               el-collapse(v-model='activeSubjects', v-if='!loading')
@@ -66,7 +72,7 @@
               //- CHART
               el-row
                 el-col(:span='18', :offset='2')
-                  Chart(:selfEvals='student.selfEvaluations', :subjects='student.studiesSubjects', :allSubjects='allSubjects2').Chart
+                  Chart(:selfEvals='student.selfEvaluations', :subjects='student.studiesSubjects', :allSubjects='allSubjects2', v-if='student').Chart
 
               //- PRINT
               router-link(:to="'/vertrauensschueler/print/' + student.id")
@@ -118,6 +124,49 @@ export default {
     },
   },
   methods: {
+    msg (type, message) {
+      this.$message({
+         type: type,
+         message: message
+      })
+    },
+
+    deletePrefectNote (note, userId) {
+      this.$confirm('Dadurch wird der Note endgültig gelöscht. Fortsetzen?', 'Warning', {
+        confirmButtonText: 'Löschen',
+        cancelButtonText: 'Stornieren',
+        type: 'warning'
+      }).then(() => {
+        this.deletePrefectNoteApollo(note, userId)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Löschung abgebrochen'
+        })
+      })
+    },
+
+    deletePrefectNoteApollo(note, userId) {
+      this.$apollo.mutate({
+        mutation: gql`mutation ($id: ID!) {
+          deletePrefectNote(id: $id) {
+            id
+          }
+        }`,
+        variables: {
+          id: note.id
+        },
+      }).then((data) => {
+        console.log(data)
+        this.msg('success', 'Note deleted')
+        const stud = this.prefectStudents.find(s => s.id === userId)
+        stud.prefectNotes = stud.prefectNotes.filter(n => n.id !== note.id)
+      }).catch((error) => {
+        console.error(error)
+        this.msg('error', error)
+      })
+    },
+
     formatDate(date) {
       const d = new Date(date)
       return '(' + d.toLocaleDateString("de-DE") + ')'
@@ -292,10 +341,15 @@ export default {
             }
             level
           }
-          prefectNotes {
+          prefectNotes(orderBy: createdAt_DESC) {
             id
             createdAt
             text
+            teacher {
+              id
+              firstname
+              surname
+            }
           }
           studentStudentNotes {
             id
@@ -401,10 +455,19 @@ export default {
   ul, li
     margin: 0
     padding: 0
-  ul
-    margin-left: 1.25em
+  .prefectNotes
+    margin-top: 2em
   ul.notes
     margin-bottom: 2em
+    max-height: 12.3em
+    overflow-y: auto
+    padding: 1em 1em 1em 2em
+    margin: 1em 0 0 0
+    border: 1px #DDD solid
+    border-radius: 5px
+  li.note
+    line-height: 1.6em
+    padding-bottom: 0.5em
   .projects
     margin: 3px 0 0 3px
   .project
@@ -417,5 +480,8 @@ export default {
     margin-top: 1em
   .Chart
     margin-top: 2em
-
+  .removeNote
+    margin: 0
+    padding: 0
+    transform: translate(4px, 1px)
 </style>

@@ -33,7 +33,25 @@ export default {
       error: false
     }
   },
+  created () {
+    // console.log(this.$route.query.error)
+  },
   methods: {
+    logout () {
+      localStorage.removeItem('authenticate-user-token')
+      localStorage.removeItem('userId')
+      this.$store.dispatch('logoutAction')
+      sessionStorage.clear()
+      localStorage.clear()
+      this.$apolloProvider.defaultClient.resetStore()
+      this.$apolloProvider.defaultClient.cache.reset()
+      setTimeout(function () {
+        // window.location.reload(true)
+      }, 1000)
+      // this.$apolloProvider.defaultClient.reFetchObservableQueries()
+      // console.log(this.$apolloProvider);
+      // this.$apolloProvider.defaultClient.resetStoreCallbacks()
+    },
     login () {
       this.loading = true
       this.error = false
@@ -44,28 +62,42 @@ export default {
     			variables: {
     				email: this.loginForm.email,
     				password: this.loginForm.password
-    			}
+    			},
+          update: (store) => {
+            // console.log(store)
+            console.log(this.loginForm.email)
+          }
     		})
     		.then(response => {
           console.log('-- auth success -- ')
+
           const token = response.data.authenticateUser.token
+          console.log(token)
+          console.log(response.data)
 
           // save user token to localstorage
     			localStorage.setItem('authenticate-user-token', token)
-          // console.log('token: ' + token)
 
           this.$store.dispatch('getUserId')
             .then((res) => {
               localStorage.setItem('userId', res)
-              // console.log('userId: ' + res)
+              console.log('userId: ' + res)
 
               this.$store.dispatch('getUserType', res)
                 .then((res) => {
-                  localStorage.setItem('userType', res)
                   this.loading = false
-                  this.$router.push({ name: 'users' })
+                  console.log(res);
+                  if (res == 'Schueler') {
+                    this.logout()
+                    this.error = true
+                    console.log('Student account. No access.')
+                  } else {
+                    localStorage.setItem('userType', res)
+                    this.$router.push({ name: 'users' })
+                  }
                 })
                 .catch((error) => {
+                  this.logout()
                   console.log(error)
                   this.error = true
                   this.loading = false
@@ -73,6 +105,7 @@ export default {
 
             })
             .catch((error) => {
+              this.logout()
               console.log(error)
               this.error = true
               this.loading = false
@@ -80,7 +113,7 @@ export default {
 
     		})
         .catch((error) => {
-          // console.log(error.message)
+          this.logout()
           console.error(error)
           console.log('Wrong credentials')
           this.error = true

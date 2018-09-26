@@ -9,7 +9,7 @@
       el-tab-pane
         span(slot='label')
           icon(icon='user', color='lightgray').icon
-          | Benutzerkonto
+          | Konto
         AccountEdit
       el-tab-pane
         span(slot='label')

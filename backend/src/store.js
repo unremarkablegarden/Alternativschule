@@ -25,6 +25,7 @@ export default new Vuex.Store({
     },
     logout (state) {
       state.userId = null
+      state.userType = null
     }
   },
   getters: {
@@ -42,8 +43,15 @@ export default new Vuex.Store({
         apolloClient
           .query({ query: LOGGED_IN_USER })
           .then(response => {
+            // console.log('--state---');
+            // console.log(response)
+            // console.log('-----------');
             commit('setUserId', response.data.loggedInUser.id)
             resolve()
+          })
+          .catch(error => {
+            console.log(error)
+            reject()
           })
       })
     },
@@ -57,24 +65,25 @@ export default new Vuex.Store({
             }
           })
           .then(response => {
-            // console.log('--store---');
-            // console.log(response.data.User.userType)
-            // console.log('---------');
             commit('setUserType', response.data.User.userType)
             resolve()
+          })
+          .catch(error => {
+            console.log(error)
+            reject()
           })
       })
     },
     async getUserId ({ self, state, dispatch }) {
-      if (!state.userId) {
-        await dispatch('setUserId')
-      }
+      // if (!state.userId) {
+      await dispatch('setUserId')
+      // }
       return state.userId
     },
     async getUserType ({ self, state, dispatch }, userId) {
-      if (!state.userType) {
-        await dispatch('setUserType', userId)
-      }
+      // if (!state.userType) {
+      await dispatch('setUserType', userId)
+      // }
       return state.userType
     }
   }
