@@ -5,15 +5,15 @@
     div(v-else)
       el-card(shadow='never').prefectstudents
         div(slot="header").header
-          span Meine Vertraunisschüler*innen
+          //- span Meine Vertraunisschüler*innen
 
-        el-collapse(v-model='activeStudents')
-          el-collapse-item(v-for='student in prefectStudents', :key='student.username', :title='student.username', :name='student.username').student
+          //- el-collapse-item(v-for='student in prefectStudents', :key='student.username', :title='student.username', :name='student.username').student
             template(slot='title')
               icon(icon='user')
               | &nbsp;
-              | {{ student.firstname }} {{ student.surname }}
-            // studentid:::::
+
+          div
+            | {{ student.firstname }} {{ student.surname }}
 
             el-card(shadow='never')
               br
@@ -68,27 +68,6 @@
               el-row
                 el-col(:span='18', :offset='2')
                   Chart(:selfEvals='student.selfEvaluations', :subjects='student.studiesSubjects', :allSubjects='allSubjects').Chart
-
-              //- PRINT
-
-              el-button.right Print
-              br
-              br
-
-        br
-        el-button(type='primary', @click='dialogVisible = true') Select students
-
-      //- SELECT STUDENTS
-      el-dialog(title='Select students', :visible.sync='dialogVisible', width='40%', v-loading='dialogLoading')
-        .list
-          el-row.student(v-for='(student, index) in allStudents', :key='student.username').userRow
-            el-col(:span='19').student
-              .name
-                icon(icon='user').i
-                | {{ student.firstname }} {{ student.surname }}
-            el-col(:span='5').buttons
-              el-button(size='mini', type='primary', v-if='isAvailable(student)', @click='addStudent(student)') Add
-              el-button(size='mini', type='danger', v-else, @click='removeStudent(student)') Remove
 </template>
 
 
@@ -113,10 +92,20 @@ export default {
       activeElCollapse: []
     }
   },
+  created () {
+    console.log(this.$route.params.student)
+  },
   computed: {
+    studentId () {
+      return this.$route.params.student
+    },
     userId () {
       return localStorage.getItem('userId')
     },
+    // student () {
+    //   const studentUsername = this.$route.params.student
+    //   return false
+    // }
   },
   methods: {
     formatDate(date) {
@@ -255,11 +244,9 @@ export default {
         return result.allSubjects
       }
     },
-    allStudents: {
-      query: gql`query ($userType: UserTypes!) {
-      	allUsers(filter: {
-      		userType: $userType
-      	}) {
+    student: {
+      query: gql`query ($studentId: ID!) {
+      	User(id: $studentId) {
           id
       		username
           firstname
@@ -331,27 +318,30 @@ export default {
       }`,
       variables () {
         return {
-          userType: "Schueler"
+          studentId: this.$route.params.student
         }
       },
       update (result) {
-        let prefectStudents = []
-        result.allUsers.forEach(student => {
-          student.prefectLinks.forEach(prefect => {
-            if (prefect.id === this.userId) {
-              prefectStudents.push(student)
-            }
-          })
-        })
-        this.prefectStudents = prefectStudents
+        // let prefectStudents = []
+        // result.allUsers.forEach(student => {
+        //   student.prefectLinks.forEach(prefect => {
+        //     if (prefect.id === this.userId) {
+        //       prefectStudents.push(student)
+        //     }
+        //   })
+        // })
+        // this.prefectStudents = prefectStudents
+        //
+        // result.allUsers.forEach(s => {
+        //   if(this.isAvailable(s)) this.studentStates[s.id] = false
+        //   else this.studentStates[s.id] = true
+        // })
+        //
 
-        result.allUsers.forEach(s => {
-          if(this.isAvailable(s)) this.studentStates[s.id] = false
-          else this.studentStates[s.id] = true
-        })
-
+        // return result.allUsers
+        console.log(result.User)
         this.loading = false
-        return result.allUsers
+        return result.User
       }
     }
   },

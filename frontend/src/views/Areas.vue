@@ -1,6 +1,7 @@
 <template lang="pug">
 #areas
-  .areas.guibox.columns.is-multiline
+  Loading(v-if='loading')
+  .areas.guibox.columns.is-multiline(v-else)
     router-link(v-for='area in areas', :class='area', :to='"/area/" + area', :key='area').area.column.is-6
       h2.title {{ areaname(area) }}
       planet(v-for='subject in db.areas[area]', :subject="subject.slug", :key="subject.slug")
@@ -16,7 +17,8 @@ export default {
     return {
       db: null,
       areas: [],
-      areanames: []
+      areanames: [],
+      loading: true
     }
   },
   mounted () {
@@ -38,7 +40,8 @@ export default {
           }
           this.areanames.push(a)
         }
-        console.log(this.db);
+        this.loading = false
+        // console.log(this.db);
       })
     }
   },

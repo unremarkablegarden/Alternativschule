@@ -1,6 +1,7 @@
 <template lang="pug">
 .wrapper.subjectarea
-  .loading(v-if='!currentSubjectData') Loading...
+  .loading(v-if='!currentSubjectData')
+    Loading
   div(v-else)
     .guibox.columns
       .column.is-5.is-offset-1

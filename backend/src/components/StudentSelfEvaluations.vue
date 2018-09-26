@@ -162,6 +162,8 @@ export default {
         }
       },
       update (result) {
+        // console.log('self evals subjectLevels result')
+        // console.log(result.Subject.levels)
         return this.$sortLevels(result.Subject.levels)
       },
     },
@@ -182,6 +184,8 @@ export default {
         }
       },
       update (result) {
+        // console.log('self evals competences');
+        // console.log(result.Subject.competences);
         return result.Subject.competences
       },
       result (res) {
@@ -205,9 +209,11 @@ export default {
               id
             }
             subject {
+              id
               name
             }
             student {
+              id
               username
             }
           }
@@ -230,6 +236,8 @@ export default {
           this.evalsByLevel.find(o => o.level === e.level).data.push(e)
         })
         this.loading = false
+        // console.log('self evals selfEvals');
+        // console.log(evaluations)
         return evaluations
       },
       result (result) {

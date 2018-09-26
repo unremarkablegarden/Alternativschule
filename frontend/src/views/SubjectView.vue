@@ -1,7 +1,7 @@
 <template lang="pug">
-  .loading(v-if='loading') Loading...
+  .loading(v-if='loading')
+    Loading
   .planetzone(v-else)
-
     .guibox.message(v-if='noMoons')
       .msg
         strong {{ viewLevel }} Monde

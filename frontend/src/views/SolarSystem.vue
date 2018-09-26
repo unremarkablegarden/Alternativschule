@@ -1,11 +1,11 @@
 <template lang="pug">
   #solarsystem
+    Loading(v-if='loading')
     .info
       div(v-if='planetHover')
         strong(v-if="planetHover !== 'Space Station AGs'") Planet&nbsp;
         | {{ planetHover }}
-
-    .solarsystem
+    .solarsystem(v-if='!loading')
       .sun
         img(src="../assets/gfx/planets/sun@3x.png")
       .planet-orbit(v-for="(subject, index) in subjects", v-if='!loading')
@@ -66,7 +66,7 @@ export default {
         this.msg = true
         this.msgText = {
           title: 'Hallo ' + this.myData.firstname + '!',
-          text: 'Willkommen in deiner persönlichen Noten-Galaxy!<br><br>Um einen Planeten (ein Fach) hinzuzufügen, klickst du unten links neben deinem Avatar auf das „+“.'
+          text: 'Willkommen in deiner persönlichen Noten-Galaxy!<br><br>Um einen Planeten (ein Fach) hinzuzufügen, klickst du unten links neben deinem Avatar auf das „+“.<br><br>Um deinen Avatar zu ändern, klickst du auf das Symbol „Einstellungen“, das sich ebenfalls unten links befindet.'
         }
         console.log();
       }
@@ -102,12 +102,13 @@ export default {
             }
           }
           // test one day
-          // if (differenceInCalendarDays(new Date(), d.updatedAt) > 1) {
+          // if (differenceInCalendarDays(new Date(), d.updatedAt) > 0) {
           //   if (! this.alertSubjects.find(o => o.id === d.subject.id)) {
           //     // console.log('last update to ' + d.subject.name + ' was over 8 days ago')
           //     this.alertSubjects.push(d.subject)
           //   }
           // }
+          // this.alertSubjects.push(this.myData.studiesSubjects[0])
         })
 
         if (this.alertSubjects.length) {
@@ -243,7 +244,7 @@ $orbital: 6vh
   z-index: 999
   padding: 30px
   right: 2vw
-  top: 2vw
+  top: 5vw
   margin: 0
   // transform: translate(-50%, -50%)
   display: flex

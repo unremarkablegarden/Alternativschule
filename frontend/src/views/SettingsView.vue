@@ -16,8 +16,7 @@
         .avatar-wrap
           .uploadingImg(v-if='uploadingImg')
             i.el-icon-loading
-            br
-            strong Uploading...
+            strong &nbsp;&nbsp;&nbsp;Uploading...
           .moreWrap(:class='{ graphic : (!uploadUrl && !myData.avatarImg) }', v-else)
             .avatar.image(:class='myData.avatarColor')
 
@@ -372,6 +371,8 @@ export default {
     justify-content: center
     align-items: center
     color: #CCC !important
+    strong, i
+      color: #CCC !important
 
   .avatar-uploader
     position: fixed

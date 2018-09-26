@@ -17,4 +17,7 @@ export default {
     left: 50vw
     transform: translate(-50%, -50%)
     color: #FFF !important
+    padding: 0
+    margin: 0
+    text-align: center
 </style>

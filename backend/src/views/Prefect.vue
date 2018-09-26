@@ -69,8 +69,8 @@
                   Chart(:selfEvals='student.selfEvaluations', :subjects='student.studiesSubjects', :allSubjects='allSubjects2').Chart
 
               //- PRINT
-
-              el-button.right Ausdrucken
+              router-link(:to="'/vertrauensschueler/print/' + student.id")
+                el-button.right Ausdrucken
               br
               br
 

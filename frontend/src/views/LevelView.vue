@@ -1,5 +1,7 @@
 <template lang="pug">
 .wrapper
+  .loading(v-if='loading')
+    Loading
   .guibox(v-if='!loading')
     levelnav
     .columns

@@ -1,7 +1,7 @@
 <template lang="pug">
 #areas
   .loading(v-if='!db')
-    h1 Loading...
+    Loading
   .areas(v-else).guibox.columns.is-multiline
     router-link(v-for='(subject, index) in db.areas[currentArea]', :to='subject.area.slug + "/" + subject.slug', :key='subject.slug', :data-index='index').area.column.is-6
       .name {{ subject.name }}
