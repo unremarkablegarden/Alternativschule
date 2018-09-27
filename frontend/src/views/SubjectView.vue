@@ -266,8 +266,10 @@ $moonFix: 4.2vh
   align-items: center
   justify-content: center
   margin-top: - $orbit / 2
+  @media screen and (min--moz-device-pixel-ratio:0)
+    margin-top: - $orbit
   animation: rotating 200s linear infinite
-  transform-origin: 0 15vh
+  transform-origin: 0 ($orbit / 2)
   .orbit
     height: $orbit
     position: absolute
