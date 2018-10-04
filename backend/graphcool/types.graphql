@@ -124,7 +124,7 @@ type TutorLevels @model {
 
 type StudentLevels @model {
   id: ID! @isUnique
-  student: User! @relation(name: "StudentLevelsStudent")
+  student: User @relation(name: "StudentLevelsStudent")
   subject: Subject! @relation(name: "StudentLevelsSubject")
   level: Levels!
 }
@@ -134,7 +134,7 @@ type Evaluation @model {
   createdAt: DateTime!
   updatedAt: DateTime!
   value: Int! # max 10
-  student: User! @relation(name: "StudentSelfEvaluation")
+  student: User @relation(name: "StudentSelfEvaluation")
   competence: Competence! @relation(name: "CompetenceEvaluation")
   subject: Subject! @relation(name: "EvaluationSubject")
   level: Levels!
@@ -146,7 +146,7 @@ type StudentNote @model {
   updatedAt: DateTime!
   text: String!
   subject: Subject! @relation(name: "StudentNoteSubject")
-  student: User! @relation(name: "StudentStudentNotes")
+  student: User @relation(name: "StudentStudentNotes")
   teacher: User! @relation(name: "TeacherStudentNotes")
 }
 
@@ -155,7 +155,7 @@ type PrefectNote @model {
   createdAt: DateTime!
   updatedAt: DateTime!
   text: String!
-  student: User! @relation(name: "PrefectNotes")
+  student: User @relation(name: "PrefectNotes")
   teacher: User @relation(name: "PrefectNotesTeacher")
 }
 

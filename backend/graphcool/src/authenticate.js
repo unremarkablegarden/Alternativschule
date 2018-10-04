@@ -2,15 +2,15 @@ const fromEvent = require('graphcool-lib').fromEvent
 const bcryptjs = require('bcryptjs')
 
 const userQuery = `
-query UserQuery($email: String!) {
-  User(email: $email){
+query UserQuery($username: String!) {
+  User(username: $username){
     id
     password
   }
 }`
 
-const getGraphcoolUser = (api, email) => {
-  return api.request(userQuery, { email })
+const getGraphcoolUser = (api, username) => {
+  return api.request(userQuery, { username })
     .then(userQueryResult => {
       if (userQueryResult.error) {
         return Promise.reject(userQueryResult.error)
@@ -23,28 +23,28 @@ const getGraphcoolUser = (api, email) => {
 module.exports = event => {
   if (!event.context.graphcool.pat) {
     console.log('Please provide a valid root token!')
-    return { error: 'Email Authentication not configured correctly.'}
+    return { error: '--- Authentication not configured correctly.'}
   }
 
   // Retrieve payload from event
-  const email = event.data.email
+  const username = event.data.username
   const password = event.data.password
 
   // Create Graphcool API (based on https://github.com/graphcool/graphql-request)
   const graphcool = fromEvent(event)
   const api = graphcool.api('simple/v1')
 
-  return getGraphcoolUser(api, email)
+  return getGraphcoolUser(api, username)
     .then(graphcoolUser => {
       if (!graphcoolUser) {
-        return Promise.reject('Invalid Credentials') //returning same generic error so user can't find out what emails are registered.
+        return Promise.reject('gc/authenticate.js > getGraphcoolUser > Invalid Credentials #1') //returning same generic error so user can't find out what emails are registered.
       } else {
         return bcryptjs.compare(password, graphcoolUser.password)
           .then(passwordCorrect => {
             if (passwordCorrect) {
               return graphcoolUser.id
             } else {
-              return Promise.reject('Invalid Credentials')
+              return Promise.reject('gc/authenticate.js > getGraphcoolUser > Invalid Credentials #2')
             }
           })
       }
@@ -58,6 +58,6 @@ module.exports = event => {
     .catch(error => {
       // Log error, but don't expose to caller
       console.log(`Error: ${JSON.stringify(error)}`)
-      return { error: `An unexpected error occured` }
+      return { error: `gc/authenticate.js > getGraphcoolUser > catch error > An unexpected error occured` }
     })
 }

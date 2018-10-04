@@ -59,6 +59,7 @@ permissions:
   # - operation: User.read
   #   authenticated: true
   - operation: "*"
+    authenticated: true
 
 
 # Your root tokens used for functions to get full access to the API

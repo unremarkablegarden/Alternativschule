@@ -71,7 +71,7 @@ export default {
         pointBackgroundColor: 'rgba(0,150,30,0.5)',
         pointHoverBorderColor: 'rgba(0,200,50,1)',
         pointRadius: 6,
-        lineTension: 0.3,
+        lineTension: 0,
       }]
     }
     const options = {

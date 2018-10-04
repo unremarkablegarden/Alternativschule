@@ -5,8 +5,8 @@
         center
           span Alternativschule Berlin
       el-form(:model='loginForm', ref='loginForm', label-width='120px', @keyup.enter.native='login').loginform
-        el-form-item(label='Email')
-          el-input(type='text', v-model='loginForm.email', autofocus='true')
+        el-form-item(label='Username')
+          el-input(type='text', v-model='loginForm.username', autofocus='true')
         el-form-item(label='Kennwort')
           el-input(type='password', v-model='loginForm.password')
         el-form-item(v-if='error')
@@ -26,7 +26,7 @@ export default {
   data () {
     return {
       loginForm: {
-        email: '',
+        username: '',
         password: ''
       },
       loading: false,
@@ -42,7 +42,7 @@ export default {
     		.mutate({
     			mutation: LOGIN_MUTATION,
     			variables: {
-    				email: this.loginForm.email,
+    				username: this.loginForm.username,
     				password: this.loginForm.password
     			}
     		})
