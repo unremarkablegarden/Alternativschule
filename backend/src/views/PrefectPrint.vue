@@ -4,7 +4,7 @@
       Loading
     div(v-else)
       el-card(shadow='never').prefectstudents
-        div(slot="header").header
+        div(slot="header")
           //- span Meine Vertraunisschüler*innen
 
           //- el-collapse-item(v-for='student in prefectStudents', :key='student.username', :title='student.username', :name='student.username').student
@@ -13,23 +13,21 @@
               | &nbsp;
 
           div
-            | {{ student.firstname }} {{ student.surname }}
-
+            span.student-name {{ student.firstname }} {{ student.surname }}
             el-card(shadow='never')
               br
               el-row
-                el-col(:span='9')
+                el-col(:span='24')
                   .notesWrapper
                     strong Notes
                     ul.notes
                       li.note(v-for='note in student.prefectNotes')
                         | {{ note.text }}&nbsp;
                         span.small {{ formatDate(note.createdAt) }}
-                el-col(:span='14', :offset='1')
-                  PrefectNotes(:studentId='student.id')
+                
 
-              el-collapse(v-model='activeSubjects', v-if='!loading')
-                el-collapse-item(v-for='subject in student.studiesSubjects', :key='subject.name', :title='subject.name', :name='subject.name').subject
+              div(v-model='activeSubjects', v-if='!loading')
+                div(v-for='subject in student.studiesSubjects', :key='subject.name', :title='subject.name', :name='subject.name').subject
                   template(slot='title')
                     icon(icon='docs')
                     | &nbsp;&nbsp;
@@ -39,7 +37,7 @@
                       | &nbsp;&nbsp;&nbsp;
 
                   el-row
-                    el-col(:span='15', :offset='1')
+                    el-col(:span='22', :offset='1')
                       //- STUDENT NOTE FROM TEACHER
                       el-card(shadow='never')
                         .subjectNote(v-if='studentNoteBySubject(student.studentStudentNotes, subject.id)')
@@ -50,15 +48,16 @@
                             span.small {{ formatDate(studentNoteBySubject(student.studentStudentNotes, subject.id).updatedAt) }}
                         .else(v-else)
                           p No teacher note
-
+                  el-row
+                    el-col(:span='15', :offset='1')      
                       //- Kompetenzen
                       .selfEvals(v-if="subject.id !== 'cjlw89ql20imy0149cdcs3ze0'")
                         //- if not space-station
-                        StudentSelfEvaluations(:subjectId='subject.id', :studentId='student.id')
+                        StudentSelfEvaluationsPrint(:subjectId='subject.id', :studentId='student.id')
 
 
-                    el-col(:span='6', :offset='2')
-                      strong Projekten
+                    el-col(:span='6', :offset='1').project-wrap
+                      .title Projekten
                       .projects
                         .project(v-for='(project, index) in projectsPerSubject(student.studiesProjects, subject.id)', :key='project.slug')
                           icon(icon='doc')
@@ -74,11 +73,12 @@
 <script>
 import gql from 'graphql-tag'
 import Chart from '@/components/Chart'
+import StudentSelfEvaluationsPrint from '@/components/StudentSelfEvaluationsPrint.vue'
 
 export default {
   name: 'prefectprint',
   components: {
-    Chart
+    Chart, StudentSelfEvaluationsPrint
   },
   data () {
     return {
@@ -409,4 +409,31 @@ export default {
   .Chart
     margin-top: 2em
 
+  template
+    display: block
+    margin-bottom: 1em
+    margin-top: 1em
+  .subject
+    border-top: 1px solid #ebeef5
+    padding-top: 2em
+    margin-top: 2em
+  .project-wrap
+    margin-top: 1em
+    .title
+      font-weight: bold
+      margin-bottom: 1em
+
+  
+@media print 
+  body
+    font-size: 10px
+  svg.sli-svg
+    display: none
+  .student-name
+    font-size: 1.5em
+    margin-bottom: 1em
+  .el-aside, .el-text-area
+    display: none
+  .el-card
+    border: none
 </style>
