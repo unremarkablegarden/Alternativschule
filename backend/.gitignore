@@ -3,6 +3,9 @@ node_modules
 firebase.json
 .firebaserc
 .firebase
+server-cool-blank
+server-partial_copy
+server.backup
 
 # local env files
 .env.local
