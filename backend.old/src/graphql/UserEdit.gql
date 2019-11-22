@@ -1,7 +1,0 @@
-#import "./UserFragment.gql"
-
-mutation userEdit ($id: ID!, $username: String!, $email: String!, $firstname: String, $surname: String, $userType: UserTypes, $prefect: Boolean!) {
-  updateUser(id: $id, username: $username, email: $email, firstname: $firstname, surname: $surname, userType: $userType, prefect: $prefect) {
-    ...User
-  }
-}

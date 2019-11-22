@@ -1,9 +1,0 @@
-mutation LoginMutation($email: String!, $password: String!) {
-  # /server/src/authenticate.graphql: authenticateUser
-  authenticateUser(
-    email: $email,
-    password: $password
-  ) {
-    token
-  }
-}

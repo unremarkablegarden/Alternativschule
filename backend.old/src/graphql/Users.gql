@@ -1,7 +1,0 @@
-#import "./UserFragment.gql"
-
-query allUsers {
-	allUsers {
-		...User
-	}
-}

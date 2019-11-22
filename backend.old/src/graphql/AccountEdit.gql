@@ -1,7 +1,0 @@
-#import "./UserFragment.gql"
-
-mutation accountEdit ($id: ID!, $username: String!, $email: String!) {
-  updateUser(id: $id, username: $username, email: $email) {
-    ...User
-  }
-}

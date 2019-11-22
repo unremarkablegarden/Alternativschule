@@ -53,7 +53,7 @@
                     | Projekt: {{ currentProjectData.name }}
                     span(v-if='currentProjectData.selfLearn') &nbsp;(Selbslernbox)
                 .column.is-3(v-if='studentCanAdd(currentProjectData)').addButtonContainer
-                  el-button(v-if='projectAvailable === true', type='success', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufugen
+                  el-button(v-if='projectAvailable === true', type='success', icon='el-icon-plus', @click='addProject(currentProjectData.id)', :loading='submitting') Hinzufügen
                   el-button(v-if='projectAvailable === false', type='danger', icon='el-icon-delete', @click='removeProject(currentProjectData.id)', :loading='submitting') L√∂schen
 
               .level(v-if='!isSpacestation')

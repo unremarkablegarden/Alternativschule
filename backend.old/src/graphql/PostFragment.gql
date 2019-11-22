@@ -1,3 +1,0 @@
-fragment Post on Post {
-  id, description, imageUrl
-}

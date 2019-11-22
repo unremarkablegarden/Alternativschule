@@ -1,9 +1,0 @@
-#import "./UserFragment.gql"
-
-query usersByType($userType: UserTypes!) {
-	allUsers(filter: {
-		userType: $userType
-	}) {
-		...User
-	}
-}

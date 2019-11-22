@@ -1,7 +1,0 @@
-#import "./ProjectFragment.gql"
-
-mutation projectAdd($name: String!, $slug: String!, $description: String!, $selfLearn: Boolean!, $isPublished: Boolean!, $levels: [Levels!]!, $teacher: ID!, $subject: ID!) {
-  createProject(name: $name, slug: $slug, description: $description, selfLearn: $selfLearn, isPublished: $isPublished, levels: $levels, teacherId: $teacher, subjectId: $subject) {
-    ...Project
-  }
-}

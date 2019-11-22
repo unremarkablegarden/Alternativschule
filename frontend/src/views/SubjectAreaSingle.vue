@@ -6,7 +6,7 @@
     .guibox.columns
       .column.is-5.is-offset-1
         planet(:subject='currentSubjectData.slug', :class="{ 'hidePlanet' : hidePlanet }")
-        .button(@click='editSubject("add", currentSubjectData.id)', v-if='availableSubject') Hinzufugen
+        .button(@click='editSubject("add", currentSubjectData.id)', v-if='availableSubject') Hinzuf�gen
         //- p(v-else) Hinzugefügt
         //- .button(v-else, @click='editSubject("remove", currentSubjectData.id)') Löschen
 
