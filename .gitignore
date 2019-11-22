@@ -3,6 +3,15 @@ node_modules
 /dist
 /as-frontend/node_modules
 /as-frontend/dist
+backend/server-cool-blank
+backend/server-partial_copy
+backend/server.backup
+backend/.firebase
+backend/.firebaserc
+backend/firebase.json
+frontend/.firebase
+frontend/.firebaserc
+frontend/firebase.json
 
 # local env files
 .env.local
