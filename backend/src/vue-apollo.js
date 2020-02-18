@@ -2,18 +2,26 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
 
-// Install the vue plugin
 Vue.use(VueApollo)
-
-// Name of the localStorage item
-// const AUTH_TOKEN = 'apollo-token'
 const AUTH_TOKEN = 'authenticate-user-token'
 
-// Http endpoint
-const httpEndpoint = 'https://api.graph.cool/simple/v1/cjlw6enft0hds016406xkhcjh'
 
-// const graphcoolURI = 'https://api.graph.cool/simple/v1/cjlw6enft0hds016406xkhcjh'
-const wsEndpointURI = 'wss://subscriptions.graph.cool/v1/cjlw6enft0hds016406xkhcjh'
+
+
+// -------------------------- EDIT THESE -----------------------------------------
+//
+// Http endpoint (Simple API)
+const httpEndpoint = 'http://localhost:60000/simple/v1/ck6sbyzoh00040117c57tzxxe'
+// Websockets endpoint (Subscriptions API)
+const wsEndpointURI = 'ws://localhost:60000/subscriptions/v1/ck6sbyzoh00040117c57tzxxe'
+//
+// --------------------------------------------------------------------------------
+
+
+
+
+
+
 
 // Config
 const defaultOptions = {

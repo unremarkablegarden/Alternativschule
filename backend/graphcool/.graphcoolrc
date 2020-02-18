@@ -1,3 +1,4 @@
 targets:
   prod: shared-eu-west-1/cjlw6enft0hds016406xkhcjh
   default: prod
+  olle: local/ck6sbyzoh00040117c57tzxxe
