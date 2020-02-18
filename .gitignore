@@ -1,11 +1,8 @@
 .DS_Store
 node_modules
-/dist
+dist
 /as-frontend/node_modules
 /as-frontend/dist
-backend/server-cool-blank
-backend/server-partial_copy
-backend/server.backup
 backend/.firebase
 backend/.firebaserc
 backend/firebase.json
@@ -14,6 +11,9 @@ frontend/.firebase
 frontend/.firebaserc
 frontend/firebase.json
 frontend/dist
+
+.firebase
+.firebaserc
 
 # local env files
 .env.local
