@@ -1,0 +1,25 @@
+types: ./types.graphql
+functions:
+  authenticate:
+    handler:
+      code:
+        src: ./src/authenticate.js
+    type: resolver
+    schema: src/authenticate.graphql
+  loggedInUser:
+    handler:
+      code:
+        src: ./src/loggedInUser.js
+    type: resolver
+    schema: src/loggedInUser.graphql
+  signup:
+    handler:
+      code:
+        src: ./src/signup.js
+    type: resolver
+    schema: src/signup.graphql
+permissions: []
+rootTokens:
+- signup
+- authenticate
+- loggedInUser

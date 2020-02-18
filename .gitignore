@@ -9,9 +9,11 @@ backend/server.backup
 backend/.firebase
 backend/.firebaserc
 backend/firebase.json
+backend/dist
 frontend/.firebase
 frontend/.firebaserc
 frontend/firebase.json
+frontend/dist
 
 # local env files
 .env.local
