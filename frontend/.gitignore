@@ -3,6 +3,7 @@ node_modules
 .firebase
 .firebaserc
 firebase.json
+yarn.lock
 
 # local env files
 .env.local
