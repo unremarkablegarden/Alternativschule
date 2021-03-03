@@ -14,7 +14,7 @@
     "element-ui": "^2.4.6",
     "graphql-tag": "^2.9.2",
     "greensock": "^1.20.2",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "pug-plain-loader": "^1.0.0",
     "vue": "^2.5.16",
     "vue-animejs": "^1.0.1",
